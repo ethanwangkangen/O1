@@ -10,6 +10,13 @@ public abstract class Creature extends Entity {
     private int health;
     private int mana;
     private Texture texturePath; //path to texture file
+    private int level;
+
+    //private ArrayList<Skill> skillList = new ArrayList();
+    private Skill skill1 = null;
+    private Skill skill2 = null;
+    private Skill skill3 = null;
+    private Skill[] skills = {skill1, skill2, skill3};
 
     private SpriteBatch batch;
 
@@ -18,11 +25,15 @@ public abstract class Creature extends Entity {
         this.mana = mana;
         this.texturePath = texturePath;
         this.alive = true;
+        this.level = 1;
     }
 
     public abstract void attack1();
+    //public abstract void attack2();
+    //public abstract void attack3();
 
-    public void takeDamage(int x) {
+    public void takeDamage(Skill skill) {
+        int x = skill.damage;
         this.health -= x;
         if (this.health <= 0) {
             this.health = 0;
@@ -30,9 +41,14 @@ public abstract class Creature extends Entity {
         }
     }
 
+//    public void addSkill(int damage) {
+//        Skill newSkill = new Skill(damage);
+//        skillList.add(newSkill);
+//    }
+
     public void render(SpriteBatch batch) {
 
-        batch.draw(texturePath, xpos, ypos, 100, 100);
+        //batch.draw(texturePath, xpos, ypos, 100, 100);
 
     }
 }

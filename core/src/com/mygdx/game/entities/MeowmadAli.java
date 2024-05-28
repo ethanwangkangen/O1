@@ -7,6 +7,7 @@ public class MeowmadAli extends Creature{
         super(100, 100, new Texture("meowmad_ali.png"));
     }
 
+    Skill skill1 = new Skill("basic attack", 1);
     public void attack1() {
     }
 

@@ -12,16 +12,31 @@ public class Player extends Entity{
     private Creature pet2 = null;
     private Creature pet3 = null;
 
+    private Creature[] pets = {pet1, pet2, pet3};
+    private Creature CurrentPet = pets[0];
+
+    //int skill (0, 1, or 2): corresponds to the skill used
+    public void attack(Player opponent, int skillNumber) {
+        Skill skill = CurrentPet.skills[skillNumber];
+        opponent.CurrentPet.takeDamage(skill);
+    }
+
+    // consider replacing pets array to reservePets array in future
+    // to better display pet screen
+    public void switchpet(int target) {
+        CurrentPet = pets[target];
+    }
+
     public Player(int xpos, int ypos) {
         this.texture = null;
         super.move(xpos, ypos);
     }
 
     public void Move() {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) xpos -= 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) xpos += 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) ypos += 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) ypos -= 200 * Gdx.graphics.getDeltaTime();
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) xpos -= 200 * Gdx.graphics.getDeltaTime();
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) xpos += 200 * Gdx.graphics.getDeltaTime();
+//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) ypos += 200 * Gdx.graphics.getDeltaTime();
+//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) ypos -= 200 * Gdx.graphics.getDeltaTime();
     }
 
 
