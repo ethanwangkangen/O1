@@ -20,6 +20,10 @@ public abstract class Creature extends Entity {
 
     private SpriteBatch batch;
 
+    public Skill[] getSkills() {
+        return skills;
+    }
+
     public Creature(int health, int mana, Texture texturePath) {
         this.health = health;
         this.mana = mana;
@@ -33,7 +37,7 @@ public abstract class Creature extends Entity {
     //public abstract void attack3();
 
     public void takeDamage(Skill skill) {
-        int x = skill.damage;
+        int x = skill.getDamage();
         this.health -= x;
         if (this.health <= 0) {
             this.health = 0;

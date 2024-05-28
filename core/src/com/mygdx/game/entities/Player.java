@@ -17,7 +17,7 @@ public class Player extends Entity{
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public void attack(Player opponent, int skillNumber) {
-        Skill skill = CurrentPet.skills[skillNumber];
+        Skill skill = CurrentPet.getSkills()[skillNumber];
         opponent.CurrentPet.takeDamage(skill);
     }
 
