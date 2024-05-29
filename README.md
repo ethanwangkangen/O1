@@ -36,7 +36,9 @@ Features:
 
 Timeline and Development Plan
 
-Class Diagram 
+Class Diagram (link)
+
+https://drive.google.com/file/d/12Qsbgy2pwt6NFLwXsRApP1EVpbVfqUeH/view?usp=sharing
 
 Proof-of-Concept
 
