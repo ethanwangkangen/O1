@@ -1,6 +1,19 @@
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 eclipse.project.name = appName + "-core"
+
+repositories {
+    // Include Maven Central repository
+    mavenCentral()
+}
+
+dependencies {
+    // Include all JAR files in the libs directory
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Add other dependencies as needed
+    // implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+}

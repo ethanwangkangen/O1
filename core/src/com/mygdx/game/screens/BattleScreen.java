@@ -20,7 +20,7 @@ public class BattleScreen implements Screen {
     //process is: call .begin(), render using .draw(texture, x, y), then .end()
 
     public BattleScreen(Game gameObj) {
-        System.out.println("here");
+        System.out.println("BattleScreen created");
         this.gameObj = gameObj;
         this.batch = new SpriteBatch();
         this.background = new Texture("Pixel_art_grass_image.png");
@@ -44,16 +44,13 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
-        System.out.println("currently rendering BattleScreen");
+        //System.out.println("currently rendering BattleScreen");
         // Begin drawing
         batch.begin();
         // Draw your game elements here
         batch.draw(background, 0, 0, 1000, 1000);
         cat1.render(batch);
         batch.end();
-
-
-
 
     }
 
