@@ -11,9 +11,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
-import com.mygdx.global.BattleState;
-import com.mygdx.global.JoinRequestEvent;
-import com.mygdx.global.JoinResponseEvent;
+import com.mygdx.global.AddPlayerEvent;
+import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 
 import java.io.IOException;
@@ -140,6 +139,10 @@ public class LoginScreen implements Screen {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            Player newPlayer = new Player(usernameField.getText());
+            AddPlayerEvent AddplayerEvent = new AddPlayerEvent(newPlayer);
+            client.sendTCP(AddplayerEvent);
         }
     }
 

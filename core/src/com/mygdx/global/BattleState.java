@@ -1,10 +1,14 @@
 package com.mygdx.global;
 
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.entities.Skill;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class BattleState {
+
+    public static final BattleState INSTANCE = new BattleState();
     public Player player1, player2;
 
     public enum Turn {
@@ -19,6 +23,7 @@ public class BattleState {
     public BattleState() {
         this.turn = Turn.PLAYERONETURN;
         this.numPlayers = 0;
+        battleStarted = false;
     }
 
     public int getNumPlayers() {
@@ -45,8 +50,27 @@ public class BattleState {
         }
     }
 
+    public void changeTurn() {
+        if (this.turn == Turn.PLAYERONETURN) {
+            this.turn = Turn.PLAYERTWOTURN;
+        } else {
+            this.turn = Turn.PLAYERONETURN;
+        }
+    }
+
     public boolean hasStarted() {
         return this.battleStarted;
+    }
+    public void startBattle() {
+        battleStarted = true;
+    }
+
+    public void attack(UUID id, Skill skill) {
+        if (player1.getId() != id) {
+            player1.takeDamage(skill);
+        } else {
+            player2.takeDamage(skill);
+        }
     }
 
 }

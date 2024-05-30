@@ -10,7 +10,8 @@ import com.mygdx.server.listeners.EventListener;
 import java.io.IOException;
 
 public class ServerFoundation {
-    private Server server;
+    private static Server server;
+    public static ServerFoundation instance;
     public static BattleState battleState = new BattleState();
 
     public static void main(String[] args) {
@@ -54,6 +55,10 @@ public class ServerFoundation {
             }
         });
         serverThread.start();
+    }
+
+    public static Server getServer() {
+        return server;
     }
 
 }

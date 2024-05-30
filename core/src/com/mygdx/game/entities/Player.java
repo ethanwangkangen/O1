@@ -3,6 +3,8 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
+import com.esotericsoftware.kryonet.Connection;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -10,19 +12,35 @@ public class Player extends Entity implements Serializable{
 
     //private Texture texture;
     String username;
-    UUID id;
-    public Creature pet1 = null;
+    public Creature pet1 = new MeowmadAli();
     private Creature pet2 = null;
     private Creature pet3 = null;
+    private UUID id = UUID.randomUUID();
 
-    //private Creature[] pets = {pet1, pet2, pet3};
-    //private Creature CurrentPet = pets[0];
+
+    private Creature[] pets = {pet1, pet2, pet3};
+    private Creature CurrentPet = pets[0];
 
     //int skill (0, 1, or 2): corresponds to the skill used
-//    public void attack(Player opponent, int skillNumber) {
-//        Skill skill = CurrentPet.getSkills()[skillNumber];
-//        opponent.CurrentPet.takeDamage(skill);
-//    }
+    public void takeDamage(Skill skill) {
+        CurrentPet.takeDamage(skill);
+    }
+
+    public boolean isAlive() {
+        for (Creature pet: pets) {
+            if (pet.isAlive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+    public Creature CurrentPet() {
+        return CurrentPet;
+    }
 
     // consider replacing pets array to reservePets array in future
     // to better display pet screen
@@ -33,7 +51,6 @@ public class Player extends Entity implements Serializable{
 
     public Player(String username){
         this.username = username;
-        id = UUID.randomUUID();
     }
 
     public void Move() {
