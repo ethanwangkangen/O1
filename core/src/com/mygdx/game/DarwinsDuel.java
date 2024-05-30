@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
@@ -13,6 +14,7 @@ import com.mygdx.game.screens.*;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.JoinRequestEvent;
 import com.mygdx.global.JoinResponseEvent;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 
 import java.io.IOException;
@@ -21,24 +23,34 @@ import java.io.IOException;
 public class DarwinsDuel extends Game {
 	SpriteBatch batch;
 	Texture img;
+	private static DarwinsDuel instance;
+	private OrthographicCamera camera;
 
 	float y = 0;
 
 	public enum GameState {
 		FREEROAM,
 		BATTLE,
+		LOGIN,
 		WIN,
 		LOSS
 	}
 
 	private GameState gameState = GameState.FREEROAM;
-
+	public void changeState (GameState gameState) {
+		this.gameState = gameState;
+	}
 
 	@Override
 	public void create () {
 		//this.create();
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+
+		this.camera = new OrthographicCamera();
+		this.camera.setToOrtho(false, 800, 600);
+		this.setScreen(new LoginScreen(this));
+
 	}
 
 	@Override
@@ -65,6 +77,11 @@ public class DarwinsDuel extends Game {
 			case BATTLE:
 				if (!(getScreen() instanceof BattleScreen)) {
 					System.out.println("BattleScreen started");
+					this.setScreen(new BattleScreen(this));
+				}
+				break;
+			case LOGIN:
+				if (!(getScreen() instanceof LoginScreen)) {
 					this.setScreen(new BattleScreen(this));
 				}
 				break;
@@ -95,5 +112,16 @@ public class DarwinsDuel extends Game {
 	public void dispose () {
 		batch.dispose();
 		img.dispose();
+	}
+
+	public static DarwinsDuel getInstance() {
+		if (instance == null) {
+			instance = (DarwinsDuel) Gdx.app.getApplicationListener();
+		}
+		return instance;
+	}
+
+	public OrthographicCamera getCamera() {
+		return camera;
 	}
 }
