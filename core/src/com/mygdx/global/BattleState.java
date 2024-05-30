@@ -19,15 +19,21 @@ public class BattleState {
     private Turn turn;
     private int numPlayers;
     private Boolean battleStarted;
+    private int numofTurns;
 
     public BattleState() {
         this.turn = Turn.PLAYERONETURN;
         this.numPlayers = 0;
+        this.numofTurns = 1;
         battleStarted = false;
     }
 
     public int getNumPlayers() {
         return this.numPlayers;
+    }
+
+    public boolean playerAlive() {
+        return player1.isAlive() || player2.isAlive();
     }
 
     public void addPlayer(Player Player) {
@@ -39,6 +45,10 @@ public class BattleState {
             this.numPlayers = 2;
         } else {
             System.out.println("max players"); //to do: throw error
+        }
+
+        if (this.numPlayers == 2) {
+            battleStarted = true;
         }
     }
 
@@ -55,6 +65,7 @@ public class BattleState {
             this.turn = Turn.PLAYERTWOTURN;
         } else {
             this.turn = Turn.PLAYERONETURN;
+            this.numofTurns += 1;
         }
     }
 

@@ -45,7 +45,11 @@ public class EventListener extends Listener {
             System.out.println("AttackEvent received by server");
             AttackEvent attackEvent = (AttackEvent) object;
             battleState.attack(attackEvent.id, attackEvent.skill);
-            server.sendToAllTCP(battleState);
+            if (battleState.playerAlive()) {
+                server.sendToAllTCP(battleState);
+            } else {
+                server.sendToAllTCP(new EndBattleEvent());
+            }
         }
         else {
             System.out.println("unknown object received.");
