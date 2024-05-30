@@ -8,7 +8,9 @@ public abstract class Creature extends Entity implements Serializable{
     public Creature(){}
 
     private boolean alive;
+    private int maxhealth;
     private int health;
+    private int maxmana;
     private int mana;
     private transient Texture texturePath; //path to texture file
     private int level;
@@ -28,9 +30,11 @@ public abstract class Creature extends Entity implements Serializable{
 //    }
 
     public Creature(int health, int mana, String name, String path, Texture texturePath) {
+        this.maxhealth = health;
         this.health = health;
+        this.maxmana = mana;
         this.mana = mana;
-        //this.texturePath = texturePath;
+        this.texturePath = texturePath;
         this.alive = true;
         this.level = 1;
         this.name = name;
@@ -61,5 +65,9 @@ public abstract class Creature extends Entity implements Serializable{
 
     public void render(SpriteBatch batch) {
         //batch.draw(texturePath, xpos, ypos, 100, 100);
+    }
+
+    public void loadTexture() {
+        texturePath = new Texture(path);
     }
 }

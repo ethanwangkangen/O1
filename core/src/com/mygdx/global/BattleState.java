@@ -84,4 +84,9 @@ public class BattleState {
         }
     }
 
+    public void loadTextures() {
+        player1.loadTextures();
+        player2.loadTextures();
+    }
+
 }

@@ -6,7 +6,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.handlers.BattleHandler;
 
 public class BattleScreen implements Screen {
     private final Game gameObj;
@@ -14,6 +17,10 @@ public class BattleScreen implements Screen {
     private Texture background;
 
     public MeowmadAli cat1 = new MeowmadAli();
+
+    private Table table1;
+    private Table table2;
+    private Stage stage;
 
     //notes for self:
     //spritebatch is object for rendering.
@@ -24,6 +31,26 @@ public class BattleScreen implements Screen {
         this.gameObj = gameObj;
         this.batch = new SpriteBatch();
         this.background = new Texture("Pixel_art_grass_image.png");
+
+
+        BattleHandler.battleState.loadTextures();
+
+        stage = new Stage();
+        final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        table1 = new Table();
+        table1.background("Pixel_art_grass_image.png");
+        Label name1 = new Label(BattleHandler.battleState.player1.username(), skin);
+        Label name2 = new Label(BattleHandler.battleState.player2.username(), skin);
+        table1.add();
+        table2 = new Table();
+
+
+
+        Stack stack = new Stack(table1, table2);
+        stack.setFillParent(true);
+        stage.addActor(stack);
+        //idea: table1 is background + pets; basically things that don't change
+        // table2 is health, rounds, skills, etc.
     }
 
 

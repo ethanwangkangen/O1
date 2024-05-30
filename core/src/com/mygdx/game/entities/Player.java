@@ -61,4 +61,15 @@ public class Player extends Entity implements Serializable{
     }
 
 
+    public String username() {
+        return this.username;
+    }
+
+    public void loadTextures() {
+        for (Creature pet: pets) {
+            if (pet != null) {
+                pet.loadTexture();
+            }
+        }
+    }
 }
