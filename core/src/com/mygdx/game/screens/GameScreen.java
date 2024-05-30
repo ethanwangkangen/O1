@@ -19,11 +19,13 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
 
+
     public GameScreen(Game gameObj) {
         System.out.println("GameScreen created");
         this.gameObj = gameObj;
         this.batch = new SpriteBatch();
         this.background = new Texture("mainscreen.png");
+
     }
 
     @Override

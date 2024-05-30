@@ -54,60 +54,7 @@ public class DarwinsDuel extends Game {
 		batch.begin();
 		batch.draw(img, 0, y);
 		batch.end();
-		boolean joined = false;
-		if (Gdx.input.isKeyPressed(Input.Keys.UP) && !joined){
-			joined = true;
-			//create client, connect client to server. start battle
-			this.gameState = gameState.BATTLE;
-			Client client = new Client();
-			client.addListener(new EventListener());
-			client.getKryo().register(JoinRequestEvent.class);
-			client.getKryo().register(JoinResponseEvent.class);
-			client.getKryo().register(BattleState.class);
-			client.getKryo().register(Player.class);
-			client.getKryo().register(Entity.class);
-			client.getKryo().register(MeowmadAli.class);
-			client.getKryo().register(Creature.class);
-			client.getKryo().register(Creature[].class);
-			client.getKryo().register(Skill.class);
-			client.getKryo().register(BattleState.Turn.class);
 
-			//start the client
-			client.start();
-
-			//connect to server
-			// Connect to the server in a separate thread
-			Thread connectThread = new Thread(() -> {
-				String host = "localhost"; // Server's IP address if not running locally
-				int tcpPort = 54455;       // Must match the server's TCP port
-				int udpPort = 54477;       // Must match the server's UDP port
-
-				try {
-					client.connect(5000, host, tcpPort, udpPort);
-					System.out.println("Connected to the server.");
-
-					JoinRequestEvent event = new JoinRequestEvent();
-					event.player = new Player();
-					client.sendTCP(event);
-					System.out.println("JoinRequestEvent sent");
-
-				} catch (IOException e) {
-					System.err.println("Error connecting to the server: " + e.getMessage());
-					e.printStackTrace();
-				}
-			});
-			connectThread.start(); // Start the thread
-			//client.sendTCP(new JoinRequestEvent(new Player(5, 5)));
-
-			try {
-				connectThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-
-
-		}
 
 		switch (gameState) {
 			case FREEROAM:

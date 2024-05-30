@@ -4,7 +4,7 @@ import com.mygdx.game.entities.Player;
 
 import java.io.Serializable;
 
-public class BattleState implements Serializable {
+public class BattleState {
     public Player player1, player2;
 
     public enum Turn {
