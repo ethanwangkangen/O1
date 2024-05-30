@@ -36,7 +36,7 @@ public class DarwinsDuel extends Game {
 		LOSS
 	}
 
-	private GameState gameState = GameState.FREEROAM;
+	private GameState gameState = GameState.LOGIN;
 	public void changeState (GameState gameState) {
 		this.gameState = gameState;
 	}
