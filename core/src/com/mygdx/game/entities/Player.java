@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Player extends Entity implements Serializable{
 
     //private Texture texture;
-
+    String username;
+    UUID id;
     public Creature pet1 = null;
     private Creature pet2 = null;
     private Creature pet3 = null;
@@ -29,7 +31,10 @@ public class Player extends Entity implements Serializable{
 //    }
 
 
-    public Player(){}
+    public Player(String username){
+        this.username = username;
+        id = UUID.randomUUID();
+    }
 
     public void Move() {
 //        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) xpos -= 200 * Gdx.graphics.getDeltaTime();
