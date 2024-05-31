@@ -18,27 +18,27 @@ public abstract class Creature extends Entity implements Serializable{
     private String path;
 
     //private ArrayList<Skill> skillList = new ArrayList();
-//    private Skill skill1 = null;
-//    private Skill skill2 = null;
-//    private Skill skill3 = null;
-//    private Skill[] skills = {skill1, skill2, skill3};
+    private Skill skill1 = null;
+    private Skill skill2 = null;
+    private Skill skill3 = null;
+    private Skill[] skills = {skill1, skill2, skill3};
 
     private transient SpriteBatch batch;
 
-//    public Skill[] getSkills() {
-//        return skills;
-//    }
+    public Skill[] getSkills() {
+        return skills;
+    }
 
-    public Creature(int health, int mana, String name, String path, Texture texturePath) {
+    public Creature(int health, int mana, String name, String path) {
         this.maxhealth = health;
         this.health = health;
         this.maxmana = mana;
         this.mana = mana;
-        this.texturePath = texturePath;
+        this.path = path;
         this.alive = true;
         this.level = 1;
         this.name = name;
-        this.path = path;
+        this.texturePath = new Texture(path);
     }
 
     //public abstract void attack1();
@@ -52,6 +52,14 @@ public abstract class Creature extends Entity implements Serializable{
             this.health = 0;
             this.alive = false;
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public boolean isAlive() {
@@ -70,4 +78,17 @@ public abstract class Creature extends Entity implements Serializable{
     public void loadTexture() {
         texturePath = new Texture(path);
     }
+
+    public Texture getTexturePath() {
+        return texturePath;
+    }
+
+    public int getMaxhealth() {
+        return maxhealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
 }

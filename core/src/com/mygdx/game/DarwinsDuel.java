@@ -25,6 +25,7 @@ public class DarwinsDuel extends Game {
 	Texture img;
 	private static DarwinsDuel instance;
 	private OrthographicCamera camera;
+	public static Client client;
 
 	float y = 0;
 
@@ -36,10 +37,15 @@ public class DarwinsDuel extends Game {
 		LOSS
 	}
 
-	private GameState gameState = GameState.LOGIN;
-	public void changeState (GameState gameState) {
+	public static GameState gameState = GameState.LOGIN;
+
+	// should make variables above private
+	/*public void changeState(GameState gameState) {
 		this.gameState = gameState;
 	}
+	public static void setClient(Client client) {
+		client = client;
+	}*/
 
 	@Override
 	public void create () {
@@ -82,7 +88,7 @@ public class DarwinsDuel extends Game {
 				break;
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
-					this.setScreen(new BattleScreen(this));
+					this.setScreen(new LoginScreen(this));
 				}
 				break;
 			case WIN:
@@ -123,5 +129,9 @@ public class DarwinsDuel extends Game {
 
 	public OrthographicCamera getCamera() {
 		return camera;
+	}
+
+	public static Client getClient() {
+		return client;
 	}
 }

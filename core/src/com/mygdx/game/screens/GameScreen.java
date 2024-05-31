@@ -12,12 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.handlers.PlayerHandler;
+import com.mygdx.global.StartBattleEvent;
 
 public class GameScreen implements Screen {
 
     private final Game gameObj;
     private SpriteBatch batch;
     private Texture background;
+    private TextButton startBattle;
+    private Stage stage;
+    private Table table;
 
 
     public GameScreen(Game gameObj) {
@@ -26,6 +32,28 @@ public class GameScreen implements Screen {
         this.batch = new SpriteBatch();
         this.background = new Texture("mainscreen.png");
 
+        Texture player = PlayerHandler.getTexture();
+
+        this.stage = new Stage();
+        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+
+        this.table = new Table();
+        this.table.setFillParent(true);
+        this.table.background("Pixel_art_grass_image.png");
+
+        final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        this.startBattle = new TextButton("Start Battle", skin);
+        this.startBattle.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                StartBattleEvent start = new StartBattleEvent();
+                DarwinsDuel.getClient().sendTCP(start);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        this.table.add(startBattle).size(250, 50).padTop(100).row();
+        this.stage.addActor(this.table);
     }
 
     @Override
@@ -38,11 +66,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         //System.out.println("currently rendering GameScreen");
-        // Begin drawing
-        batch.begin();
-        // Draw your game elements here
-        batch.draw(background, 0, 0, 400, 100);
-        batch.end();
+//        // Begin drawing
+//        batch.begin();
+//        // Draw your game elements here
+//        batch.draw(background, 0, 0, 400, 100);
+//        batch.end();
+
+        this.stage.draw();
+        this.stage.act(delta);
     }
 
     @Override

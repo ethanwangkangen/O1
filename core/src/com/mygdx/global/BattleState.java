@@ -6,10 +6,10 @@ import com.mygdx.game.entities.Skill;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class BattleState {
+public class BattleState{
 
-    public static final BattleState INSTANCE = new BattleState();
-    public Player player1, player2;
+    //public static final BattleState INSTANCE = new BattleState();
+    private Player player1, player2;
 
     public enum Turn {
         PLAYERONETURN,
@@ -19,6 +19,7 @@ public class BattleState {
     private Turn turn;
     private int numPlayers;
     private Boolean battleStarted;
+    private Boolean battleEnded;
     private int numofTurns;
 
     public BattleState() {
@@ -26,22 +27,31 @@ public class BattleState {
         this.numPlayers = 0;
         this.numofTurns = 1;
         battleStarted = false;
+        battleEnded = false;
     }
 
     public int getNumPlayers() {
         return this.numPlayers;
     }
 
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
     public boolean playerAlive() {
         return player1.isAlive() || player2.isAlive();
     }
 
-    public void addPlayer(Player Player) {
+    public void createPlayer(String username) {
         if (this.player1 == null) {
-            this.player1 = Player;
+            this.player1 = new Player(username);
             this.numPlayers = 1;
         } else if (this.player2 == null) {
-            this.player2 = Player;
+            this.player2 = new Player(username);
             this.numPlayers = 2;
         } else {
             System.out.println("max players"); //to do: throw error
@@ -52,12 +62,8 @@ public class BattleState {
         }
     }
 
-    public Player getPlayerTurn() {
-        if (this.turn == Turn.PLAYERONETURN) {
-            return this.player1;
-        } else {
-            return this.player2;
-        }
+    public Turn getPlayerTurn() {
+        return turn;
     }
 
     public void changeTurn() {
@@ -81,6 +87,10 @@ public class BattleState {
             player1.takeDamage(skill);
         } else {
             player2.takeDamage(skill);
+        }
+
+        if (!playerAlive()) {
+            battleEnded = true;
         }
     }
 

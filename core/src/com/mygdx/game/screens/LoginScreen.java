@@ -11,7 +11,6 @@ import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
-import com.mygdx.global.AddPlayerEvent;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 
@@ -19,8 +18,8 @@ import java.io.IOException;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
-    private Stage stage;
-    private Table table;
+    private final Stage stage;
+    private final Table table;
     private Texture background;
     private final TextButton loginButton;
     private final TextField usernameField;
@@ -88,9 +87,11 @@ public class LoginScreen implements Screen {
         batch.end(); */
 
         if (login && !joined) {
-            gameObj.changeState(DarwinsDuel.GameState.BATTLE);
+            joined = true;
+            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
 
-            final Client client = new Client();
+            DarwinsDuel.client = new Client();
+            Client client = DarwinsDuel.getClient();
 
             client.addListener(new EventListener());
             //client.addListener(new ConnectionStateListener());
@@ -111,27 +112,7 @@ public class LoginScreen implements Screen {
 
             // Connect to server
             // Connect to the server in a separate thread
-            Thread connectThread = new Thread(() -> {
-                String host = "localhost"; // Server's IP address if not running locally
-                int tcpPort = 54455;       // Must match the server's TCP port
-                int udpPort = 54477;       // Must match the server's UDP port
-
-                try {
-                    client.connect(5000, host, tcpPort, udpPort);
-                    System.out.println("Connected to the server.");
-
-                    JoinRequestEvent JoinRequestEvent = new JoinRequestEvent();
-                    JoinRequestEvent.player = new Player(usernameField.getText());
-                    client.sendTCP(JoinRequestEvent);
-                    System.out.println("JoinRequestEvent sent");
-
-                } catch (IOException e) {
-                    System.err.println("Error connecting to the server: " + e.getMessage());
-                    e.printStackTrace();
-                    errorLabel.setText(e.getMessage());
-                }
-            });
-            connectThread.start(); // Start the thread
+            Thread connectThread = getThread(client);
             //client.sendTCP(new JoinRequestEvent(new Player(5, 5)));
 
             try {
@@ -140,10 +121,34 @@ public class LoginScreen implements Screen {
                 e.printStackTrace();
             }
 
-            Player newPlayer = new Player(usernameField.getText());
-            AddPlayerEvent AddplayerEvent = new AddPlayerEvent(newPlayer);
+            String username = usernameField.getText();
+            AddPlayerEvent AddplayerEvent = new AddPlayerEvent(username);
             client.sendTCP(AddplayerEvent);
         }
+    }
+
+    private Thread getThread(Client client) {
+        Thread connectThread = new Thread(() -> {
+            String host = "localhost"; // Server's IP address if not running locally
+            int tcpPort = 54455;       // Must match the server's TCP port
+            int udpPort = 54477;       // Must match the server's UDP port
+
+            try {
+                client.connect(5000, host, tcpPort, udpPort);
+                System.out.println("Connected to the server.");
+
+                JoinRequestEvent JoinRequestEvent = new JoinRequestEvent();
+                client.sendTCP(JoinRequestEvent);
+                System.out.println("JoinRequestEvent sent");
+
+            } catch (IOException e) {
+                System.err.println("Error connecting to the server: " + e.getMessage());
+                e.printStackTrace();
+                errorLabel.setText(e.getMessage());
+            }
+        });
+        connectThread.start(); // Start the thread
+        return connectThread;
     }
 
     @Override

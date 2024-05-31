@@ -8,6 +8,10 @@ public class Skill {
         return damage;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public Skill(String name, int damage) {
         this.name = name;
         this.damage = damage;

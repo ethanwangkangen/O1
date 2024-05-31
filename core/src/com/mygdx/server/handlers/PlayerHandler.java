@@ -5,10 +5,8 @@ import com.mygdx.game.entities.Player;
 
 public class PlayerHandler {
 
-    public static final PlayerHandler INSTANCE = new PlayerHandler();
-
-    Player player1;
-    Player player2;
+    static public Player player1;
+    static public Player player2;
 
     public PlayerHandler() {
         player1 = null;

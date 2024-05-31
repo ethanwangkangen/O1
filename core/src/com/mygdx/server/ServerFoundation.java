@@ -5,6 +5,7 @@ import com.mygdx.game.entities.*;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.JoinRequestEvent;
 import com.mygdx.global.JoinResponseEvent;
+import com.mygdx.server.handlers.PlayerHandler;
 import com.mygdx.server.listeners.EventListener;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ public class ServerFoundation {
     private static Server server;
     public static ServerFoundation instance;
     public static BattleState battleState = new BattleState();
+    public static PlayerHandler players = new PlayerHandler();
 
     public static void main(String[] args) {
         ServerFoundation instance = new ServerFoundation();

@@ -11,11 +11,13 @@ import java.util.UUID;
 public class Player extends Entity implements Serializable{
 
     //private Texture texture;
-    String username;
-    public Creature pet1 = new MeowmadAli();
+    private String username;
+    public Creature pet1 = null;
     private Creature pet2 = null;
     private Creature pet3 = null;
-    private UUID id = UUID.randomUUID();
+    private UUID id;
+    private transient Texture texturePath;
+    private String path;
 
 
     private Creature[] pets = {pet1, pet2, pet3};
@@ -35,6 +37,8 @@ public class Player extends Entity implements Serializable{
         return false;
     }
 
+
+
     public UUID getId() {
         return id;
     }
@@ -51,6 +55,17 @@ public class Player extends Entity implements Serializable{
 
     public Player(String username){
         this.username = username;
+        this.pet1 = new MeowmadAli();
+        this.id = UUID.randomUUID();
+        path = "player1(1).png";
+        texturePath = new Texture ("player1(1).png");
+    }
+
+    public void loadTexture() {
+        texturePath = new Texture(path);
+    }
+    public Texture getTexture() {
+        return texturePath;
     }
 
     public void Move() {
