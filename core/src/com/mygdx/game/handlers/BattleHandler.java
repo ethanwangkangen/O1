@@ -6,6 +6,9 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class BattleHandler {
     private static BattleState battleState;
+    public static boolean changePet = false;
+    public static boolean updatePetInfo = false;
+    public static boolean battleEnd = false;
     //note: current implementation is such that BattleState is (and is required to be) mutable. should change this in the future
 
     //logic of
