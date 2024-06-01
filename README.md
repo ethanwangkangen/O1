@@ -47,4 +47,7 @@ https://drive.google.com/file/d/12Qsbgy2pwt6NFLwXsRApP1EVpbVfqUeH/view?usp=shari
 
 Proof-of-Concept
 
+Class Diagram
+![image](https://github.com/ethanwangkangen/O1/assets/118478459/f7e80ccc-8bf4-4977-bf3d-d0d1755a8b23)
+
 
