@@ -4,6 +4,11 @@ CodeClown Creations
 Proposed Level of Achievement:
 Apollo
 
+MileStone 1:
+Poster:
+Video:
+Project Log: 
+
 Motivation:
 
 As long-time gamers, we are tired of games being seen as “useless” and “ a waste of time”. As such, we hope to create a game that encourages both social interaction and friendly competition. Inspired by popular AR mobile game Pokemon Go and its rivals (eg. Palworld), we intend to incorporate real-time, location-based systems (similar to those used in games like Pokemon Go and Ingress) for deeper immersion. Coupled with diverse environments, each teeming with unique creatures and new challenges to overcome, we want to create a captivating pet battling mobile game that will encourage people to leave the comforts of their homes to encounter and capture new and unique creatures.
