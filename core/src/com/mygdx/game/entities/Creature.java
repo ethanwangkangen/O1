@@ -18,10 +18,10 @@ public abstract class Creature extends Entity implements Serializable{
     private String path;
 
     //private ArrayList<Skill> skillList = new ArrayList();
-    private Skill skill1 = null;
-    private Skill skill2 = null;
-    private Skill skill3 = null;
-    private Skill[] skills = {skill1, skill2, skill3};
+    public Skill skill1;
+    public Skill skill2;
+    public Skill skill3;
+    public Skill[] skills = {skill1, skill2, skill3};
 
     private transient SpriteBatch batch;
 

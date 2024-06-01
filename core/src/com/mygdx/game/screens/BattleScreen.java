@@ -151,7 +151,7 @@ public class BattleScreen implements Screen {
 
 
         //skills window
-        final Skill[] skills = thisPet.getSkills();
+        final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
         TextButton skill1 = createSkillButton(skills[0]);
         TextButton skill2 = createSkillButton(skills[1]);
         TextButton skill3 = createSkillButton(skills[2]);
@@ -218,7 +218,7 @@ public class BattleScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        
+
         // enable/disable skillButtons
         if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && BattleHandler.getPlayer1().getId() == myId) {
             // this player's turn
@@ -227,7 +227,7 @@ public class BattleScreen implements Screen {
             // opponent's turn
             setNotTouchable();
         }
-        
+
         // logic for battle
         if (BattleHandler.changePet) {
             // currently not in use
