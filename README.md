@@ -31,13 +31,30 @@ As a student, who wants to meet new people and make new friends, I want to be ab
 
 Project Scope:
 
-	In Darwin’s Duel, players travel the in-game world through location-based systems that track their real-life locations. Players can encounter, capture a wide variety of creatures while exploring diverse environments. They can then train and evolve these pets by engaging in battles with others while obtaining new skills and items that will enhance their battle capabilities. By engaging in real-time duels with other players, they can climb leaderboards and gain both prestige and unique rewards. 
+	Darwin's Duel is a RPG mobile game, similar to that of Pokemon Go.
+	Players travel the in-game world through location-based systems that track their real-life locations. They can encounter, capture a wide variety of unique creatures while exploring diverse environments. They can then train and evolve these pets by engaging in battles with others while obtaining new skills and items that will enhance their battle capabilities. With various battle elements that players have to consider (eg. element counter system, mana/AP management, unique status conditions), Darwin's Duel is more than a simple game where a strong pet beats all.
+ 	By engaging in real-time duels with other players, they can climb leaderboards and gain both prestige and unique rewards. 
 
-Features:
+Features implemented in MileStone 1:
 
-[Proposed]
-[Current Progress]
-[Additional Features]
+Turn-based system
+Combat
+Basic visuals
+User Login Screen
+Basic networking for online 2-player combat
+
+Features to be implemented in future milestones:
+
+Database to store data
+Multithreading
+Incorporate items
+Create a wider variety of pets
+Improve visual quality and include animations
+Improve battle system
+Create a large RPG world to explore
+Additional features such as menu, setting, etc.
+location-based GPS system
+
 
 Timeline and Development Plan
 
