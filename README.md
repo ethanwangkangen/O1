@@ -7,7 +7,7 @@ Apollo
 MileStone 1:
 Poster:
 Video:
-Project Log: 
+Project Log: https://docs.google.com/document/d/1weF3uqogUadpHA4-t_1HjwFV7HoL4UolzKsHFlo2ckI/edit?usp=sharing
 
 Motivation:
 
