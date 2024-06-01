@@ -20,16 +20,18 @@ public class EventListener extends Listener {
         } else if (object instanceof BattleState) {
             BattleState joinObj = (BattleState) object;
             BattleHandler.updateBattleState(joinObj);
+            BattleHandler.updatePetInfo = true;
             System.out.println("Client has received the battleState");
         } else if (object instanceof AddPlayerEvent) {
             AddPlayerEvent joinObj = (AddPlayerEvent) object;
             PlayerHandler.updatePlayer(joinObj.getPlayer());
-            System.out.println("Client has received the battleState");
+            System.out.println("Client has received the Player Info");
+            // todo change to game screen
         } else if (object instanceof StartBattleEvent) {
             DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
         } else if (object instanceof EndBattleEvent) {
+            BattleHandler.battleEnd = true;
             System.out.println("Client has received EndBattleEvent");
-            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
         }
     }
 }

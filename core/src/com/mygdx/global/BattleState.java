@@ -46,12 +46,12 @@ public class BattleState{
         return player1.isAlive() || player2.isAlive();
     }
 
-    public void createPlayer(String username) {
+    public void createPlayer(Player player) {
         if (this.player1 == null) {
-            this.player1 = new Player(username);
+            this.player1 = player;
             this.numPlayers = 1;
         } else if (this.player2 == null) {
-            this.player2 = new Player(username);
+            this.player2 = player;
             this.numPlayers = 2;
         } else {
             System.out.println("max players"); //to do: throw error

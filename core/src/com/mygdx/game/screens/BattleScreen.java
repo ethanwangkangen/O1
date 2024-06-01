@@ -52,6 +52,9 @@ public class BattleScreen implements Screen {
     private ProgressBar healthBar2;
     TextButton[] skillButtons;
     Boolean[] skillAvailable = {false, false, false};
+    private Label winLabel;
+    private Label loseLabel;
+    private Table winOrLoseTable;
 
     //notes for self:
     //spritebatch is object for rendering.
@@ -147,6 +150,21 @@ public class BattleScreen implements Screen {
             skillsWindow.row();
         }
 
+        // table for win/lose
+        // table should cover entire screen, rendering player unable to click anything else
+        // todo change from label to image
+        winLabel = new Label("You have won", skin);
+        loseLabel = new Label("You have lost", skin);
+        winOrLoseTable.setFillParent(true);
+        winOrLoseTable.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                // todo clear BattleHandler
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
 
         pet1Info.top().left().padLeft(100).padTop(50);
         stage.addActor(pet1Info);
@@ -157,6 +175,7 @@ public class BattleScreen implements Screen {
         imagesTable.add(pet2Image).right().center().padRight(100);
         stage.addActor(imagesTable);
         stage.addActor(skillsWindow);
+
 
         //Stack stack = new Stack(table1, table2);
         //stack.setFillParent(true);
@@ -191,17 +210,27 @@ public class BattleScreen implements Screen {
         
         // logic for battle
         if (BattleHandler.changePet) {
+            // currently not in use
             changePet();
+            BattleHandler.changePet = false;
         } else if (BattleHandler.updatePetInfo) {
             updatePetInfo();
+            BattleHandler.updatePetInfo = false;
         } else if (BattleHandler.battleEnd) {
             setNotTouchable();
             // todo load end battle screen
+            // if this doesn't work, consider implementing stack
             if (thisPlayer.isAlive()) {
                 // this player has won
+                winOrLoseTable.add(winLabel);
+                stage.addActor(winOrLoseTable);
             } else {
                 // this player has lost
+                winOrLoseTable.add(loseLabel);
+                stage.addActor(winOrLoseTable);
             }
+            BattleHandler.battleEnd = false;
+
         }
 
         // draw screen

@@ -15,8 +15,7 @@ public class EventListener extends Listener {
     @Override
     public void received(Connection connection, final Object object) {
         Server server = ServerFoundation.getServer();
-        Connection[] connections = server.getConnections();
-        //BattleState battleState = BattleState.INSTANCE;
+        //Connection[] connections = server.getConnections();
         BattleState battleState = ServerFoundation.battleState;
         PlayerHandler players = ServerFoundation.players;
 
@@ -41,7 +40,8 @@ public class EventListener extends Listener {
             connection.sendTCP(playerInfo);
             System.out.println("sending playerInfo to user");
 
-            battleState.createPlayer(addPlayerEvent.username);
+            battleState.createPlayer(newPlayer);
+            //todo move to startbattleevent
 
             /*for (Connection i : connections) {
                 if (i != connection) {
@@ -64,7 +64,7 @@ public class EventListener extends Listener {
                 System.out.println("sending battleState to user");
                 server.sendToAllTCP(new StartBattleEvent());
                 System.out.println("Starting Battle");
-            }
+            } //todo change
         } else {
             System.out.println("unknown object received.");
         }
