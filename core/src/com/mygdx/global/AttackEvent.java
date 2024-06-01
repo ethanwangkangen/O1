@@ -9,6 +9,7 @@ public class AttackEvent implements Serializable {
     public Skill skill;
     public UUID id; // of attacker
 
+    public AttackEvent(){}
 
     public AttackEvent(UUID id, Skill skill) {
         this.skill = skill;

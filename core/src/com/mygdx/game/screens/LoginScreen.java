@@ -48,8 +48,8 @@ public class LoginScreen implements Screen {
 //        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
 //        stage.getBatch().end();
 
-        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
-        table.background(background);
+//        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
+//        table.background(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         this.usernameField = new TextField("Username", skin);
@@ -89,45 +89,41 @@ public class LoginScreen implements Screen {
         this.stage.draw();
         this.stage.act(delta);
 
-        /* // Begin drawing
-        batch.begin();
-        // Draw your game elements here
-        batch.draw(background, 0, 0, 1000, 1000);
-        cat1.render(batch);
-        batch.end(); */
-
         if (login && !joined) {
             joined = true;
             DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
 
             DarwinsDuel.client = new Client();
-            Client client = DarwinsDuel.getClient();
+            Client myClient = DarwinsDuel.getClient();
 
-            client.addListener(new EventListener());
+
+            myClient.addListener(new EventListener());
             //client.addListener(new ConnectionStateListener());
 
-            client.getKryo().register(AddPlayerEvent.class);
-            client.getKryo().register(AttackEvent.class);
-            client.getKryo().register(BattleState.class);
-            client.getKryo().register(EndBattleEvent.class);
-            client.getKryo().register(JoinRequestEvent.class);
-            client.getKryo().register(JoinResponseEvent.class);
-            client.getKryo().register(StartBattleEvent.class);
+            myClient.getKryo().register(AddPlayerEvent.class);
+            myClient.getKryo().register(AttackEvent.class);
+            myClient.getKryo().register(BattleState.class);
+            myClient.getKryo().register(EndBattleEvent.class);
+            myClient.getKryo().register(JoinRequestEvent.class);
+            myClient.getKryo().register(JoinResponseEvent.class);
+            myClient.getKryo().register(StartBattleEvent.class);
+            myClient.getKryo().register(java.util.UUID.class);
 
-            client.getKryo().register(Player.class);
-            client.getKryo().register(Entity.class);
-            client.getKryo().register(MeowmadAli.class);
-            client.getKryo().register(Creature.class);
-            client.getKryo().register(Creature[].class);
-            client.getKryo().register(Skill.class);
-            client.getKryo().register(BattleState.Turn.class);
+            myClient.getKryo().register(Player.class);
+            myClient.getKryo().register(Entity.class);
+            myClient.getKryo().register(MeowmadAli.class);
+            myClient.getKryo().register(Creature.class);
+            myClient.getKryo().register(Creature[].class);
+            myClient.getKryo().register(Skill.class);
+            myClient.getKryo().register(Skill[].class);
+            myClient.getKryo().register(BattleState.Turn.class);
 
             //start the client
-            client.start();
+            myClient.start();
 
             // Connect to server
             // Connect to the server in a separate thread
-            Thread connectThread = getThread(client);
+            Thread connectThread = getThread(myClient);
             //client.sendTCP(new JoinRequestEvent(new Player(5, 5)));
 
             try {
@@ -136,30 +132,30 @@ public class LoginScreen implements Screen {
                 e.printStackTrace();
             }
 
-            String username = usernameField.getText();
-            AddPlayerEvent AddplayerEvent = new AddPlayerEvent(username);
-            client.sendTCP(AddplayerEvent);
+            AddPlayerEvent addPlayerEvent = new AddPlayerEvent();
+            addPlayerEvent.username = usernameField.getText();
+            myClient.sendTCP(addPlayerEvent);
         }
     }
 
     private Thread getThread(Client client) {
         Thread connectThread = new Thread(() -> {
             String host = "localhost"; // Server's IP address if not running locally
-            int tcpPort = 54455;       // Must match the server's TCP port
-            int udpPort = 54477;       // Must match the server's UDP port
+            int tcpPort = 55555;       // Must match the server's TCP port
+            int udpPort = 55577;       // Must match the server's UDP port
 
             try {
                 client.connect(5000, host, tcpPort, udpPort);
                 System.out.println("Connected to the server.");
 
-                JoinRequestEvent JoinRequestEvent = new JoinRequestEvent();
-                client.sendTCP(JoinRequestEvent);
+                JoinRequestEvent joinRequestEvent = new JoinRequestEvent();
+                client.sendTCP(joinRequestEvent);
                 System.out.println("JoinRequestEvent sent");
 
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());
                 e.printStackTrace();
-                errorLabel.setText(e.getMessage());
+                //errorLabel.setText(e.getMessage());
             }
         });
         connectThread.start(); // Start the thread

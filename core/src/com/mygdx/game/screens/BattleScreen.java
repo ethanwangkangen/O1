@@ -21,6 +21,10 @@ import com.mygdx.game.handlers.PlayerHandler;
 import com.mygdx.global.AttackEvent;
 import com.mygdx.global.BattleState;
 import org.w3c.dom.Text;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.UUID;
 
@@ -36,9 +40,9 @@ public class BattleScreen implements Screen {
     //private Table pet2Info;
     //private Window skillsWindow;
     //private Table imagesTable;
-    private UUID id = PlayerHandler.getId(); //id of current player
+    private UUID myId = PlayerHandler.getId(); //id of current player
     private Player thisPlayer;
-    private Player opponent;
+    private Player opponentPlayer;
 
     private Image pet1Image;
     private Image pet2Image;
@@ -55,10 +59,12 @@ public class BattleScreen implements Screen {
     private Label winLabel;
     private Label loseLabel;
     private Table winOrLoseTable;
-
-    //notes for self:
-    //spritebatch is object for rendering.
-    //process is: call .begin(), render using .draw(texture, x, y), then .end()
+    Table bgTable = new Table(); //background + pets + usernames
+    Table pet1Info = new Table();
+    Table pet2Info = new Table();
+    Table pet1imageTable = new Table();
+    Table pet2imageTable = new Table();
+    Window skillsWindow;
 
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
@@ -71,44 +77,81 @@ public class BattleScreen implements Screen {
         BattleHandler.loadTextures();
 
         // set players
-        if (id == BattleHandler.getPlayer1().getId()) {
+        if (myId == BattleHandler.getPlayer1().getId()) {
             thisPlayer = BattleHandler.getPlayer1();
-            opponent = BattleHandler.getPlayer2();
+            opponentPlayer = BattleHandler.getPlayer2();
         } else {
             thisPlayer = BattleHandler.getPlayer2();
-            opponent = BattleHandler.getPlayer1();
+            opponentPlayer = BattleHandler.getPlayer1();
         }
 
-        Creature pet1 = thisPlayer.CurrentPet();
-        Creature pet2 = opponent.CurrentPet();
+
+        Creature thisPet = thisPlayer.getCurrentPet();
+        Creature opponentPet = opponentPlayer.getCurrentPet();
+        if (thisPet == null) {
+            System.out.println("thisPet null");
+        }
 
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
-        // components to add
-        Label name1 = new Label(thisPlayer.username(), skin);
-        Label name2 = new Label(opponent.username(), skin);
+//        // components to add
+//        Label name1 = new Label(thisPlayer.username(), skin);
+//        Label name2 = new Label(opponentPlayer.username(), skin);
 
-        pet1Image = new Image(pet1.getTexturePath());
-        pet2Image = new Image(pet1.getTexturePath());
 
-        pet1Name = new Label(pet1.getName(), skin);
-        pet2Name = new Label(pet2.getName(), skin);
+        //background table
+        Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("Pixel_art_grass_image.png")));
+        bgTable.setBackground(background);
+        bgTable.setFillParent(true);
 
-        pet1Level = new Label(((Integer)pet1.getLevel()).toString(), skin);
-        pet2Level = new Label(((Integer)pet1.getLevel()).toString(), skin);
+        //pet Images
+        pet1Image = new Image(new Texture("meowmad_ali.png"));
+        pet2Image = new Image(new Texture("meowmad_ali.png")); //bug: getTexture() not working. nullpointerexception
+        pet1imageTable.add(pet1Image).width(100).height(100).left().padLeft(70);
+        pet1imageTable.left();
+        pet1imageTable.setFillParent(true);
 
-        health1 = new Label(pet1.getHealth() + " / " + pet1.getMaxhealth(), skin);
-        health2 = new Label(pet2.getHealth() + " / " + pet2.getMaxhealth(), skin);
+        pet2imageTable.add(pet2Image).width(100).height(100).right().padRight(70);
+        pet2imageTable.right();
+        pet2imageTable.setFillParent(true);
 
-        healthBar1 = new ProgressBar(0, pet1.getMaxhealth(), 1, false, skin);
+
+        //petInfo
+        pet1Name = new Label(thisPet.getName(), skin);
+        pet2Name = new Label(opponentPet.getName(), skin);
+        pet1Level = new Label(((Integer)thisPet.getLevel()).toString(), skin);
+        pet2Level = new Label(((Integer)opponentPet.getLevel()).toString(), skin);
+        health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
+        health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
+        healthBar1 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
         healthBar1.setAnimateDuration(.5f);
-        healthBar1.setValue(pet1.getHealth());
-        healthBar2 = new ProgressBar(0, pet2.getMaxhealth(), 1, false, skin);
+        healthBar1.setValue(thisPet.getHealth());
+        healthBar2 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
         healthBar2.setAnimateDuration(0.5f);
-        healthBar1.setValue(pet2.getHealth());
+        healthBar1.setValue(opponentPet.getHealth());
 
-        final Skill[] skills = pet1.getSkills();
+        pet1Info.add(pet1Name).padLeft(10).padTop(5);
+        pet1Info.add(pet1Level).left().padLeft(100);
+        pet1Info.row();
+        pet1Info.add(health1).center().padLeft(10);
+        pet1Info.add(healthBar1).left().padLeft(10);
+        //pet1Info.top().left().padLeft(100).padTop(50);
+        pet1Info.left();
+        pet1Info.setFillParent(true);
+
+        pet2Info.add(pet2Name).padRight(10).padTop(5);
+        pet2Info.add(pet2Level).right().padRight(100);
+        pet2Info.row();
+        pet2Info.add(health2).center().padRight(10);
+        pet2Info.add(healthBar2).left().padRight(10);
+        //pet2Info.top().right().padRight(100).padTop(50);
+        pet2Info.right();
+        pet2Info.setFillParent(true);
+
+
+        //skills window
+        final Skill[] skills = thisPet.getSkills();
         TextButton skill1 = createSkillButton(skills[0]);
         TextButton skill2 = createSkillButton(skills[1]);
         TextButton skill3 = createSkillButton(skills[2]);
@@ -121,60 +164,37 @@ public class BattleScreen implements Screen {
             addSkillListener(skillButtons[i], skills[i]);
         }
 
-        // table1: background
-        Table table1 = new Table(); //background + pets + usernames
-        table1.background("Pixel_art_grass_image.png");
-        table1.setFillParent(true);
-        this.stage.addActor(table1);
-
-        // table for pet1Info
-        Table pet1Info = new Table();
-        pet1Info.add(pet1Name).padLeft(10).padTop(5);
-        pet1Info.add(pet1Level).left().padLeft(100);
-        pet1Info.row();
-        pet1Info.add(health1).center().padLeft(10);
-        pet1Info.add(healthBar1).left().padLeft(10);
-
-        // table for pet2Info
-        Table pet2Info = new Table();
-        pet2Info.add(pet2Name).padLeft(10).padTop(5);
-        pet2Info.add(pet2Level).left().padLeft(100);
-        pet2Info.row();
-        pet2Info.add(health2).center().padLeft(10);
-        pet2Info.add(healthBar2).left().padLeft(10);
-
-        // table for skills
-        Window skillsWindow = new Window("Skills", skin);
+        skillsWindow = new Window("Skills", skin);
         for (TextButton button: skillButtons) {
             skillsWindow.add(button);
             skillsWindow.row();
         }
 
-        // table for win/lose
-        // table should cover entire screen, rendering player unable to click anything else
-        // todo change from label to image
-        winLabel = new Label("You have won", skin);
-        loseLabel = new Label("You have lost", skin);
-        winOrLoseTable.setFillParent(true);
-        winOrLoseTable.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
-                // todo clear BattleHandler
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
 
 
-        pet1Info.top().left().padLeft(100).padTop(50);
-        stage.addActor(pet1Info);
-        pet2Info.top().right().padLeft(100).padTop(50);
-        stage.addActor(pet2Info);
-        Table imagesTable = new Table();
-        imagesTable.add(pet1Image).left().center().padLeft(100);
-        imagesTable.add(pet2Image).right().center().padRight(100);
-        stage.addActor(imagesTable);
-        stage.addActor(skillsWindow);
+//        // table for win/lose
+//        // table should cover entire screen, rendering player unable to click anything else
+//        // todo change from label to image
+//        winLabel = new Label("You have won", skin);
+//        loseLabel = new Label("You have lost", skin);
+//        winOrLoseTable.setFillParent(true);
+//        winOrLoseTable.addListener(new ClickListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+//                // todo clear BattleHandler
+//                return super.touchDown(event, x, y, pointer, button);
+//            }
+//        });
+
+        //then add all the tables to the stage
+        this.stage.addActor(bgTable);
+        this.stage.addActor(skillsWindow);
+        this.stage.addActor(pet2imageTable);
+        this.stage.addActor(pet1imageTable);
+        this.stage.addActor(pet1Info);
+        this.stage.addActor(pet2Info);
+
 
 
         //Stack stack = new Stack(table1, table2);
@@ -200,7 +220,7 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         
         // enable/disable skillButtons
-        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && BattleHandler.getPlayer1().getId() == id) {
+        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && BattleHandler.getPlayer1().getId() == myId) {
             // this player's turn
             setTouchable();
         } else {
@@ -240,15 +260,7 @@ public class BattleScreen implements Screen {
         this.stage.getViewport().apply();
         this.stage.act();
         this.stage.draw();
-        this.stage.act(delta);
 
-        //System.out.println("currently rendering BattleScreen");
-//        // Begin drawing
-//        batch.begin();
-//        // Draw your game elements here
-//        batch.draw(background, 0, 0, 1000, 1000);
-//        cat1.render(batch);
-//        batch.end();
 
     }
 
@@ -313,7 +325,9 @@ public class BattleScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                AttackEvent attackEvent = new AttackEvent(id, skill);
+                AttackEvent attackEvent = new AttackEvent();
+                attackEvent.id = myId;
+                attackEvent.skill = skill;
                 DarwinsDuel.getClient().sendTCP(attackEvent);
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -322,31 +336,31 @@ public class BattleScreen implements Screen {
 
     public void updatePetImage() {
         BattleHandler.loadTextures();
-        pet1Image = new Image(thisPlayer.CurrentPet().getTexturePath());
-        pet2Image = new Image(opponent.CurrentPet().getTexturePath());
+        pet1Image = new Image(thisPlayer.getCurrentPet().getTexturePath());
+        pet2Image = new Image(opponentPlayer.getCurrentPet().getTexturePath());
     }
 
     public void changePet() {
         Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-        pet1Level.setText(((Integer)thisPlayer.CurrentPet().getLevel()).toString());
-        pet2Level.setText(((Integer)opponent.CurrentPet().getLevel()).toString());
-        pet1Name.setText(thisPlayer.CurrentPet().getName());
-        pet2Name.setText(opponent.CurrentPet().getName());
-        health1.setText(thisPlayer.CurrentPet().getHealth() + "/" + thisPlayer.CurrentPet().getMaxhealth());
-        health2.setText(opponent.CurrentPet().getHealth() + "/" + opponent.CurrentPet().getMaxhealth());
-        healthBar1 = new ProgressBar(0, thisPlayer.CurrentPet().getMaxhealth(), 1, false, skin);
+        pet1Level.setText(((Integer)thisPlayer.getCurrentPet().getLevel()).toString());
+        pet2Level.setText(((Integer)opponentPlayer.getCurrentPet().getLevel()).toString());
+        pet1Name.setText(thisPlayer.getCurrentPet().getName());
+        pet2Name.setText(opponentPlayer.getCurrentPet().getName());
+        health1.setText(thisPlayer.getCurrentPet().getHealth() + "/" + thisPlayer.getCurrentPet().getMaxhealth());
+        health2.setText(opponentPlayer.getCurrentPet().getHealth() + "/" + opponentPlayer.getCurrentPet().getMaxhealth());
+        healthBar1 = new ProgressBar(0, thisPlayer.getCurrentPet().getMaxhealth(), 1, false, skin);
         healthBar1.setAnimateDuration(.5f);
-        healthBar1.setValue(thisPlayer.CurrentPet().getHealth());
-        healthBar2 = new ProgressBar(0, opponent.CurrentPet().getMaxhealth(), 1, false, skin);
+        healthBar1.setValue(thisPlayer.getCurrentPet().getHealth());
+        healthBar2 = new ProgressBar(0, opponentPlayer.getCurrentPet().getMaxhealth(), 1, false, skin);
         healthBar2.setAnimateDuration(.5f);
-        healthBar2.setValue(opponent.CurrentPet().getHealth());
+        healthBar2.setValue(opponentPlayer.getCurrentPet().getHealth());
         updatePetImage();
     }
 
     public void updatePetInfo() {
-        health1.setText(thisPlayer.CurrentPet().getHealth() + "/" + thisPlayer.CurrentPet().getMaxhealth());
-        health2.setText(opponent.CurrentPet().getHealth() + "/" + opponent.CurrentPet().getMaxhealth());
-        healthBar1.setValue(thisPlayer.CurrentPet().getHealth());
-        healthBar2.setValue(opponent.CurrentPet().getHealth());
+        health1.setText(thisPlayer.getCurrentPet().getHealth() + "/" + thisPlayer.getCurrentPet().getMaxhealth());
+        health2.setText(opponentPlayer.getCurrentPet().getHealth() + "/" + opponentPlayer.getCurrentPet().getMaxhealth());
+        healthBar1.setValue(thisPlayer.getCurrentPet().getHealth());
+        healthBar2.setValue(opponentPlayer.getCurrentPet().getHealth());
     }
 }

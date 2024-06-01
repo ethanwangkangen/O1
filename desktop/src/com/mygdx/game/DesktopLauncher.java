@@ -11,5 +11,6 @@ public class DesktopLauncher {
 		config.setForegroundFPS(30);
 		config.setTitle("DarwinsDuelv1");
 		new Lwjgl3Application(new DarwinsDuel(), config);
+
 	}
 }

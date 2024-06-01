@@ -16,4 +16,5 @@ public class Skill {
         this.name = name;
         this.damage = damage;
     }
+    public Skill() {}
 }

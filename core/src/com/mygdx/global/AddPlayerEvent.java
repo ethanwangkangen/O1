@@ -5,14 +5,11 @@ import com.mygdx.game.entities.Player;
 public class AddPlayerEvent {
 
     public String username;
-    private Player player;
+    public Player player;
 
-    public AddPlayerEvent(String username) {
-        this.username = username;
+    public AddPlayerEvent() {
     }
-    public AddPlayerEvent(Player player) {
-        this.player = player;
-    }
+
     public Player getPlayer() {
         return player;
     }

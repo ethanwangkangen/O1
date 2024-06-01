@@ -46,7 +46,9 @@ public class BattleState{
         return player1.isAlive() || player2.isAlive();
     }
 
-    public void createPlayer(Player player) {
+
+    //first player to connect to server will be set as player1, second set as player2
+    public void addPlayer(Player player) {
         if (this.player1 == null) {
             this.player1 = player;
             this.numPlayers = 1;

@@ -12,20 +12,21 @@ public class Player extends Entity implements Serializable{
 
     //private Texture texture;
     private String username;
-    public Creature pet1 = null;
-    private Creature pet2 = null;
-    private Creature pet3 = null;
-    private UUID id;
+    public Creature pet1 = new MeowmadAli();
+    private Creature pet2;
+    private Creature pet3;
+    private transient UUID id;
+    private String idString;
     private transient Texture texturePath;
     private String path;
 
 
     private Creature[] pets = {pet1, pet2, pet3};
-    private Creature CurrentPet = pets[0];
+    private Creature currentPet = pet1;
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public void takeDamage(Skill skill) {
-        CurrentPet.takeDamage(skill);
+        currentPet.takeDamage(skill);
     }
 
     public boolean isAlive() {
@@ -42,8 +43,9 @@ public class Player extends Entity implements Serializable{
     public UUID getId() {
         return id;
     }
-    public Creature CurrentPet() {
-        return CurrentPet;
+    public String getIdString() {return idString;}
+    public Creature getCurrentPet() {
+        return currentPet;
     }
 
     // consider replacing pets array to reservePets array in future
@@ -55,11 +57,19 @@ public class Player extends Entity implements Serializable{
 
     public Player(String username){
         this.username = username;
-        this.pet1 = new MeowmadAli();
+        //this.pet1 = new MeowmadAli();
         this.id = UUID.randomUUID();
+        this.idString = id.toString();
         path = "player1(1).png";
-        texturePath = new Texture ("player1(1).png");
+        //texturePath = new Texture ("player1(1).png");
     }
+
+    public Player() {
+        //this.pet1 = new MeowmadAli();
+        this.id = UUID.randomUUID();
+        this.idString = id.toString();
+        path = "player1(1).png";
+    } //no arg constructor for serialisation
 
     public void loadTexture() {
         texturePath = new Texture(path);
@@ -80,11 +90,12 @@ public class Player extends Entity implements Serializable{
         return this.username;
     }
 
-    public void loadTextures() {
+    public void loadTextures() { //please change this method name
         for (Creature pet: pets) {
             if (pet != null) {
                 pet.loadTexture();
             }
         }
+        pet1.loadTexture();
     }
 }

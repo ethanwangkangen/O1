@@ -17,7 +17,7 @@ public class EventListener extends Listener {
         Server server = ServerFoundation.getServer();
         //Connection[] connections = server.getConnections();
         BattleState battleState = ServerFoundation.battleState;
-        PlayerHandler players = ServerFoundation.players;
+        PlayerHandler playerHandler = ServerFoundation.playerHandler;
 
         if (object instanceof JoinRequestEvent) {
             System.out.println("JoinRequestEvent received by server");
@@ -31,16 +31,15 @@ public class EventListener extends Listener {
                 System.out.println(e.getMessage());
             }
         } else if (object instanceof AddPlayerEvent) {
-            System.out.println("AddplayerEvent received by server");
+            System.out.println("AddPlayerEvent received by server");
             AddPlayerEvent addPlayerEvent = (AddPlayerEvent) object;
-
             Player newPlayer = new Player(addPlayerEvent.username);
-            players.createPlayer(newPlayer);
-            AddPlayerEvent playerInfo = new AddPlayerEvent(newPlayer);
+            playerHandler.createPlayer(newPlayer);
+            AddPlayerEvent playerInfo = new AddPlayerEvent();
+            playerInfo.player = newPlayer;
             connection.sendTCP(playerInfo);
             System.out.println("sending playerInfo to user");
-
-            battleState.createPlayer(newPlayer);
+            battleState.addPlayer(newPlayer);
             //todo move to startbattleevent
 
             /*for (Connection i : connections) {

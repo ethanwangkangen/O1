@@ -45,8 +45,7 @@ public class GameScreen implements Screen {
         this.startBattle.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                StartBattleEvent start = new StartBattleEvent();
-                DarwinsDuel.getClient().sendTCP(start);
+                DarwinsDuel.getClient().sendTCP(new StartBattleEvent());
                 System.out.println("StartBattleEvent sent");
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -58,7 +57,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -66,12 +65,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         //System.out.println("currently rendering GameScreen");
-//        // Begin drawing
-//        batch.begin();
-//        // Draw your game elements here
-//        batch.draw(background, 0, 0, 400, 100);
-//        batch.end();
-
         this.stage.draw();
         this.stage.act(delta);
     }

@@ -34,11 +34,11 @@ public abstract class Creature extends Entity implements Serializable{
         this.health = health;
         this.maxmana = mana;
         this.mana = mana;
-        this.path = path;
         this.alive = true;
         this.level = 1;
         this.name = name;
-        this.texturePath = new Texture(path);
+        this.path = path;
+        //this.texturePath = new Texture(path);
     }
 
     //public abstract void attack1();
@@ -76,7 +76,9 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     public void loadTexture() {
-        texturePath = new Texture(path);
+
+        System.out.println("loading texture of creature");
+        this.texturePath = new Texture(path);
     }
 
     public Texture getTexturePath() {
