@@ -43,8 +43,12 @@ Timeline and Development Plan
 
 Proof-of-Concept
 
-Class Diagram
-Link to high resolution version: ![image](https://github.com/ethanwangkangen/O1/assets/118478459/f7e80ccc-8bf4-4977-bf3d-d0d1755a8b23)
-https://drive.google.com/file/d/12Qsbgy2pwt6NFLwXsRApP1EVpbVfqUeH/view?usp=sharing
+Class Diagram:
+
+Link to high resolution version: https://drive.google.com/file/d/12Qsbgy2pwt6NFLwXsRApP1EVpbVfqUeH/view?usp=sharing
+
+![image](https://github.com/ethanwangkangen/O1/assets/118478459/f7e80ccc-8bf4-4977-bf3d-d0d1755a8b23)
+
+
 
 
