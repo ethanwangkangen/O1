@@ -3,10 +3,13 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -39,7 +42,14 @@ public class LoginScreen implements Screen {
         this.table.setFillParent(true);
         //this.table.setBackground("mainscreen.png"); //to change
 
-        this.background = new Texture("mainscreen.png"); //to change
+//        Texture background = new Texture("mainscreen.png");
+//        stage.act(Gdx.graphics.getDeltaTime());
+//        stage.getBatch().begin();
+//        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
+//        stage.getBatch().end();
+
+        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
+        table.background(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         this.usernameField = new TextField("Username", skin);
@@ -61,8 +71,8 @@ public class LoginScreen implements Screen {
 
     public void setTable() {
         this.table.clear();
-        this.table.add(this.usernameField).width(250).padTop(50).row();
-        this.table.add(this.loginButton).size(250, 50).padTop(100).row();
+        this.table.add(this.usernameField).center().width(250).padTop(50).row();
+        this.table.add(this.loginButton).center().size(250, 50).padTop(100).row();
     }
 
     @Override
@@ -88,7 +98,7 @@ public class LoginScreen implements Screen {
 
         if (login && !joined) {
             joined = true;
-            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
+            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
 
             DarwinsDuel.client = new Client();
             Client client = DarwinsDuel.getClient();
@@ -96,9 +106,14 @@ public class LoginScreen implements Screen {
             client.addListener(new EventListener());
             //client.addListener(new ConnectionStateListener());
 
+            client.getKryo().register(AddPlayerEvent.class);
+            client.getKryo().register(AttackEvent.class);
+            client.getKryo().register(BattleState.class);
+            client.getKryo().register(EndBattleEvent.class);
             client.getKryo().register(JoinRequestEvent.class);
             client.getKryo().register(JoinResponseEvent.class);
-            client.getKryo().register(BattleState.class);
+            client.getKryo().register(StartBattleEvent.class);
+
             client.getKryo().register(Player.class);
             client.getKryo().register(Entity.class);
             client.getKryo().register(MeowmadAli.class);

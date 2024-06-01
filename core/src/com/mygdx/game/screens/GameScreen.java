@@ -29,31 +29,31 @@ public class GameScreen implements Screen {
     public GameScreen(Game gameObj) {
         System.out.println("GameScreen created");
         this.gameObj = gameObj;
-        this.batch = new SpriteBatch();
-        this.background = new Texture("mainscreen.png");
 
-        Texture player = PlayerHandler.getTexture();
+        //Texture player = PlayerHandler.getTexture();
 
         this.stage = new Stage();
         this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
 
         this.table = new Table();
         this.table.setFillParent(true);
-        this.table.background("Pixel_art_grass_image.png");
+        //this.table.background("Pixel_art_grass_image.png");
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+
         this.startBattle = new TextButton("Start Battle", skin);
         this.startBattle.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 StartBattleEvent start = new StartBattleEvent();
                 DarwinsDuel.getClient().sendTCP(start);
+                System.out.println("StartBattleEvent sent");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
-        this.table.add(startBattle).size(250, 50).padTop(100).row();
         this.stage.addActor(this.table);
+        this.table.add(startBattle).size(250, 50).padTop(100).row();
     }
 
     @Override
