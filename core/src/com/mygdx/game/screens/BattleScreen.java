@@ -267,15 +267,7 @@ public class BattleScreen implements Screen {
             setAllNotTouchable();
             // todo load end battle screen
             // if this doesn't work, consider implementing stack
-            if (thisPlayer.isAlive()) {
-                // this player has won
-                winOrLoseTable.add(winLabel);
-                stage.addActor(winOrLoseTable);
-            } else {
-                // this player has lost
-                winOrLoseTable.add(loseLabel);
-                stage.addActor(winOrLoseTable);
-            }
+            DarwinsDuel.gameState =  DarwinsDuel.gameState.FREEROAM;
             BattleHandler.battleEnd = false;
 
         }

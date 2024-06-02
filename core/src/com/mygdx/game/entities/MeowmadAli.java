@@ -7,7 +7,7 @@ public class MeowmadAli extends Creature{
         super(100, 100, "MeowmadAli", "meowmad_ali.png");
         skill1 = new Skill();
         skill1.name = "cat scratch";
-        skill1.damage = 1;
+        skill1.damage = 20;
         skill2 = null;
         skill3 = null;
     }
