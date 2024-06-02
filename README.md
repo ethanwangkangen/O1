@@ -11,13 +11,15 @@ Project Log: https://docs.google.com/document/d/1weF3uqogUadpHA4-t_1HjwFV7HoL4Uo
 
 Motivation:
 
-	As long-time gamers, we are tired of games being seen as “useless” and “ a waste of time”. As such, we hope to create a game that encourages both social interaction and friendly competition. Inspired by popular AR mobile game Pokemon Go and its rivals (eg. Palworld), we intend to incorporate real-time, location-based systems (similar to those used in games like Pokemon Go and Ingress) for deeper immersion. Coupled with diverse environments, each teeming with unique creatures and new challenges to overcome, we want to create a captivating pet battling mobile game that will encourage people to leave the comforts of their homes to encounter and capture new and unique creatures.
+	 As avid gamers ourselves, we are weary of the stereotype that games are "useless" or merely a "waste of time." In response, we aspire to develop a game that fosters both social interaction and friendly competition.
+
+	Taking inspiration from popular AR mobile games like Pokémon Go and its competitors (e.g., Palworld), we aim to integrate real-time, location-based systems into our game, akin to those utilized in Pokémon Go and Ingress. This approach promises deeper immersion for players, allowing them to engage with the game world in their real-life surroundings.
+
+	Moreover, by offering diverse environments brimming with unique creatures and challenges, our goal is to craft a captivating pet battling mobile game that motivates players to venture beyond the confines of their homes. Through this, we hope to encourage players to explore, encounter, and capture new and distinctive creatures, thereby transforming their gaming experiences into meaningful adventures.
 
 Aim:
 
-Darwin’s Duel is a multiplayer pet battling mobile game with 2D pixel art style. 
-
-	With a branching evolutionary system and unique skills that allows players to tailor the growth of their pets to suit their battle strategies, we hope to create a game that pushes the strategic skills of the players to their limits. 	
+	Darwin’s Duel is a multiplayer pet battling mobile game with 2D pixel art style. With a branching evolutionary system and unique skills that allows players to tailor the growth of their pets to suit their battle strategies, we hope to create a game that pushes the strategic skills of the players to their limits. 	
 
 	In Darwin’s Duel, every monster you encounter and capture can be trained and evolved through a branching evolutionary system, allowing you to tailor their growth to suit your battle strategies. Explore diverse environments, each teeming with unique creatures and challenges, making every gameplay session a new adventure.
 
@@ -31,9 +33,11 @@ User Stories:
 
 Project Scope:
 
-	Darwin's Duel is a RPG mobile game, similar to that of Pokemon Go.
-	Players travel the in-game world through location-based systems that track their real-life locations. They can encounter, capture a wide variety of unique creatures while exploring diverse environments. They can then train and evolve these pets by engaging in battles with others while obtaining new skills and items that will enhance their battle capabilities. With various battle elements that players have to consider (eg. element counter system, mana/AP management, unique status conditions), Darwin's Duel is more than a simple game where a strong pet beats all.
- 	By engaging in real-time duels with other players, they can climb leaderboards and gain both prestige and unique rewards. 
+	Darwin's Duel is an RPG mobile game, similar to Pokémon Go, where players traverse the in-game world using location-based systems that track their real-life whereabouts. Throughout their journey, players will encounter and capture a diverse array of unique creatures while exploring varied environments. These captured creatures can be trained and evolved through engaging in battles with other players, allowing them to acquire new skills and items to enhance their battle prowess.
+
+	With an array of strategic elements to consider, including an elemental counter system, mana/AP management, and unique status conditions, Darwin's Duel transcends simplistic gameplay where a single powerful pet reigns supreme.
+
+	By participating in real-time duels with fellow players, individuals have the opportunity to ascend the leaderboards and earn both prestige and exclusive rewards, further heightening the competitive aspect of the game.
 
 Features implemented in MileStone 1:
 
@@ -89,13 +93,21 @@ Future Major Plans:
 
 Location-based GPS system (by end June)
 
- 	One important key feature we plan to have for Darwin's Duel is to use the real-life locations of the players to facilitate the exploration of the in-game world, as well as the battling and interaction between players, similar to that of Pokemon Go. 
-	Through this, players are encourage to travel around in-real-life in order to explore new and diverse areas, challenge new and powerful opponenets (both players and NPCs), and obtain unique, location-specific items and pets. This makes the game more interesting and fun, one that cannot be won by just staying indoors and grinding hours on end. 
- 	To achieve this, we plan to use Google Maps API to track the real-time location of players and utitlize this data in our in-game features. 
+	One crucial feature we plan to incorporate into Darwin's Duel is the utilization of players' real-life locations to enhance the exploration of the in-game world, as well as facilitate battling and interaction between players, akin to the mechanics of Pokémon Go.
+
+	By integrating real-life locations, players are incentivized to explore diverse areas, challenge formidable opponents (both players and NPCs), and acquire unique, location-specific items and pets. This dynamic approach adds depth and excitement to the game, ensuring that victory cannot be achieved solely by remaining indoors and grinding for hours on end.
+
+	To realize this vision, we intend to leverage the Google Maps API to track players' real-time locations and integrate this data into our in-game features. We hope that this implementation will create an immersive gaming experience that encourages outdoor exploration and fosters social interaction among players.
 
 Advance Combat System (by end July) 
 
-	For a pet-battling game, the simplest battle strategy would be to use pets with high stats as well as skills that deal the most amount of damage. 
+	For a pet-battling game, the simplest battle strategy would typically involve using pets with high stats and skills that deal significant damage. However, in Darwin's Duel, we aim to introduce complexity and depth to the battling system to prevent situations where one pet dominates all others.
+
+	Our plans include implementing an elemental counter system, incorporating unique skills with various effects, and introducing status conditions (both positive and negative). These additions will necessitate strategic thinking and lead to unpredictable outcomes in battles. Furthermore, we will assign action points to each skill to prevent overpowered skills from being used excessively.
+
+	The environment where battles take place, determined by the real-life location of the players, will also influence the strength of different pets. This feature will result in buffs for some pets while weakening others, adding another layer of strategy to the game.
+
+	Overall, our goal is to make Darwin's Duel a game that demands careful strategizing and adaptability from players.
 
 Proof-of-Concept
 
