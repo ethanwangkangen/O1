@@ -80,36 +80,51 @@ public class Player extends Entity implements Serializable{
     }
 
     public void loadTextures(Runnable callback) {
-        // Counter to keep track of the number of textures loaded
-        AtomicInteger counter = new AtomicInteger(0);
-
-        // Callback to be executed when all textures are loaded
-        Runnable allTexturesLoadedCallback = () -> {
-            if (counter.incrementAndGet() >= 3) {
-                // All textures are loaded, execute the callback
-                callback.run();
-            }
-        };
+        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
 
         // Load textures for each pet
         if (pet1 != null) {
-            pet1.loadTexture(allTexturesLoadedCallback);
-        } else {
-            // Increment the counter for null pets to maintain consistency
-            counter.incrementAndGet();
+            pet1.loadTexture(() -> {
+                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+                    // All creatures' textures are loaded, invoke callback
+                    callback.run();
+                }
+            });
+        }
+
+        if (pet2 != null) {
+            pet2.loadTexture(() -> {
+                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+                    // All creatures' textures are loaded, invoke callback
+                    callback.run();
+                }
+            });
+        }
+
+        if (pet3 != null) {
+            pet3.loadTexture(() -> {
+                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+                    // All creatures' textures are loaded, invoke callback
+                    callback.run();
+                }
+            });
+        }
+
+
+    }
+
+    public int getNumPets() {
+        int numPets = 0;
+        if (pet1 != null) {
+            numPets += 1;
         }
         if (pet2 != null) {
-            pet2.loadTexture(allTexturesLoadedCallback);
-        } else {
-            // Increment the counter for null pets to maintain consistency
-            counter.incrementAndGet();
+            numPets += 1;
         }
         if (pet3 != null) {
-            pet3.loadTexture(allTexturesLoadedCallback);
-        } else {
-            // Increment the counter for null pets to maintain consistency
-            counter.incrementAndGet();
+            numPets += 1;
         }
+        return numPets;
     }
 
 }

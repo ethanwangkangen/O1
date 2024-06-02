@@ -98,8 +98,9 @@ public class BattleState{
     }
 
     public void loadTextures(Runnable callback) {
-        player1.loadTextures(callback);
-        player2.loadTextures(callback);
+        player1.loadTextures(() -> {
+            player2.loadTextures(callback);
+        });
         System.out.println("battlestate textures loading");
 
     }
