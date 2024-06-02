@@ -50,6 +50,7 @@ public class BattleScreen implements Screen {
     private ProgressBar healthBar2;
     private TextButton[] skillButtons;
     private Boolean[] skillAvailable = {false, false, false};
+    private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
     private Label winLabel;
     private Label loseLabel;
     private Table winOrLoseTable;
@@ -58,8 +59,8 @@ public class BattleScreen implements Screen {
     private Table pet2Info = new Table();
     private Table pet1imageTable = new Table();
     private Table pet2imageTable = new Table();
-    private Window skillsWindow;
-    private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+    private Window skillsWindow = new Window("Skills", skin);;
+
     private Creature thisPet;
     private Creature opponentPet;
 
@@ -127,9 +128,13 @@ public class BattleScreen implements Screen {
         pet1Image = new Image(thisPet.getTexturePath());
         pet2Image = new Image(opponentPet.getTexturePath()); //bug: getTexture() not working. nullpointerexception
 
+        pet1imageTable.clear();
+
         pet1imageTable.add(pet1Image).width(100).height(100).left().padLeft(70);
         pet1imageTable.left();
         pet1imageTable.setFillParent(true);
+
+        pet2imageTable.clear();
 
         pet2imageTable.add(pet2Image).width(100).height(100).right().padRight(70);
         pet2imageTable.right();
@@ -151,6 +156,8 @@ public class BattleScreen implements Screen {
         healthBar2.setAnimateDuration(0.5f);
         healthBar2.setValue(opponentPet.getHealth());
 
+        pet1Info.clear();
+
         pet1Info.add(pet1Name).padLeft(10).padTop(5);
         pet1Info.add(pet1Level).left().padLeft(100);
         pet1Info.row();
@@ -159,6 +166,8 @@ public class BattleScreen implements Screen {
         //pet1Info.top().left().padLeft(100).padTop(50);
         pet1Info.left();
         pet1Info.setFillParent(true);
+
+        pet2Info.clear();
 
         pet2Info.add(pet2Name).padRight(10).padTop(5);
         pet2Info.add(pet2Level).right().padRight(100);
@@ -185,7 +194,7 @@ public class BattleScreen implements Screen {
             addSkillListener(skillButtons[i], skills[i]);
         }
 
-        skillsWindow = new Window("Skills", skin);
+        skillsWindow.clear();
         for (TextButton button: skillButtons) {
             skillsWindow.add(button);
             skillsWindow.row();
@@ -234,8 +243,6 @@ public class BattleScreen implements Screen {
         });
     }
 
-
-
     @Override
     public void render(float delta) {
         // enable/disable skillButtons
@@ -247,33 +254,33 @@ public class BattleScreen implements Screen {
             setAllNotTouchable();
         }
 
-        // logic for battle
-//        if (BattleHandler.changePet) {
-//            // currently not in use
-//            initialisePlayers();
-//            initialisePetInfo();
-//            initialisePetImages();
-//            BattleHandler.changePet = false;
-//        } else if (BattleHandler.updatePetInfo) {
-//            initialisePlayers();
-//            initialisePetInfo();
-//            BattleHandler.updatePetInfo = false;
-//        } else if (BattleHandler.battleEnd) {
-//            setAllNotTouchable();
-//            // todo load end battle screen
-//            // if this doesn't work, consider implementing stack
-//            if (thisPlayer.isAlive()) {
-//                // this player has won
-//                winOrLoseTable.add(winLabel);
-//                stage.addActor(winOrLoseTable);
-//            } else {
-//                // this player has lost
-//                winOrLoseTable.add(loseLabel);
-//                stage.addActor(winOrLoseTable);
-//            }
-//            BattleHandler.battleEnd = false;
-//
-//        }
+        //logic for battle
+        if (BattleHandler.changePet) {
+            // currently not in use
+            initialisePlayers();
+            initialisePetInfo();
+            initialisePetImages();
+            BattleHandler.changePet = false;
+        } else if (BattleHandler.updatePetInfo) {
+            initialisePlayers();
+            initialisePetInfo();
+            BattleHandler.updatePetInfo = false;
+        } else if (BattleHandler.battleEnd) {
+            setAllNotTouchable();
+            // todo load end battle screen
+            // if this doesn't work, consider implementing stack
+            if (thisPlayer.isAlive()) {
+                // this player has won
+                winOrLoseTable.add(winLabel);
+                stage.addActor(winOrLoseTable);
+            } else {
+                // this player has lost
+                winOrLoseTable.add(loseLabel);
+                stage.addActor(winOrLoseTable);
+            }
+            BattleHandler.battleEnd = false;
+
+        }
 
         // draw screen
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
