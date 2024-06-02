@@ -7,12 +7,14 @@ import com.esotericsoftware.kryonet.Connection;
 
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Player extends Entity implements Serializable{
 
     //private Texture texture;
-    private String username;
-    public Creature pet1 = new MeowmadAli();
+    public String username;
+    public Creature pet1;
     private Creature pet2;
     private Creature pet3;
     private transient UUID id;
@@ -20,13 +22,12 @@ public class Player extends Entity implements Serializable{
     private transient Texture texturePath;
     private String path;
 
-
     private Creature[] pets = {pet1, pet2, pet3};
-    private Creature currentPet = pet1;
+
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public void takeDamage(Skill skill) {
-        currentPet.takeDamage(skill);
+        pet1.takeDamage(skill);
     }
 
     public boolean isAlive() {
@@ -38,14 +39,12 @@ public class Player extends Entity implements Serializable{
         return false;
     }
 
-
-
     public UUID getId() {
         return id;
     }
     public String getIdString() {return idString;}
     public Creature getCurrentPet() {
-        return currentPet;
+        return this.pet1;
     }
 
     // consider replacing pets array to reservePets array in future
@@ -54,18 +53,8 @@ public class Player extends Entity implements Serializable{
 //        CurrentPet = pets[target];
 //    }
 
-
-    public Player(String username){
-        this.username = username;
-        //this.pet1 = new MeowmadAli();
-        this.id = UUID.randomUUID();
-        this.idString = id.toString();
-        path = "player1(1).png";
-        //texturePath = new Texture ("player1(1).png");
-    }
-
     public Player() {
-        //this.pet1 = new MeowmadAli();
+        this.pet1 = new MeowmadAli();
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
@@ -90,16 +79,37 @@ public class Player extends Entity implements Serializable{
         return this.username;
     }
 
-    public void loadTextures() { //please change this method name
+    public void loadTextures(Runnable callback) {
+        // Counter to keep track of the number of textures loaded
+        AtomicInteger counter = new AtomicInteger(0);
+
+        // Callback to be executed when all textures are loaded
+        Runnable allTexturesLoadedCallback = () -> {
+            if (counter.incrementAndGet() >= 3) {
+                // All textures are loaded, execute the callback
+                callback.run();
+            }
+        };
+
+        // Load textures for each pet
         if (pet1 != null) {
-            pet1.loadTexture();
+            pet1.loadTexture(allTexturesLoadedCallback);
+        } else {
+            // Increment the counter for null pets to maintain consistency
+            counter.incrementAndGet();
         }
         if (pet2 != null) {
-            pet2.loadTexture();
+            pet2.loadTexture(allTexturesLoadedCallback);
+        } else {
+            // Increment the counter for null pets to maintain consistency
+            counter.incrementAndGet();
         }
         if (pet3 != null) {
-            pet3.loadTexture();
+            pet3.loadTexture(allTexturesLoadedCallback);
+        } else {
+            // Increment the counter for null pets to maintain consistency
+            counter.incrementAndGet();
         }
-
     }
+
 }

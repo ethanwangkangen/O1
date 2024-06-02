@@ -13,7 +13,7 @@ public class PlayerHandler {
         player2 = null;
     };
 
-    public void createPlayer(Player player) {
+    public void addPlayer(Player player) {
         if (player1 == null) {
             player1 = player;
         } else if (player2 == null) {

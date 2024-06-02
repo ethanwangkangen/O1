@@ -1,8 +1,11 @@
 package com.mygdx.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
+
 public abstract class Creature extends Entity implements Serializable{
 
     public Creature(){}
@@ -15,7 +18,7 @@ public abstract class Creature extends Entity implements Serializable{
     private transient Texture texturePath; //path to texture file
     private int level;
     private String name;
-    private String path;
+    public String path;
 
     //private ArrayList<Skill> skillList = new ArrayList();
     public Skill skill1;
@@ -75,12 +78,32 @@ public abstract class Creature extends Entity implements Serializable{
         //batch.draw(texturePath, xpos, ypos, 100, 100);
     }
 
-    public void loadTexture() {
-        System.out.println("loading texture of creature");
-        System.out.println("path is: " + path);
-        this.texturePath = new Texture(path);
-    }
 
+
+    public void loadTexture(Runnable callback) {
+        System.out.println("here.");
+        Gdx.app.postRunnable(() -> {
+            try {
+                System.out.println("loading texture of creature");
+                System.out.println("path is: " + path);
+                this.texturePath = new Texture(path);
+                if (this.texturePath == null) {
+                    System.out.println("texturePath is null????");
+                } else {
+                    System.out.println("texturePath ok");
+                }
+                if (callback != null) {
+                    callback.run();
+                }
+                System.out.println("finished loading creature texture");
+
+            } catch (Exception e) { // Catching general Exception for simplicity
+                System.out.println(e.getMessage());
+                System.out.println("Creature texture not loaded");
+            }
+        });
+
+    }
     public Texture getTexturePath() {
         if (texturePath == null) {
             System.out.println("cannot find texturePath");

@@ -33,8 +33,12 @@ public class EventListener extends Listener {
         } else if (object instanceof AddPlayerEvent) {
             System.out.println("AddPlayerEvent received by server");
             AddPlayerEvent addPlayerEvent = (AddPlayerEvent) object;
-            Player newPlayer = new Player(addPlayerEvent.username);
-            playerHandler.createPlayer(newPlayer);
+
+            Player newPlayer = new Player();
+            newPlayer.username = addPlayerEvent.username;
+
+            playerHandler.addPlayer(newPlayer);
+
             AddPlayerEvent playerInfo = new AddPlayerEvent();
             playerInfo.player = newPlayer;
             connection.sendTCP(playerInfo);

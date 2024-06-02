@@ -1,8 +1,8 @@
 package com.mygdx.game.entities;
 
 public class Skill {
-    private String name;
-    private int damage;
+    public String name;
+    public int damage;
 
     public int getDamage() {
         return damage;

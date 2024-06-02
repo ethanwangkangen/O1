@@ -5,6 +5,7 @@ import com.mygdx.game.entities.Skill;
 
 import java.io.Serializable;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class BattleState{
 
@@ -96,9 +97,11 @@ public class BattleState{
         }
     }
 
-    public void loadTextures() {
-        player1.loadTextures();
-        player2.loadTextures();
+    public void loadTextures(Runnable callback) {
+        player1.loadTextures(callback);
+        player2.loadTextures(callback);
+        System.out.println("battlestate textures loading");
+
     }
 
 }

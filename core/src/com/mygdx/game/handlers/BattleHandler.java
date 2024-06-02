@@ -1,8 +1,11 @@
 package com.mygdx.game.handlers;
 
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.global.BattleState;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+
+import java.util.concurrent.CompletableFuture;
 
 public class BattleHandler {
     private static BattleState battleState;
@@ -20,8 +23,12 @@ public class BattleHandler {
         return battleState.hasStarted();
     }
 
-    public static void loadTextures() {
-        battleState.loadTextures();
+    public static void loadTextures(Runnable callback) {
+        try{
+            battleState.loadTextures(callback);
+            System.out.println("battlehandler textures loading");
+        } catch (Exception e) {
+        }
     }
 
     public static Player getPlayer1() {

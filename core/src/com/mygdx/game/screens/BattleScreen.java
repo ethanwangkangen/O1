@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 
 public class BattleScreen implements Screen {
@@ -68,31 +69,55 @@ public class BattleScreen implements Screen {
         this.batch = new SpriteBatch();
         this.background = new Texture("Pixel_art_grass_image.png");
 
-        //set Players, Creatures, etc.
-        initialisePlayers();
-
         //set stage
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
-        //initialise UI elements
-        initialiseBgTable();
-        initialisePetInfo();
-        initialisePetImages();
-        initialiseSkillsWindow();
+    }
 
-        //then add all the tables to the stage
-        this.stage.addActor(bgTable);
-        this.stage.addActor(skillsWindow);
-        this.stage.addActor(pet2imageTable);
-        this.stage.addActor(pet1imageTable);
-        this.stage.addActor(pet1Info);
-        this.stage.addActor(pet2Info);
+    @Override
+    public void show() {
+        //load textures
+        BattleHandler.loadTextures(() -> {
+            System.out.println("finished loading all textures");
+
+            //set Players, Creatures, etc.
+            initialisePlayers();
+
+            //testing textures:
+            System.out.println(thisPlayer.pet1.path);
+            System.out.println(thisPlayer.pet1.getTexturePath() == null);//false
+            System.out.println(thisPet.getTexturePath() == null);//true
+            System.out.println(opponentPet.getTexturePath() == null);//true
+            System.out.println(thisPet == thisPlayer.pet1);//false
+            System.out.println(thisPet == thisPlayer.getCurrentPet());//true
+            System.out.println(thisPlayer.pet1 == thisPlayer.getCurrentPet());//false
+            System.out.println(thisPet == null);//false
+            System.out.println(thisPlayer.pet1 == null);//false
+            System.out.println(thisPlayer.getCurrentPet() == null);//false
+            System.out.println(thisPlayer.getCurrentPet() == thisPlayer.pet1);
+            System.out.println(thisPlayer.getCurrentPet());
+            System.out.println(thisPlayer);
+            System.out.println(thisPlayer.pet1);
+            System.out.println(thisPlayer);
+
+            //initialise UI elements
+            initialiseBgTable();
+            initialisePetInfo();
+            initialisePetImages();
+            initialiseSkillsWindow();
+
+            //then add all the tables to the stage
+            this.stage.addActor(bgTable);
+            this.stage.addActor(skillsWindow);
+            this.stage.addActor(pet2imageTable);
+            this.stage.addActor(pet1imageTable);
+            this.stage.addActor(pet1Info);
+            this.stage.addActor(pet2Info);
+        });
+
     }
     public void initialisePlayers() {
-        //load textures
-        BattleHandler.loadTextures();
-
         // set players
         if (myId == BattleHandler.getPlayer1().getId()) {
             thisPlayer = BattleHandler.getPlayer1();
@@ -138,7 +163,7 @@ public class BattleScreen implements Screen {
         healthBar1.setValue(thisPet.getHealth());
         healthBar2 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
         healthBar2.setAnimateDuration(0.5f);
-        healthBar1.setValue(opponentPet.getHealth());
+        healthBar2.setValue(opponentPet.getHealth());
 
         pet1Info.add(pet1Name).padLeft(10).padTop(5);
         pet1Info.add(pet1Level).left().padLeft(100);
@@ -184,6 +209,7 @@ public class BattleScreen implements Screen {
         TextButton newButton;
         if (skill != null) {
             newButton = new TextButton(skill.getName(), skin);
+            newButton.setTouchable(Touchable.enabled);
         } else {
             newButton = new TextButton("No Skill Acquired", skin);
             newButton.setTouchable(Touchable.disabled);
@@ -191,7 +217,7 @@ public class BattleScreen implements Screen {
         return newButton;
     }
 
-    public void setTouchable() {
+    public void setAllTouchable() {
         // sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
             if (skillAvailable[i]) {
@@ -200,9 +226,11 @@ public class BattleScreen implements Screen {
         }
     }
 
-    public void setNotTouchable() {
+    public void setAllNotTouchable() {
         for (int i = 0; i < 3; i ++) {
-            skillButtons[i].setTouchable(Touchable.disabled);
+            if (skillAvailable[i]) {
+                skillButtons[i].setTouchable(Touchable.enabled);
+            }
         }
     }
 
@@ -219,19 +247,17 @@ public class BattleScreen implements Screen {
         });
     }
 
-    @Override
-    public void show() {
-    }
+
 
     @Override
     public void render(float delta) {
         // enable/disable skillButtons
         if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && BattleHandler.getPlayer1().getId() == myId) {
             // this player's turn
-            setTouchable();
+            setAllTouchable();
         } else {
             // opponent's turn
-            setNotTouchable();
+            setAllNotTouchable();
         }
 
         // logic for battle
@@ -246,7 +272,7 @@ public class BattleScreen implements Screen {
             initialisePetInfo();
             BattleHandler.updatePetInfo = false;
         } else if (BattleHandler.battleEnd) {
-            setNotTouchable();
+            setAllNotTouchable();
             // todo load end battle screen
             // if this doesn't work, consider implementing stack
             if (thisPlayer.isAlive()) {
@@ -266,9 +292,9 @@ public class BattleScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
 
-        this.stage.getViewport().apply();
-        this.stage.act();
-        this.stage.draw();
+        // Clear the stage
+
+
     }
 
     @Override
