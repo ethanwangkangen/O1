@@ -38,13 +38,13 @@ public class EventListener extends Listener {
             newPlayer.username = addPlayerEvent.username;
 
             playerHandler.addPlayer(newPlayer);
+            battleState.addPlayer(newPlayer);
+            //todo move to startbattleevent
 
             AddPlayerEvent playerInfo = new AddPlayerEvent();
             playerInfo.player = newPlayer;
             connection.sendTCP(playerInfo);
             System.out.println("sending playerInfo to user");
-            battleState.addPlayer(newPlayer);
-            //todo move to startbattleevent
 
             /*for (Connection i : connections) {
                 if (i != connection) {
@@ -55,9 +55,11 @@ public class EventListener extends Listener {
             System.out.println("AttackEvent received by server");
             AttackEvent attackEvent = (AttackEvent) object;
             battleState.attack(attackEvent.id, attackEvent.skill);
-            if (battleState.playerAlive()) {
+            if (!battleState.battleEnded) {
+                System.out.println("Sending battleState");
                 server.sendToAllTCP(battleState);
             } else {
+                System.out.println("Sending EndBattleEvent");
                 server.sendToAllTCP(new EndBattleEvent());
             }
         } else if (object instanceof StartBattleEvent) {

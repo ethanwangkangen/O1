@@ -12,6 +12,8 @@ public class PlayerHandler {
         return player.getId();
     }
 
+    public static String getIdString() {return player.getIdString(); }
+
     public static String getUsername() {
         return player.username();
     }

@@ -4,6 +4,7 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -20,7 +21,7 @@ public class BattleState{
     private Turn turn;
     private int numPlayers;
     private Boolean battleStarted;
-    private Boolean battleEnded;
+    public Boolean battleEnded;
     private int numofTurns;
 
     public BattleState() {
@@ -85,14 +86,15 @@ public class BattleState{
         battleStarted = true;
     }
 
-    public void attack(UUID id, Skill skill) {
-        if (player1.getId() != id) {
+    public void attack(String id, Skill skill) {
+        if (!Objects.equals(player1.getIdString(), id)) {
             player1.takeDamage(skill);
         } else {
             player2.takeDamage(skill);
         }
 
         if (!playerAlive()) {
+            System.out.println("Changing battleEnded to true");
             battleEnded = true;
         }
     }

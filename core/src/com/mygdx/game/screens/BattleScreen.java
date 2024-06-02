@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,7 +36,7 @@ public class BattleScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
     private Stage stage;
-    private UUID myId = PlayerHandler.getId(); //id of current player
+    private String myId = PlayerHandler.getIdString(); //id of current player
     private Player thisPlayer;
     private Player opponentPlayer;
     private Image pet1Image;
@@ -103,7 +104,7 @@ public class BattleScreen implements Screen {
     }
     public void initialisePlayers() {
         // set players
-        if (myId == BattleHandler.getPlayer1().getId()) {
+        if (Objects.equals(myId, BattleHandler.getPlayer1().getIdString())) {
             thisPlayer = BattleHandler.getPlayer1();
             opponentPlayer = BattleHandler.getPlayer2();
         } else {
@@ -237,6 +238,7 @@ public class BattleScreen implements Screen {
                 AttackEvent attackEvent = new AttackEvent();
                 attackEvent.id = myId;
                 attackEvent.skill = skill;
+                System.out.println("This player is attacking");
                 DarwinsDuel.getClient().sendTCP(attackEvent);
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -246,7 +248,7 @@ public class BattleScreen implements Screen {
     @Override
     public void render(float delta) {
         // enable/disable skillButtons
-        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && BattleHandler.getPlayer1().getId() == myId) {
+        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(BattleHandler.getPlayer1().getIdString(), myId)) {
             // this player's turn
             setAllTouchable();
         } else {
