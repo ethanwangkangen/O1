@@ -23,6 +23,8 @@ public class ServerFoundation {
     public ServerFoundation() {
         this.server = new Server();
 
+        server.getKryo().register(UUID.class,  new UUIDSerializer());
+
         // Add all global events
         server.getKryo().register(AddPlayerEvent.class);
         server.getKryo().register(AttackEvent.class);
@@ -32,7 +34,6 @@ public class ServerFoundation {
         server.getKryo().register(JoinResponseEvent.class);
         server.getKryo().register(StartBattleEvent.class);
         server.getKryo().register(java.util.UUID.class);
-
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Entity.class);

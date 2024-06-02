@@ -53,7 +53,7 @@ public class BattleScreen implements Screen {
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
     private Label winLabel;
     private Label loseLabel;
-    private Table winOrLoseTable;
+    private Table winOrLoseTable = new Table();
     private Table bgTable = new Table(); //background + pets + usernames
     private Table pet1Info = new Table();
     private Table pet2Info = new Table();

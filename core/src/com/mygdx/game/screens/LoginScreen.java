@@ -16,8 +16,10 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
+import com.mygdx.server.UUIDSerializer;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
@@ -99,6 +101,8 @@ public class LoginScreen implements Screen {
 
             myClient.addListener(new EventListener());
             //client.addListener(new ConnectionStateListener());
+
+            myClient.getKryo().register(UUID.class,  new UUIDSerializer());
 
             myClient.getKryo().register(AddPlayerEvent.class);
             myClient.getKryo().register(AttackEvent.class);
