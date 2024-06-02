@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -49,7 +50,7 @@ public class BattleScreen implements Screen {
     private Label health2;
     private ProgressBar healthBar1;
     private ProgressBar healthBar2;
-    private TextButton[] skillButtons;
+    private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
     private Label winLabel;
@@ -186,13 +187,16 @@ public class BattleScreen implements Screen {
         TextButton skill1 = createSkillButton(skills[0]);
         TextButton skill2 = createSkillButton(skills[1]);
         TextButton skill3 = createSkillButton(skills[2]);
-        skillButtons = new TextButton[]{skill1, skill2, skill3};
+        skillButtons.add(skill1);
+        skillButtons.add(skill2);
+        skillButtons.add(skill3);
+
         // initialize skillAvailable and skillButtons
         for (int i = 0; i < 3; i ++) {
-            if (skillButtons[i].isTouchable()) {
+            if (skillButtons.get(i).isTouchable()) {
                 skillAvailable[i] = true;
             }
-            addSkillListener(skillButtons[i], skills[i]);
+            addSkillListener(skillButtons.get(i), skills[i]);
         }
 
         skillsWindow.clear();
@@ -210,7 +214,7 @@ public class BattleScreen implements Screen {
             newButton.setTouchable(Touchable.enabled);
         } else {
             newButton = new TextButton("No Skill Acquired", skin);
-            newButton.setTouchable(Touchable.enabled);
+            newButton.setTouchable(Touchable.disabled);
         }
         return newButton;
     }
@@ -219,16 +223,16 @@ public class BattleScreen implements Screen {
         // sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
             if (skillAvailable[i]) {
-                skillButtons[i].setTouchable(Touchable.enabled);
+                skillButtons.get(i).setTouchable(Touchable.enabled);
             }
         }
-
     }
 
     public void setAllNotTouchable() {
-        for (int i = 0; i < 3; i ++) {
-            skillButtons[i].setTouchable(Touchable.disabled);
+        for (TextButton button: skillButtons) {
+            button.setTouchable(Touchable.disabled);
         }
+
     }
 
     public void addSkillListener(TextButton button, Skill skill) {
