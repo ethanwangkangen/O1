@@ -201,6 +201,7 @@ public class BattleScreen implements Screen {
             skillsWindow.row();
         }
     }
+
     public TextButton createSkillButton(Skill skill) {
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         TextButton newButton;
@@ -209,7 +210,7 @@ public class BattleScreen implements Screen {
             newButton.setTouchable(Touchable.enabled);
         } else {
             newButton = new TextButton("No Skill Acquired", skin);
-            newButton.setTouchable(Touchable.disabled);
+            newButton.setTouchable(Touchable.enabled);
         }
         return newButton;
     }
@@ -221,13 +222,12 @@ public class BattleScreen implements Screen {
                 skillButtons[i].setTouchable(Touchable.enabled);
             }
         }
+
     }
 
     public void setAllNotTouchable() {
         for (int i = 0; i < 3; i ++) {
-            if (skillAvailable[i]) {
-                skillButtons[i].setTouchable(Touchable.enabled);
-            }
+            skillButtons[i].setTouchable(Touchable.disabled);
         }
     }
 
@@ -247,14 +247,6 @@ public class BattleScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // enable/disable skillButtons
-        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(BattleHandler.getPlayer1().getIdString(), myId)) {
-            // this player's turn
-            setAllTouchable();
-        } else {
-            // opponent's turn
-            setAllNotTouchable();
-        }
 
         //logic for battle
         if (BattleHandler.changePet) {
@@ -282,6 +274,16 @@ public class BattleScreen implements Screen {
             }
             BattleHandler.battleEnd = false;
 
+        }
+
+        // enable/disable skillButtons
+        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(BattleHandler.getPlayer1().getIdString(), myId)
+                || BattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(BattleHandler.getPlayer2().getIdString(), myId)) {
+            // this player's turn
+            setAllTouchable();
+        } else {
+            // opponent's turn
+            setAllNotTouchable();
         }
 
         // draw screen

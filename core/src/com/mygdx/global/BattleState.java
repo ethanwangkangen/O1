@@ -4,6 +4,7 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 
 import java.io.Serializable;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -92,6 +93,8 @@ public class BattleState{
         } else {
             player2.takeDamage(skill);
         }
+        changeTurn();
+        System.out.println("Changing turns");
 
         if (!playerAlive()) {
             System.out.println("Changing battleEnded to true");
