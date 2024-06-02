@@ -34,6 +34,7 @@ public class BattleHandler {
 
     public static void updateBattleState(BattleState newState) {
         battleState = newState;
+
     }
 
 }

@@ -91,11 +91,15 @@ public class Player extends Entity implements Serializable{
     }
 
     public void loadTextures() { //please change this method name
-        for (Creature pet: pets) {
-            if (pet != null) {
-                pet.loadTexture();
-            }
+        if (pet1 != null) {
+            pet1.loadTexture();
         }
-        pet1.loadTexture();
+        if (pet2 != null) {
+            pet2.loadTexture();
+        }
+        if (pet3 != null) {
+            pet3.loadTexture();
+        }
+
     }
 }

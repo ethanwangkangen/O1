@@ -76,12 +76,15 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     public void loadTexture() {
-
         System.out.println("loading texture of creature");
+        System.out.println("path is: " + path);
         this.texturePath = new Texture(path);
     }
 
     public Texture getTexturePath() {
+        if (texturePath == null) {
+            System.out.println("cannot find texturePath");
+        }
         return texturePath;
     }
 
