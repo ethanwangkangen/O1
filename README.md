@@ -95,7 +95,7 @@ Location-based GPS system (by end June)
 
 Advance Combat System (by end July) 
 
-	In order to enhance 
+	For a pet-battling game, the simplest battle strategy would be to use pets with high stats as well as skills that deal the most amount of damage. 
 
 Proof-of-Concept
 
