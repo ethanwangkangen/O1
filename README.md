@@ -109,7 +109,9 @@ Advance Combat System (by end July)
 
 	Overall, our goal is to make Darwin's Duel a game that demands careful strategizing and adaptability from players.
 
-Proof-of-Concept
+Proof-of-Concept: https://github.com/ethanwangkangen/O1/tree/updateOne
+
+Flowchart Diagram:
 
 Class Diagram:
 
