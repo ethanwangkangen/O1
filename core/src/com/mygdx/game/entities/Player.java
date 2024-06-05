@@ -15,8 +15,8 @@ public class Player extends Entity implements Serializable{
     //private Texture texture;
     public String username;
     public Creature pet1;
-    private Creature pet2;
-    private Creature pet3;
+    public Creature pet2;
+    public Creature pet3;
     private transient UUID id;
     private String idString;
     private transient Texture texturePath;
