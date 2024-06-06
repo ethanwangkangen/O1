@@ -17,6 +17,9 @@ import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.server.UUIDSerializer;
+import com.mygdx.services.AuthService;
+
+
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,6 +27,7 @@ import java.util.UUID;
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
+
     private final Table table;
     private Texture background;
     private final TextButton loginButton;
@@ -32,6 +36,17 @@ public class LoginScreen implements Screen {
     boolean login = false;
     boolean joined = false;
 
+    /*
+    stuff for firebase login (to be refactored):
+
+
+
+
+     */
+    AuthService authService1 = gameObj.authService;
+    String email = "user@gmail.com";
+    String password = "password123";
+    authService1.signUp(email, password);
 
     public LoginScreen(DarwinsDuel gameObj) {
 
