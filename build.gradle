@@ -152,6 +152,8 @@ project(":core") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+
+            compile "com.esotericsoftware:kryonet:2.22.0-RC1"
         
     }
 }
