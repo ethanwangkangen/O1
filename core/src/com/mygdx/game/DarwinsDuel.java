@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.FireBaseInterface;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.game.screens.*;
@@ -26,6 +27,8 @@ public class DarwinsDuel extends Game {
 	private static DarwinsDuel instance;
 	private OrthographicCamera camera;
 	public static Client client;
+
+	FireBaseInterface FBIC;
 
 	float y = 0;
 
@@ -46,6 +49,10 @@ public class DarwinsDuel extends Game {
 	public static void setClient(Client client) {
 		client = client;
 	}*/
+
+	public DarwinsDuel(FireBaseInterface FBIC) {
+		this.FBIC = FBIC;
+	}
 
 	@Override
 	public void create () {

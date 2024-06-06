@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "934065189820",
+    "project_id": "orbital-eb9a6",
+    "storage_bucket": "orbital-eb9a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934065189820:android:a2908a5f24d63825caf1b9",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB12j3s4VFnxwkYHbziAmQDsze3vITngLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

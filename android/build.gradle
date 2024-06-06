@@ -87,3 +87,15 @@ tasks.register('run', Exec) {
 }
 
 eclipse.project.name = appName + "-android"
+
+dependencies {
+    // Other dependencies...
+    // Add Firebase Authentication dependency
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+
+    // Add Firebase Realtime Database dependency
+    implementation 'com.google.firebase:firebase-database:21.0.1'
+}
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'
+
