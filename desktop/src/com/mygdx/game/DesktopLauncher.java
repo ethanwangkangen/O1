@@ -8,9 +8,8 @@ import com.mygdx.game.DarwinsDuel;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(30);
-		config.setTitle("DarwinsDuelv1");
+		config.setForegroundFPS(60);
+		config.setTitle("DarwinsDuel2");
 		new Lwjgl3Application(new DarwinsDuel(), config);
-
 	}
 }
