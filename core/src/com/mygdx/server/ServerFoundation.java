@@ -38,6 +38,7 @@ public class ServerFoundation {
         server.getKryo().register(Player.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
+        server.getKryo().register(CrocLesnar.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);
