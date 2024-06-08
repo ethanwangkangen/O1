@@ -53,6 +53,7 @@ public class Player extends Entity implements Serializable{
 
     public Player() {
         this.pet1 = new MeowmadAli();
+        this.pet2 = new CrocLesnar();
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
