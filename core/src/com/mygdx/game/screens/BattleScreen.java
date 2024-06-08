@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -111,9 +112,9 @@ public class BattleScreen implements Screen {
             pet1imageTable.setBackground(border);
             skillsWindow.setBackground(border);*/
 
-            petsWindow.setVisible(false);
-            stack.add(skillsWindow);
-            stack.add(petsWindow);
+            petsWindow.setVisible(true);
+            //stack.add(skillsWindow);
+            //stack.add(petsWindow);
 
             turnLabel = new Label("Testing", skin);
             bgTable.add(turnLabel).center().colspan(2).expandY().top();
@@ -128,7 +129,7 @@ public class BattleScreen implements Screen {
             bgTable.row();
 
             bgTable.add(changeTable).expandY().bottom();
-            bgTable.add(stack).center().bottom();
+            bgTable.add(petsWindow).center().bottom();
 
 
             /*this.stage.addActor(pet1Info);
@@ -318,11 +319,12 @@ public class BattleScreen implements Screen {
         if (pet != null) {
             newButton = new ImageTextButton(pet.getName(), skin);
             newButton.setTouchable(Touchable.enabled);
-            newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
+            newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
+            newButton.setSize(245, 50); //todo problem
         } else {
             newButton = new ImageTextButton("No pet owned", skin);
             newButton.setTouchable(Touchable.disabled);
-            newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
+            //newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
         }
 
         return newButton;
