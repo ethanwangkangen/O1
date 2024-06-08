@@ -20,7 +20,7 @@ android {
     }
     defaultConfig {
         applicationId "com.mygdx.game"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
@@ -95,6 +95,10 @@ dependencies {
     //implementation 'com.google.gms:google-services:4.3.14' // Specify the version here
 
     //add dependencies that i will need (firebase analytics eg.)
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth:23.0.0")
+
 }
 
 apply plugin: 'com.android.application'

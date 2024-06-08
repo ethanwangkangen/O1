@@ -7,4 +7,6 @@ eclipse.project.name = appName + "-core"
 dependencies {
     // Other dependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation project(':android')
+
 }

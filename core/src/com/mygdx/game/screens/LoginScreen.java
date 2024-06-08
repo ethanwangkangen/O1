@@ -3,13 +3,10 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -17,6 +14,11 @@ import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.server.UUIDSerializer;
+import com.mygdx.game.AuthService;
+import org.w3c.dom.ls.LSOutput;
+//import com.mygdx.game.FirebaseAuthServiceAndroid;
+
+
 
 import java.io.IOException;
 import java.util.UUID;
@@ -24,6 +26,7 @@ import java.util.UUID;
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
+
     private final Table table;
     private Texture background;
     private final TextButton loginButton;
@@ -33,7 +36,35 @@ public class LoginScreen implements Screen {
     boolean joined = false;
 
 
+
+
     public LoginScreen(DarwinsDuel gameObj) {
+
+        /*
+        For reference:
+        Firebase placeholder logic start (for sk)
+         */
+
+        AuthService authService1 = gameObj.authService;
+        String email = "user@gmail.com";
+        String password = "password123";
+
+        //to sign in:
+        authService1.signIn(email, password);
+
+        //to sign up/register:
+        authService1.signUp(email, password);
+
+        //to check if use is signed in:
+        authService1.isUserSignedIn();
+
+        //to sign out:
+        authService1.signOut();
+
+        /*
+        Firebase placeholder logic end (for sk)
+         */
+
 
         System.out.println("LoginScreen created");
         this.gameObj = gameObj;
