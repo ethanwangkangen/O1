@@ -6,19 +6,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.handlers.BattleHandler;
 import com.mygdx.game.handlers.PlayerHandler;
-import com.mygdx.global.AttackEvent;
-import com.mygdx.global.BattleState;
+import com.mygdx.global.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -50,7 +46,7 @@ public class BattleScreen implements Screen {
     private Label turnLabel;
     private TextButton changeSkillButton;
     private TextButton changePetButton;
-    private ArrayList<ImageTextButton> petButtons= new ArrayList<>();
+    private ArrayList<TextImageButton> petButtons= new ArrayList<>();
     private Boolean[] petAvailable = {false, false, false};
 
 
@@ -71,9 +67,6 @@ public class BattleScreen implements Screen {
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
     private int screenHeight = Gdx.graphics.getHeight();
-
-    //Drawable border = new TextureRegionDrawable(new Texture(Gdx.files.internal("border.png")));
-
 
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
@@ -103,41 +96,38 @@ public class BattleScreen implements Screen {
             initialiseChangeButtons();
             initialisePetsWindow();
 
+
+            petsWindow.setWidth(250);
+            petsWindow.setHeight(250);
+
+
             //then add all the tables to the stage
-            this.stage.addActor(bgTable);
+            Table table = new Table();
+            table.setFillParent(true);
+            table.setBackground(new TextureRegionDrawable(new Texture("border.png")));
+            table.add(petsWindow).bottom().center();
 
-            /*pet1Info.setBackground(border);
-            pet2imageTable.setBackground(border);
-            pet2Info.setBackground(border);
-            pet1imageTable.setBackground(border);
-            skillsWindow.setBackground(border);*/
-
-            petsWindow.setVisible(true);
-            //stack.add(skillsWindow);
-            //stack.add(petsWindow);
+            Stack stack = new Stack();
+            stack.add(bgTable);
+            stack.add(table);
+            stack.setFillParent(true);
+            stage.addActor(stack);
 
             turnLabel = new Label("Testing", skin);
-            bgTable.add(turnLabel).center().colspan(2).expandY().top();
+            bgTable.add(turnLabel).center().colspan(3).top().expandY();
             bgTable.row();
 
             bgTable.add(pet1Info).left();
             bgTable.add(pet2Info).right().expandX();
             bgTable.row();
 
-            bgTable.add(pet1imageTable).left().padLeft(10);
+            bgTable.add(pet1imageTable).left().expandY().padLeft(10);
             bgTable.add(pet2imageTable).right().padRight(10);
             bgTable.row();
 
             bgTable.add(changeTable).expandY().bottom();
-            bgTable.add(petsWindow).center().bottom();
+            bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
 
-
-            /*this.stage.addActor(pet1Info);
-            this.stage.addActor(pet2Info);
-            this.stage.addActor(pet1imageTable);
-            this.stage.addActor(pet2imageTable);
-            this.stage.addActor(skillsWindow);
-*/
         });
     }
     public void initialisePlayers() {
@@ -287,9 +277,9 @@ public class BattleScreen implements Screen {
         System.out.println("initialising initialisePetsWindow");
         final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
         final Creature[] pets = {thisPlayer.pet1, thisPlayer.pet2, thisPlayer.pet3};
-        ImageTextButton pet1 = createPetButton(thisPlayer.pet1);
-        ImageTextButton pet2 = createPetButton(thisPlayer.pet2);
-        ImageTextButton pet3 = createPetButton(thisPlayer.pet3);
+        TextImageButton pet1 = createPetButton(thisPlayer.pet1);
+        TextImageButton pet2 = createPetButton(thisPlayer.pet2);
+        TextImageButton pet3 = createPetButton(thisPlayer.pet3);
         petButtons.add(pet1);
         petButtons.add(pet2);
         petButtons.add(pet3);
@@ -303,26 +293,26 @@ public class BattleScreen implements Screen {
         }
 
         petsWindow.clear();
-        for (ImageTextButton button: petButtons) {
-            petsWindow.add(button).pad(1).width(245);
+        for (TextImageButton button: petButtons) {
+            petsWindow.add(button).pad(1).width(245).height(80);
             petsWindow.row();
         }
 
         petsWindow.setHeight(120);
         petsWindow.setWidth(250);
-        petsWindow.setPosition(((float)screenWidth - petsWindow.getWidth()) / 2, 0);
         petsWindow.padBottom(1);
+        petsWindow.setVisible(false);
     }
 
-    public ImageTextButton createPetButton(Creature pet) {
-        ImageTextButton newButton;
+    public TextImageButton createPetButton(Creature pet) {
+        TextImageButton newButton;
         if (pet != null) {
-            newButton = new ImageTextButton(pet.getName(), skin);
+            newButton = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
             newButton.setTouchable(Touchable.enabled);
-            newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
-            newButton.setSize(245, 50); //todo problem
+            //newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
+            //newButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
         } else {
-            newButton = new ImageTextButton("No pet owned", skin);
+            newButton = new TextImageButton("No pet owned", skin, thisPet.getTexturePath());
             newButton.setTouchable(Touchable.disabled);
             //newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
         }
@@ -353,7 +343,7 @@ public class BattleScreen implements Screen {
             button.setTouchable(Touchable.disabled);
         }
 
-        for (ImageTextButton button: petButtons) {
+        for (TextImageButton button: petButtons) {
             button.setTouchable(Touchable.disabled);
         }
     }
@@ -372,11 +362,12 @@ public class BattleScreen implements Screen {
         });
     }
 
-    public void addPetListener(ImageTextButton button, Creature pet) {
+    public void addPetListener(TextImageButton button, Creature pet) {
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // todo: swap pet1 (current pet) and pet (in argument)
+
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -414,6 +405,7 @@ public class BattleScreen implements Screen {
             // opponent's turn
             setAllsSkillNotTouchable();
         }
+
 
         // draw screen
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black

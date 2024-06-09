@@ -43,10 +43,7 @@ public class LoginScreen implements Screen {
 
 
      */
-    AuthService authService1 = gameObj.authService;
-    String email = "user@gmail.com";
-    String password = "password123";
-    authService1.signUp(email, password);
+
 
     public LoginScreen(DarwinsDuel gameObj) {
 
