@@ -425,9 +425,9 @@ public class BattleScreen implements Screen {
             // for both attacking and changing pets updates
             initialisePlayers();
             initialisePetInfo();
-            //initialisePetImages();
+            initialisePetImages();
             initialiseSkillsWindow();
-            //initialisePetsWindow();
+            initialisePetsWindow();
             BattleHandler.updatePetInfo = false;
         } else if (BattleHandler.battleEnd) {
             setAllsSkillNotTouchable();
