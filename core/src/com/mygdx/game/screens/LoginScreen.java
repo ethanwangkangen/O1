@@ -108,8 +108,8 @@ public class LoginScreen implements Screen {
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         this.usernameField = new TextField("Username", skin);
 
-        this.loginButton = new TextButton("Login", skin);
-        this.loginButton.addListener(new ClickListener() {
+        loginButton = new TextButton("Login", skin);
+        loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //connect
@@ -119,14 +119,14 @@ public class LoginScreen implements Screen {
 
             }
         });
-        this.stage.addActor(this.table);
-        this.setTable();
+        stage.addActor(table);
+        setTable();
     }
 
     public void setTable() {
-        this.table.clear();
-        this.table.add(this.usernameField).center().width(250).padTop(50).row();
-        this.table.add(this.loginButton).center().size(250, 50).padTop(100).row();
+        table.clear();
+        table.add(usernameField).center().width(250).padTop(50).row();
+        table.add(loginButton).center().size(250, 50).padTop(100).row();
     }
 
     @Override
@@ -140,8 +140,8 @@ public class LoginScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         //System.out.println("currently rendering BattleScreen");
-        this.stage.draw();
-        this.stage.act(delta);
+        stage.act(delta);
+        stage.draw();
 
         if (login && !joined) {
             joined = true;
