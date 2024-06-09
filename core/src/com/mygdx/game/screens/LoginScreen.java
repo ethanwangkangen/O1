@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
@@ -50,10 +51,30 @@ public class LoginScreen implements Screen {
         String password = "password123";
 
         //to sign in:
-        authService1.signIn(email, password);
+        authService1.signIn(email, password, new AuthResultCallback() {
+            @Override
+            public void onSuccess() {
+                //change login screen to game screen or wtv
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+            }
+        });
 
         //to sign up/register:
-        authService1.signUp(email, password);
+        authService1.signUp(email, password, new AuthResultCallback() {
+            @Override
+            public void onSuccess() {
+                //change login screen to game screen or wtv
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+            }
+        });
 
         //to check if use is signed in:
         authService1.isUserSignedIn();

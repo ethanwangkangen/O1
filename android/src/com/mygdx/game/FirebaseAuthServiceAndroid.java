@@ -4,6 +4,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.android.gms.tasks.Task;
 import com.badlogic.gdx.Gdx;
 
+import javax.security.auth.callback.Callback;
+
 public class FirebaseAuthServiceAndroid implements AuthService {
     public FirebaseAuth auth;
 
@@ -12,15 +14,27 @@ public class FirebaseAuthServiceAndroid implements AuthService {
     }
 
     @Override
-    public void signUp(String email, String password) {
+    public void signUp(String email, String password, final AuthResultCallback callback) {
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> handleTaskResult(task, "SignUp"));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 
     @Override
-    public void signIn(String email, String password) {
+    public void signIn(String email, String password, final AuthResultCallback callback) {
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> handleTaskResult(task, "SignIn"));
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+                        callback.onFailure(task.getException());
+                    }
+                });
     }
 
     @Override
@@ -33,11 +47,11 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         auth.signOut();
     }
 
-    private void handleTaskResult(Task<AuthResult> task, String action) {
-        if (task.isSuccessful()) {
-            Gdx.app.log(action, "Successful");
-        } else {
-            Gdx.app.log(action, "Failed: " + task.getException().getMessage());
-        }
-    }
+//    private void handleTaskResult(Task<AuthResult> task, String action) {
+//        if (task.isSuccessful()) {
+//            Gdx.app.log(action, "Successful");
+//        } else {
+//            Gdx.app.log(action, "Failed: " + task.getException().getMessage());
+//        }
+//    }
 }
