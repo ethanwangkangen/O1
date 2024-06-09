@@ -70,6 +70,17 @@ public class EventListener extends Listener {
                 server.sendToAllTCP(new StartBattleEvent());
                 System.out.println("Starting Battle");
             } //todo change
+        } else if (object instanceof ChangePetEvent) {
+            System.out.println("ChangePetEvent received by server");
+            ChangePetEvent changePetEvent = (ChangePetEvent) object;
+            battleState.changePet(changePetEvent.id, changePetEvent.pet);
+            if (!battleState.battleEnded) {
+                System.out.println("Sending battleState");
+                server.sendToAllTCP(battleState);
+            } else {
+                System.out.println("Sending EndBattleEvent");
+                server.sendToAllTCP(new EndBattleEvent());
+            }
         } else {
             System.out.println("unknown object received.");
         }

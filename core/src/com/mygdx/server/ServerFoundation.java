@@ -34,6 +34,7 @@ public class ServerFoundation {
         server.getKryo().register(JoinResponseEvent.class);
         server.getKryo().register(StartBattleEvent.class);
         server.getKryo().register(java.util.UUID.class);
+        server.getKryo().register(ChangePetEvent.class);
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Entity.class);

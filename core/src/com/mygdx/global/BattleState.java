@@ -1,5 +1,6 @@
 package com.mygdx.global;
 
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 
@@ -108,6 +109,14 @@ public class BattleState{
         });
         System.out.println("battlestate textures loading");
 
+    }
+
+    public void changePet(String id, ChangePetEvent.Pet pet) {
+        if (Objects.equals(player1.getIdString(), id)) {
+            player1.changePet(pet);
+        } else if (Objects.equals(player2.getIdString(), id)) {
+            player2.changePet(pet);
+        }
     }
 
 }

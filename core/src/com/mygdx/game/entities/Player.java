@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.esotericsoftware.kryonet.Connection;
+import com.mygdx.global.ChangePetEvent;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -21,13 +22,30 @@ public class Player extends Entity implements Serializable{
     private String idString;
     private transient Texture texturePath;
     private String path;
+    private ChangePetEvent.Pet currentPet;
 
     private Creature[] pets = {pet1, pet2, pet3};
 
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public void takeDamage(Skill skill) {
-        pet1.takeDamage(skill);
+        if (currentPet == ChangePetEvent.Pet.PET1) {
+            pet1.takeDamage(skill);
+            if (!pet1.isAlive()) {
+                changeNextPet();
+            }
+        } else if (currentPet == ChangePetEvent.Pet.PET2) {
+            pet2.takeDamage(skill);
+            if (!pet2.isAlive()) {
+                changeNextPet();
+            }
+        } else if (currentPet == ChangePetEvent.Pet.PET3) {
+            pet3.takeDamage(skill);
+            if (!pet3.isAlive()) {
+                changeNextPet();
+            }
+        }
+
     }
 
     public boolean isAlive() {
@@ -42,7 +60,13 @@ public class Player extends Entity implements Serializable{
     }
     public String getIdString() {return idString;}
     public Creature getCurrentPet() {
-        return this.pet1;
+        if (currentPet == ChangePetEvent.Pet.PET1) {
+            return pet1;
+        } else if (currentPet == ChangePetEvent.Pet.PET2) {
+            return pet2;
+        } else {
+            return pet3;
+        }
     }
 
     // consider replacing pets array to reservePets array in future
@@ -57,6 +81,7 @@ public class Player extends Entity implements Serializable{
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
+        currentPet = ChangePetEvent.Pet.PET1;
     } //no arg constructor for serialisation
 
     public void loadTexture() {
@@ -108,8 +133,26 @@ public class Player extends Entity implements Serializable{
                 }
             });
         }
+    }
 
+    public void changePet(ChangePetEvent.Pet pet) {
+        if (pet == ChangePetEvent.Pet.PET1) {
+            currentPet = ChangePetEvent.Pet.PET1;
+        } else if (pet == ChangePetEvent.Pet.PET2) {
+            currentPet = ChangePetEvent.Pet.PET2;
+        } else if (pet == ChangePetEvent.Pet.PET3) {
+            currentPet = ChangePetEvent.Pet.PET3;
+        }
+    }
 
+    public void changeNextPet() {
+        if (pet1.isAlive()) {
+            changePet(ChangePetEvent.Pet.PET1);
+        } else if (pet2.isAlive()) {
+            changePet(ChangePetEvent.Pet.PET2);
+        } else if (pet3.isAlive()) {
+            changePet(ChangePetEvent.Pet.PET3);
+        }
     }
 
     public int getNumPets() {

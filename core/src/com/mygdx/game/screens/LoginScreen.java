@@ -123,6 +123,7 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(JoinRequestEvent.class);
             myClient.getKryo().register(JoinResponseEvent.class);
             myClient.getKryo().register(StartBattleEvent.class);
+            myClient.getKryo().register(ChangePetEvent.class);
             myClient.getKryo().register(java.util.UUID.class);
 
             myClient.getKryo().register(Player.class);

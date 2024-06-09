@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -289,7 +288,7 @@ public class BattleScreen implements Screen {
             if (petButtons.get(i).isTouchable()) {
                 petAvailable[i] = true;
             }
-            addPetListener(petButtons.get(i), pets[i]);
+            addPetListener(petButtons.get(i), pets[i], i);
         }
 
         petsWindow.clear();
@@ -308,7 +307,11 @@ public class BattleScreen implements Screen {
         TextImageButton newButton;
         if (pet != null) {
             newButton = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
-            newButton.setTouchable(Touchable.enabled);
+            if (pet.isAlive()) {
+                newButton.setTouchable(Touchable.enabled);
+            } else {
+                newButton.setTouchable(Touchable.disabled);
+            }
             //newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
             //newButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
         } else {
@@ -362,15 +365,48 @@ public class BattleScreen implements Screen {
         });
     }
 
-    public void addPetListener(TextImageButton button, Creature pet) {
-        button.addListener(new ClickListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // todo: swap pet1 (current pet) and pet (in argument)
+    public void addPetListener(TextImageButton button, Creature pet, int i) {
+        if (i == 0) {
+            button.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    // todo: swap pet1 (current pet) and pet (in argument)
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = ChangePetEvent.Pet.PET1;
+                    changePetEvent.id = myId;
+                    System.out.println("Changing to pet1");
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+        } else if (i == 1) {
+            button.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    // todo: swap pet1 (current pet) and pet (in argument)
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = ChangePetEvent.Pet.PET2;
+                    changePetEvent.id = myId;
+                    System.out.println("Changing to pet2");
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+        } else if (i == 2) {
+            button.addListener(new ClickListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    // todo: swap pet1 (current pet) and pet (in argument)
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = ChangePetEvent.Pet.PET3;
+                    changePetEvent.id = myId;
+                    System.out.println("Changing to pet3");
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+        }
 
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        });
     }
 
     @Override
@@ -384,16 +420,20 @@ public class BattleScreen implements Screen {
             initialisePetImages();
             BattleHandler.changePet = false;
         } else if (BattleHandler.updatePetInfo) {
+            // for both attacking and changing pets updates
             initialisePlayers();
             initialisePetInfo();
+            initialisePetImages();
+            initialiseSkillsWindow();
+            initialisePetsWindow();
             BattleHandler.updatePetInfo = false;
         } else if (BattleHandler.battleEnd) {
             setAllsSkillNotTouchable();
             // todo load end battle screen
             // if this doesn't work, consider implementing stack
-            DarwinsDuel.gameState =  DarwinsDuel.gameState.FREEROAM;
+            DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
             BattleHandler.battleEnd = false;
-
+            // todo automatic change of pets when one pet dies, but battle hasn't ended
         }
 
         // enable/disable skillButtons
