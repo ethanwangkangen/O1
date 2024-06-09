@@ -40,6 +40,7 @@ public class BattleScreen implements Screen {
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+    private Texture crossedBox = new Texture("crossedBox.png");
     private Label winLabel;
     private Label loseLabel;
     private Label turnLabel;
@@ -232,6 +233,7 @@ public class BattleScreen implements Screen {
 
     public void initialiseSkillsWindow() {
         System.out.println("initialising initialiseSkillsWindow");
+        skillsWindow.clearChildren();
         final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
         TextButton skill1 = createSkillButton(skills[0]);
         TextButton skill2 = createSkillButton(skills[1]);
@@ -315,7 +317,7 @@ public class BattleScreen implements Screen {
             //newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
             //newButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
         } else {
-            newButton = new TextImageButton("No pet owned", skin, thisPet.getTexturePath());
+            newButton = new TextImageButton("No pet owned", skin, crossedBox);
             newButton.setTouchable(Touchable.disabled);
             //newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
         }
