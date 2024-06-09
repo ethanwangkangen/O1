@@ -33,10 +33,11 @@ public class ServerFoundation {
         server.getKryo().register(JoinRequestEvent.class);
         server.getKryo().register(JoinResponseEvent.class);
         server.getKryo().register(StartBattleEvent.class);
-        server.getKryo().register(java.util.UUID.class);
         server.getKryo().register(ChangePetEvent.class);
+        server.getKryo().register(java.util.UUID.class);
 
         server.getKryo().register(Player.class);
+        server.getKryo().register(Player.Pet.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
@@ -45,6 +46,7 @@ public class ServerFoundation {
         server.getKryo().register(Skill.class);
         server.getKryo().register(Skill[].class);
         server.getKryo().register(BattleState.Turn.class);
+        server.getKryo().register(TextImageButton.class);
 
         // Add all listeners of server
         this.server.addListener(new EventListener());

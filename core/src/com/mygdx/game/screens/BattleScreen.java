@@ -372,7 +372,7 @@ public class BattleScreen implements Screen {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
-                    changePetEvent.pet = ChangePetEvent.Pet.PET1;
+                    changePetEvent.pet = Player.Pet.PET1;
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet1");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
@@ -385,7 +385,7 @@ public class BattleScreen implements Screen {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
-                    changePetEvent.pet = ChangePetEvent.Pet.PET2;
+                    changePetEvent.pet = Player.Pet.PET2;
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet2");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
@@ -398,7 +398,7 @@ public class BattleScreen implements Screen {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
-                    changePetEvent.pet = ChangePetEvent.Pet.PET3;
+                    changePetEvent.pet = Player.Pet.PET3;
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet3");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
@@ -423,9 +423,9 @@ public class BattleScreen implements Screen {
             // for both attacking and changing pets updates
             initialisePlayers();
             initialisePetInfo();
-            initialisePetImages();
+            //initialisePetImages();
             initialiseSkillsWindow();
-            initialisePetsWindow();
+            //initialisePetsWindow();
             BattleHandler.updatePetInfo = false;
         } else if (BattleHandler.battleEnd) {
             setAllsSkillNotTouchable();

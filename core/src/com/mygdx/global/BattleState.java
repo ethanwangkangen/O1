@@ -111,7 +111,7 @@ public class BattleState{
 
     }
 
-    public void changePet(String id, ChangePetEvent.Pet pet) {
+    public void changePet(String id, Player.Pet pet) {
         if (Objects.equals(player1.getIdString(), id)) {
             player1.changePet(pet);
         } else if (Objects.equals(player2.getIdString(), id)) {

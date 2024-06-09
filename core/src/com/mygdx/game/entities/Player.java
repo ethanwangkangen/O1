@@ -22,24 +22,30 @@ public class Player extends Entity implements Serializable{
     private String idString;
     private transient Texture texturePath;
     private String path;
-    private ChangePetEvent.Pet currentPet;
+    private Pet currentPet;
 
     private Creature[] pets = {pet1, pet2, pet3};
+
+    public enum Pet {
+        PET1,
+        PET2,
+        PET3
+    }
 
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public void takeDamage(Skill skill) {
-        if (currentPet == ChangePetEvent.Pet.PET1) {
+        if (currentPet == Pet.PET1) {
             pet1.takeDamage(skill);
             if (!pet1.isAlive()) {
                 changeNextPet();
             }
-        } else if (currentPet == ChangePetEvent.Pet.PET2) {
+        } else if (currentPet == Pet.PET2) {
             pet2.takeDamage(skill);
             if (!pet2.isAlive()) {
                 changeNextPet();
             }
-        } else if (currentPet == ChangePetEvent.Pet.PET3) {
+        } else if (currentPet == Pet.PET3) {
             pet3.takeDamage(skill);
             if (!pet3.isAlive()) {
                 changeNextPet();
@@ -60,9 +66,9 @@ public class Player extends Entity implements Serializable{
     }
     public String getIdString() {return idString;}
     public Creature getCurrentPet() {
-        if (currentPet == ChangePetEvent.Pet.PET1) {
+        if (currentPet == Pet.PET1) {
             return pet1;
-        } else if (currentPet == ChangePetEvent.Pet.PET2) {
+        } else if (currentPet == Pet.PET2) {
             return pet2;
         } else {
             return pet3;
@@ -81,7 +87,7 @@ public class Player extends Entity implements Serializable{
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
-        currentPet = ChangePetEvent.Pet.PET1;
+        currentPet = Pet.PET1;
     } //no arg constructor for serialisation
 
     public void loadTexture() {
@@ -135,23 +141,23 @@ public class Player extends Entity implements Serializable{
         }
     }
 
-    public void changePet(ChangePetEvent.Pet pet) {
-        if (pet == ChangePetEvent.Pet.PET1) {
-            currentPet = ChangePetEvent.Pet.PET1;
-        } else if (pet == ChangePetEvent.Pet.PET2) {
-            currentPet = ChangePetEvent.Pet.PET2;
-        } else if (pet == ChangePetEvent.Pet.PET3) {
-            currentPet = ChangePetEvent.Pet.PET3;
+    public void changePet(Pet pet) {
+        if (pet == Pet.PET1 && pet1 != null) {
+            currentPet = Pet.PET1;
+        } else if (pet == Pet.PET2 && pet2 != null) {
+            currentPet = Pet.PET2;
+        } else if (pet == Pet.PET3 && pet3 != null) {
+            currentPet = Pet.PET3;
         }
     }
 
     public void changeNextPet() {
-        if (pet1.isAlive()) {
-            changePet(ChangePetEvent.Pet.PET1);
-        } else if (pet2.isAlive()) {
-            changePet(ChangePetEvent.Pet.PET2);
-        } else if (pet3.isAlive()) {
-            changePet(ChangePetEvent.Pet.PET3);
+        if (pet1 != null && pet1.isAlive()) {
+            changePet(Pet.PET1);
+        } else if (pet2 != null && pet2.isAlive()) {
+            changePet(Pet.PET2);
+        } else if (pet3 != null && pet3.isAlive()) {
+            changePet(Pet.PET3);
         }
     }
 

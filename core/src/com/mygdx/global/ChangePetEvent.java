@@ -1,17 +1,13 @@
 package com.mygdx.global;
 
+import com.mygdx.game.entities.Player;
+
 public class ChangePetEvent {
     public ChangePetEvent() {
     }
 
-    public Pet pet;
+    public Player.Pet pet;
     public String id;
-
-    public enum Pet {
-        PET1,
-        PET2,
-        PET3
-    }
 
 
 }
