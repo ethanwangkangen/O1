@@ -23,7 +23,7 @@ public abstract class Creature extends Entity implements Serializable{
     //private ArrayList<Skill> skillList = new ArrayList();
     public Skill skill1;
     public Skill skill2;
-    public Skill skill3;
+    public Skill skill3 ;
     public Skill[] skills = {skill1, skill2, skill3};
 
     private transient SpriteBatch batch;
