@@ -119,6 +119,12 @@ public class BattleState{
         } else if (Objects.equals(player2.getIdString(), id)) {
             player2.changePet(pet);
         }
+        changeTurn();
     }
+
+//    public void update(BattleState newState) {
+//        player1.update(newState.player1);
+//        player2.update(newState.player2);
+//    }
 
 }

@@ -175,4 +175,8 @@ public class Player extends Entity implements Serializable{
         return numPets;
     }
 
+//    public void update(Player player) {
+//
+//    }
+
 }

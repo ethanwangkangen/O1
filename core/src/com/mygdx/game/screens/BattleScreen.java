@@ -153,21 +153,21 @@ public class BattleScreen implements Screen {
     }
 
     public void initialisePetImages() {
+        pet1imageTable.clear();
+        pet2imageTable.clear();
+
         System.out.println("initialising PetImages table");
         pet1Image = new Image(thisPet.getTexturePath());
         pet2Image = new Image(opponentPet.getTexturePath()); //bug: getTexture() not working. nullpointerexception
 
-
-        pet1imageTable.clear();
-
         pet1imageTable.add(pet1Image).padLeft(10).height(100).width(100);
-
-        pet2imageTable.clear();
-
         pet2imageTable.add(pet2Image).padRight(10).height(100).width(100);
     }
 
     public void initialisePetInfo() {
+        pet1Info.clear();
+        pet2Info.clear();
+
         System.out.println("initialising PetInfo table");
         pet1Name = new Label(thisPet.getName(), skin);
         pet2Name = new Label(opponentPet.getName(), skin);
@@ -182,24 +182,20 @@ public class BattleScreen implements Screen {
         healthBar2.setAnimateDuration(0.5f);
         healthBar2.setValue(opponentPet.getHealth());
 
-        pet1Info.clear();
+
 
         pet1Info.add(pet1Name);
         pet1Info.add(pet1Level).padLeft(2.5f);
         pet1Info.row();
         //pet1Info.add(health1).center().padLeft(10);
         pet1Info.add(healthBar1).colspan(2);
-
         pet1Info.padLeft(5);
-
-        pet2Info.clear();
 
         pet2Info.add(pet2Name);
         pet2Info.add(pet2Level).padLeft(2.5f);
         pet2Info.row();
         //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
-
         pet2Info.padRight(5);
     }
 
@@ -232,6 +228,9 @@ public class BattleScreen implements Screen {
     }
 
     public void initialiseSkillsWindow() {
+        skillsWindow.clear();
+        skillButtons.clear();
+
         System.out.println("initialising initialiseSkillsWindow");
         skillsWindow.clearChildren();
         final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
@@ -250,7 +249,6 @@ public class BattleScreen implements Screen {
             addSkillListener(skillButtons.get(i), skills[i]);
         }
 
-        skillsWindow.clear();
         for (TextButton button: skillButtons) {
             skillsWindow.add(button).pad(1).width(245);
             skillsWindow.row();
@@ -275,6 +273,8 @@ public class BattleScreen implements Screen {
     }
 
     public void initialisePetsWindow() {
+        petsWindow.clear();
+        petButtons.clear();
         System.out.println("initialising initialisePetsWindow");
         final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
         final Creature[] pets = {thisPlayer.pet1, thisPlayer.pet2, thisPlayer.pet3};
@@ -293,7 +293,6 @@ public class BattleScreen implements Screen {
             addPetListener(petButtons.get(i), pets[i], i);
         }
 
-        petsWindow.clear();
         for (TextImageButton button: petButtons) {
             petsWindow.add(button).pad(1).width(245).height(80);
             petsWindow.row();
@@ -415,20 +414,22 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
 
         //logic for battle
-        if (BattleHandler.changePet) {
+        /*if (BattleHandler.changePet) {
             // currently not in use
             initialisePlayers();
             initialisePetInfo();
             initialisePetImages();
             BattleHandler.changePet = false;
-        } else if (BattleHandler.updatePetInfo) {
+        } else */if (BattleHandler.updatePetInfo) {
             // for both attacking and changing pets updates
-            initialisePlayers();
-            initialisePetInfo();
-            initialisePetImages();
-            initialiseSkillsWindow();
-            initialisePetsWindow();
-            BattleHandler.updatePetInfo = false;
+            BattleHandler.loadTextures(() -> {
+                initialisePlayers();
+                initialisePetInfo();
+                initialisePetImages();
+                initialiseSkillsWindow();
+                initialisePetsWindow();
+                BattleHandler.updatePetInfo = false;
+            });
         } else if (BattleHandler.battleEnd) {
             setAllsSkillNotTouchable();
             // todo load end battle screen
