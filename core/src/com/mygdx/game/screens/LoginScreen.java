@@ -106,21 +106,13 @@ public class LoginScreen implements Screen {
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
 //        font = new BitmapFont(Gdx.files.internal("buttons/default.fnt"));
-//        BitmapFont.BitmapFontData fontData = font.getData();
-//        int newSize = 24;
-//        int originalsize = font
-//        fontData.setScale(newSize / (float)(fontData.fontSize()));
+//        font.getData().setScale(3, 3);
+//        skin.add("default-font", font, BitmapFont.class);
+        skin.getFont("default-font").getData().setScale(3,3);
 
         usernameField = new TextField("Username", skin);
 
         loginButton = new TextButton("Login", skin);
-//        loginButton.setTransform(true);
-//        loginButton.scaleBy(0.25f);
-//
-
-
-        usernameField.setSize(0.3f * width, 0.1f * height);
-        usernameField.setPosition((width - usernameField.getWidth()) / 2, height * 0.67f);
 
         loginButton.addListener(new ClickListener() {
             @Override
