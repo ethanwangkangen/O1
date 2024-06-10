@@ -20,7 +20,7 @@ public class BattleState{
         PLAYERTWOTURN,
     }
 
-    private Turn turn;
+    public Turn turn;
     private int numPlayers;
     private Boolean battleStarted;
     public Boolean battleEnded;
@@ -122,9 +122,13 @@ public class BattleState{
         changeTurn();
     }
 
-//    public void update(BattleState newState) {
-//        player1.update(newState.player1);
-//        player2.update(newState.player2);
-//    }
+    public void update(BattleState newState) {
+        player1.update(newState.player1);
+        player2.update(newState.player2);
+        turn = newState.turn;
+        battleEnded = newState.battleEnded;
+        battleStarted = newState.battleStarted;
+        firstRound = newState.firstRound;
+    }
 
 }

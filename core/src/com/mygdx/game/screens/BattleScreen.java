@@ -256,7 +256,8 @@ public class BattleScreen implements Screen {
 //        skillsWindow.setHeight(120);
 //        skillsWindow.setWidth(250);
         //skillsWindow.setPosition(((float)screenWidth - skillsWindow.getWidth()) / 2, 0);
-        skillsWindow.padBottom(1);
+
+        skillsWindow.setVisible(true);
 
     }
 

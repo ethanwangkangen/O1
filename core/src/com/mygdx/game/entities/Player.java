@@ -75,6 +75,10 @@ public class Player extends Entity implements Serializable{
         }
     }
 
+    public Pet getPet() {
+        return currentPet;
+    }
+
     // consider replacing pets array to reservePets array in future
     // to better display pet screen
 //    public void switchpet(int target) {
@@ -175,8 +179,14 @@ public class Player extends Entity implements Serializable{
         return numPets;
     }
 
-//    public void update(Player player) {
-//
-//    }
-
+    public void update(Player player) {
+        if (pet1 != null) {
+            pet1.update(player.pet1);
+        } else if (pet2 != null) {
+            pet2.update(player.pet2);
+        } else if (pet3 != null) {
+            pet3.update(player.pet3);
+        }
+        changePet(player.getPet());
+    }
 }

@@ -40,10 +40,10 @@ public class BattleHandler {
     }
 
     public static void updateBattleState(BattleState newState) {
-//        battleState.update(newState);
-        battleState = newState;
-
+        if (battleState == null) {
+            battleState = newState;
+        } else {
+            battleState.update(newState);
+        }
     }
-
-
 }

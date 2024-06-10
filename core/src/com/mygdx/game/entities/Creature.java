@@ -119,6 +119,10 @@ public abstract class Creature extends Entity implements Serializable{
         return health;
     }
 
-
+    public void update(Creature pet) {
+        health = pet.getHealth();
+        alive = pet.isAlive();
+//      update mana, level, skills in the future
+    }
 
 }
