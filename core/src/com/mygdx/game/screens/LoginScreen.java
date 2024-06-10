@@ -105,10 +105,7 @@ public class LoginScreen implements Screen {
         table.setBackground(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-//        font = new BitmapFont(Gdx.files.internal("buttons/default.fnt"));
-//        font.getData().setScale(3, 3);
-//        skin.add("default-font", font, BitmapFont.class);
-        skin.getFont("default-font").getData().setScale(3,3);
+        skin.getFont("default-font").getData().setScale((int) (2.5 * Gdx.graphics.getDensity()));
 
         usernameField = new TextField("Username", skin);
 
