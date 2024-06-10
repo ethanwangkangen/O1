@@ -1,12 +1,21 @@
 package com.mygdx.game.screens;
 
+import static com.badlogic.gdx.utils.Align.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
@@ -19,22 +28,23 @@ import com.mygdx.game.AuthService;
 import org.w3c.dom.ls.LSOutput;
 //import com.mygdx.game.FirebaseAuthServiceAndroid;
 
-
-
 import java.io.IOException;
 import java.util.UUID;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
-
     private final Table table;
-    private Texture background;
+    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
     private final TextButton loginButton;
     private final TextField usernameField;
     private Label errorLabel;
     boolean login = false;
     boolean joined = false;
+    int height = Gdx.graphics.getHeight();
+    int width = Gdx.graphics.getWidth();
+
+    private BitmapFont font;
 
 
 
@@ -88,27 +98,30 @@ public class LoginScreen implements Screen {
 
 
         System.out.println("LoginScreen created");
-        this.gameObj = gameObj;
-        this.stage = new Stage();
-        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+        stage = new Stage(new ScreenViewport());
 
-        this.table = new Table();
-        this.table.setFillParent(true);
-        //this.table.setBackground("mainscreen.png"); //to change
-
-//        Texture background = new Texture("mainscreen.png");
-//        stage.act(Gdx.graphics.getDeltaTime());
-//        stage.getBatch().begin();
-//        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
-//        stage.getBatch().end();
-
-//        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
-//        table.background(background);
+        table = new Table();
+        table.setFillParent(true);
+        table.setBackground(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-        this.usernameField = new TextField("Username", skin);
+//        font = new BitmapFont(Gdx.files.internal("buttons/default.fnt"));
+//        BitmapFont.BitmapFontData fontData = font.getData();
+//        int newSize = 24;
+//        int originalsize = font
+//        fontData.setScale(newSize / (float)(fontData.fontSize()));
+
+        usernameField = new TextField("Username", skin);
 
         loginButton = new TextButton("Login", skin);
+//        loginButton.setTransform(true);
+//        loginButton.scaleBy(0.25f);
+//
+
+
+        usernameField.setSize(0.3f * width, 0.1f * height);
+        usernameField.setPosition((width - usernameField.getWidth()) / 2, height * 0.67f);
+
         loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -125,8 +138,9 @@ public class LoginScreen implements Screen {
 
     public void setTable() {
         table.clear();
-        table.add(usernameField).center().width(250).padTop(50).row();
-        table.add(loginButton).center().size(250, 50).padTop(100).row();
+
+        table.add(usernameField).center().padTop(100).width(0.3f * Gdx.graphics.getWidth()).height(0.1f * Gdx.graphics.getHeight()).row();
+        table.add(loginButton).center().padTop(100).width(0.3f * width).height(0.1f * height).row();
     }
 
     @Override
@@ -220,7 +234,7 @@ public class LoginScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
