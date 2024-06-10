@@ -27,11 +27,9 @@ import java.util.UUID;
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
-    Viewport extendviewport;
-    PerspectiveCamera camera;
 
     private final Table table;
-    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("Pixel_art_grass_image.png")));
+    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
 
     private final TextButton loginButton;
     private final TextField usernameField;
@@ -58,17 +56,8 @@ public class LoginScreen implements Screen {
 
         table = new Table();
         table.setFillParent(true);
-        //table.setSkin(new Skin(Gdx.files.internal("buttons/uiskin.json")));
         table.setBackground(background); //to change
 
-//        Texture background = new Texture("mainscreen.png");
-//        stage.act(Gdx.graphics.getDeltaTime());
-//        stage.getBatch().begin();
-//        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
-//        stage.getBatch().end();
-
-//        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
-//        table.background(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         usernameField = new TextField("Username", skin);

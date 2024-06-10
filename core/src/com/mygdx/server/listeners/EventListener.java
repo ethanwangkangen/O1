@@ -67,6 +67,7 @@ public class EventListener extends Listener {
             if (battleState.getNumPlayers() == 2) {
                 server.sendToAllTCP(battleState);
                 System.out.println("sending battleState to user");
+                battleState.firstRound = false;
                 server.sendToAllTCP(new StartBattleEvent());
                 System.out.println("Starting Battle");
             } //todo change

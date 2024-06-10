@@ -24,6 +24,7 @@ public class BattleState{
     private int numPlayers;
     private Boolean battleStarted;
     public Boolean battleEnded;
+    public Boolean firstRound;
     private int numofTurns;
 
     public BattleState() {
@@ -32,6 +33,7 @@ public class BattleState{
         this.numofTurns = 1;
         battleStarted = false;
         battleEnded = false;
+        firstRound = true;
     }
 
     public int getNumPlayers() {
