@@ -2,14 +2,16 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -17,8 +19,6 @@ import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.server.UUIDSerializer;
-import com.mygdx.services.AuthService;
-
 
 
 import java.io.IOException;
@@ -27,9 +27,12 @@ import java.util.UUID;
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
+    Viewport extendviewport;
+    PerspectiveCamera camera;
 
     private final Table table;
-    private Texture background;
+    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("Pixel_art_grass_image.png")));
+
     private final TextButton loginButton;
     private final TextField usernameField;
     private Label errorLabel;
@@ -49,12 +52,14 @@ public class LoginScreen implements Screen {
 
         System.out.println("LoginScreen created");
         this.gameObj = gameObj;
-        this.stage = new Stage();
-        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        //stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+        //camera = new PerspectiveCamera(70, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        this.table = new Table();
-        this.table.setFillParent(true);
-        //this.table.setBackground("mainscreen.png"); //to change
+        table = new Table();
+        table.setFillParent(true);
+        //table.setSkin(new Skin(Gdx.files.internal("buttons/uiskin.json")));
+        table.setBackground(background); //to change
 
 //        Texture background = new Texture("mainscreen.png");
 //        stage.act(Gdx.graphics.getDeltaTime());
@@ -66,10 +71,10 @@ public class LoginScreen implements Screen {
 //        table.background(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-        this.usernameField = new TextField("Username", skin);
+        usernameField = new TextField("Username", skin);
 
-        this.loginButton = new TextButton("Login", skin);
-        this.loginButton.addListener(new ClickListener() {
+        loginButton = new TextButton("Login", skin);
+        loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //connect
@@ -79,14 +84,14 @@ public class LoginScreen implements Screen {
 
             }
         });
-        this.stage.addActor(this.table);
-        this.setTable();
+        stage.addActor(table);
+        setTable();
     }
 
     public void setTable() {
-        this.table.clear();
-        this.table.add(this.usernameField).center().width(250).padTop(50).row();
-        this.table.add(this.loginButton).center().size(250, 50).padTop(100).row();
+        table.clear();
+        table.add(usernameField).center().width(250).padTop(50).row();
+        table.add(loginButton).center().size(250, 50).padTop(100).row();
     }
 
     @Override
@@ -100,8 +105,8 @@ public class LoginScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         //System.out.println("currently rendering BattleScreen");
-        this.stage.draw();
-        this.stage.act(delta);
+        stage.act(delta);
+        stage.draw();
 
         if (login && !joined) {
             joined = true;
@@ -184,7 +189,7 @@ public class LoginScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
