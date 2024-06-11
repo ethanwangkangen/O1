@@ -47,8 +47,8 @@ public class BattleState{
         return player2;
     }
 
-    public boolean playerAlive() {
-        return player1.isAlive() || player2.isAlive();
+    public boolean playersAlive() {
+        return player1.isAlive() && player2.isAlive();
     }
 
 
@@ -105,10 +105,10 @@ public class BattleState{
         petAttacked = true;
         System.out.println("Changing turns");
 
-        if (!playerAlive()) {
-            System.out.println("Changing battleEnded to true");
-            battleEnded = true;
-        }
+//        if (!playersAlive()) {
+//            System.out.println("Changing battleEnded to true");
+//            battleEnded = true;
+//        }
     }
 
     public void loadTextures(Runnable callback) {

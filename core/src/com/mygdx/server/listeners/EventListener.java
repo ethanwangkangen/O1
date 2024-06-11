@@ -55,10 +55,10 @@ public class EventListener extends Listener {
             System.out.println("AttackEvent received by server");
             AttackEvent attackEvent = (AttackEvent) object;
             battleState.attack(attackEvent.id, attackEvent.skill);
-            if (!battleState.battleEnded) {
-                System.out.println("Sending battleState");
-                server.sendToAllTCP(battleState);
-            } else {
+            System.out.println("Sending battleState");
+            server.sendToAllTCP(battleState);
+
+            if (!battleState.playersAlive()){
                 System.out.println("Sending EndBattleEvent");
                 server.sendToAllTCP(new EndBattleEvent());
             }

@@ -10,7 +10,7 @@ public abstract class Creature extends Entity implements Serializable{
 
     public Creature(){}
 
-    private boolean alive;
+    //private boolean alive;
     private int maxhealth;
     private int health;
     private int maxmana;
@@ -37,7 +37,7 @@ public abstract class Creature extends Entity implements Serializable{
         this.health = health;
         this.maxmana = mana;
         this.mana = mana;
-        this.alive = true;
+        //this.alive = true;
         this.level = 1;
         this.name = name;
         this.path = path;
@@ -51,10 +51,10 @@ public abstract class Creature extends Entity implements Serializable{
     public void takeDamage(Skill skill) {
         int x = skill.getDamage();
         this.health -= x;
-        if (this.health <= 0) {
-            this.health = 0;
-            this.alive = false;
-        }
+//        if (this.health <= 0) {
+//            this.health = 0;
+//            this.alive = false;
+//        }
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     public boolean isAlive() {
-        return alive;
+        return this.health > 0;
     }
 
 //    public void addSkill(int damage) {
@@ -120,7 +120,7 @@ public abstract class Creature extends Entity implements Serializable{
 
     public void update(Creature pet) {
         health = pet.getHealth();
-        alive = pet.isAlive();
+//        alive = pet.isAlive();
 //      update mana, level, skills in the future
     }
 

@@ -306,6 +306,7 @@ public class BattleScreen implements Screen {
                 newButton.setTouchable(Touchable.enabled);
             } else {
                 newButton.setTouchable(Touchable.disabled);
+                System.out.println("This pet is dead");
             }
         } else {
             newButton = new TextImageButton("No pet owned", skin, crossedBox);

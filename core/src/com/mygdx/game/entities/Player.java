@@ -62,8 +62,12 @@ public class Player extends Entity implements Serializable{
     }
 
     public boolean isAlive() {
-        if (pet1 != null) {
-            return pet1.isAlive();
+        if (pet1 != null && pet1.isAlive()) {
+            return true;
+        } else if (pet2 != null && pet2.isAlive()) {
+            return true;
+        } else if (pet3 != null && pet3.isAlive()) {
+            return true;
         }
         return false;
     }
