@@ -27,6 +27,10 @@ public class PlayerHandler {
         return player.getTexture();
     }
 
+    public static Player getPlayer() {
+        return player;
+    }
+
     // used to store info about player
 
 }

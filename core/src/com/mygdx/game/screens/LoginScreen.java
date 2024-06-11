@@ -5,19 +5,13 @@ import static com.badlogic.gdx.utils.Align.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
@@ -25,13 +19,8 @@ import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
-import com.mygdx.server.UUIDSerializer;
 import com.mygdx.game.AuthService;
-import org.w3c.dom.ls.LSOutput;
 //import com.mygdx.game.FirebaseAuthServiceAndroid;
-
-import java.io.IOException;
-import java.util.UUID;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;

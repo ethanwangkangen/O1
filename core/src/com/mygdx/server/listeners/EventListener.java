@@ -37,7 +37,7 @@ public class EventListener extends Listener {
             Player newPlayer = new Player();
             newPlayer.username = addPlayerEvent.username;
 
-            playerHandler.addPlayer(newPlayer);
+            playerHandler.addPlayer(newPlayer); //ignore
             battleState.addPlayer(newPlayer);
             //todo move to startbattleevent
 
