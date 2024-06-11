@@ -27,7 +27,7 @@ public class BattleScreen implements Screen {
     private String myId = PlayerHandler.getIdString(); //id of current player
     private Player thisPlayer;
     private Player opponentPlayer;
-    private Image pet1Image;
+    private FlippedImage pet1Image;
     private Image pet2Image;
     private Label pet1Level;
     private Label pet2Level;
@@ -149,7 +149,7 @@ public class BattleScreen implements Screen {
         pet2imageTable.clear();
 
         System.out.println("initialising PetImages table");
-        pet1Image = new Image(thisPet.getTexturePath());
+        pet1Image = new FlippedImage(thisPet.getTexturePath());
         pet2Image = new Image(opponentPet.getTexturePath());
 
         pet1imageTable.add(pet1Image).padLeft(10).height(100).width(100);
