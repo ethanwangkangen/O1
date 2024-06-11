@@ -82,7 +82,7 @@ public class LoginScreen implements Screen {
 
     public void initialiseBgTable() {
         bgTable.setFillParent(true);
-        bgTable.setBackground(new TextureRegionDrawable(new Texture("mainscreen.png")));
+        bgTable.setBackground(background);
     }
 
     public void initialiseLoginTable() {
