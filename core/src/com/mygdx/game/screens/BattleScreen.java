@@ -415,6 +415,9 @@ public class BattleScreen implements Screen {
             if (BattleHandler.petAttacked()) {
                 System.out.println("A pet has attacked.");
                 initialisePetInfo();
+                initialisePetImages();
+                initialiseSkillsWindow();
+                initialisePetsWindow();
                 //updatePetsWindow();
             }
 
