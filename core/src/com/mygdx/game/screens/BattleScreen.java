@@ -96,18 +96,12 @@ public class BattleScreen implements Screen {
             initialiseChangeButtons();
             initialisePetsWindow();
 
-
-            petsWindow.setWidth(250);
-            petsWindow.setHeight(250);
-
-
             //then add all the tables to the stage
             Table table = new Table();
             table.setFillParent(true);
             table.setBackground(new TextureRegionDrawable(new Texture("border.png")));
             table.add(petsWindow).bottom().center();
 
-            Stack stack = new Stack();
             stack.add(bgTable);
             stack.add(table);
             stack.setFillParent(true);
@@ -139,12 +133,10 @@ public class BattleScreen implements Screen {
             thisPlayer = BattleHandler.getPlayer2();
             opponentPlayer = BattleHandler.getPlayer1();
         }
-
-        //set pets
         thisPet = thisPlayer.getCurrentPet();
         opponentPet = opponentPlayer.getCurrentPet();
-
     }
+
     public void initialiseBgTable() {
         System.out.println("initialising BG table");
         Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("Pixel_art_grass_image.png")));
@@ -158,7 +150,7 @@ public class BattleScreen implements Screen {
 
         System.out.println("initialising PetImages table");
         pet1Image = new Image(thisPet.getTexturePath());
-        pet2Image = new Image(opponentPet.getTexturePath()); //bug: getTexture() not working. nullpointerexception
+        pet2Image = new Image(opponentPet.getTexturePath());
 
         pet1imageTable.add(pet1Image).padLeft(10).height(100).width(100);
         pet2imageTable.add(pet2Image).padRight(10).height(100).width(100);
@@ -173,30 +165,35 @@ public class BattleScreen implements Screen {
         pet2Name = new Label(opponentPet.getName(), skin);
         pet1Level = new Label("(" + ((Integer)thisPet.getLevel()).toString() + ")", skin);
         pet2Level = new Label("(" + ((Integer)opponentPet.getLevel()).toString() + ")", skin);
-        //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
-        //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
+        health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
+        health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
         healthBar1 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar1.setAnimateDuration(.5f);
+        healthBar1.setAnimateDuration(1f);
         healthBar1.setValue(thisPet.getHealth());
         healthBar2 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar2.setAnimateDuration(0.5f);
+        healthBar2.setAnimateDuration(1f);
         healthBar2.setValue(opponentPet.getHealth());
-
-
 
         pet1Info.add(pet1Name);
         pet1Info.add(pet1Level).padLeft(2.5f);
         pet1Info.row();
-        //pet1Info.add(health1).center().padLeft(10);
+        pet1Info.add(health1).center().padLeft(10);
         pet1Info.add(healthBar1).colspan(2);
         pet1Info.padLeft(5);
 
         pet2Info.add(pet2Name);
         pet2Info.add(pet2Level).padLeft(2.5f);
         pet2Info.row();
-        //pet2Info.add(health2).center().padRight(10);
+        pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
         pet2Info.padRight(5);
+    }
+
+    public void updatePetInfo() {
+        health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());
+        health2.setText(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth());
+        healthBar1.setValue(thisPet.getHealth());
+        healthBar2.setValue(opponentPet.getHealth());
     }
 
     public void initialiseChangeButtons() {
@@ -253,10 +250,8 @@ public class BattleScreen implements Screen {
             skillsWindow.add(button).pad(1).width(245);
             skillsWindow.row();
         }
-//        skillsWindow.setHeight(120);
-//        skillsWindow.setWidth(250);
-        //skillsWindow.setPosition(((float)screenWidth - skillsWindow.getWidth()) / 2, 0);
 
+        //skillsWindow.setPosition(((float)screenWidth - skillsWindow.getWidth()) / 2, 0);
         skillsWindow.setVisible(true);
 
     }
@@ -277,7 +272,6 @@ public class BattleScreen implements Screen {
         petsWindow.clear();
         petButtons.clear();
         System.out.println("initialising initialisePetsWindow");
-        final Skill[] skills = {thisPet.skill1, thisPet.skill2, thisPet.skill3};
         final Creature[] pets = {thisPlayer.pet1, thisPlayer.pet2, thisPlayer.pet3};
         TextImageButton pet1 = createPetButton(thisPlayer.pet1);
         TextImageButton pet2 = createPetButton(thisPlayer.pet2);
@@ -299,9 +293,8 @@ public class BattleScreen implements Screen {
             petsWindow.row();
         }
 
-        petsWindow.setHeight(120);
+        petsWindow.setHeight(250);
         petsWindow.setWidth(250);
-        petsWindow.padBottom(1);
         petsWindow.setVisible(false);
     }
 
@@ -314,12 +307,9 @@ public class BattleScreen implements Screen {
             } else {
                 newButton.setTouchable(Touchable.disabled);
             }
-            //newButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
-            //newButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(pet.getTexturePath()));
         } else {
             newButton = new TextImageButton("No pet owned", skin, crossedBox);
             newButton.setTouchable(Touchable.disabled);
-            //newButton.getStyle().imageUp = new TextureRegionDrawable(pet.getTexturePath());
         }
 
         return newButton;
@@ -340,7 +330,6 @@ public class BattleScreen implements Screen {
                 petButtons.get(i).setTouchable(Touchable.enabled);
             }
         }
-
     }
 
     public void setAllsSkillNotTouchable() {
@@ -353,8 +342,8 @@ public class BattleScreen implements Screen {
         }
     }
 
-    public void addSkillListener(TextButton button, Skill skill) {
-        button.addListener(new ClickListener() {
+    public void addSkillListener(TextButton skillButton, Skill skill) {
+        skillButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 AttackEvent attackEvent = new AttackEvent();
@@ -362,14 +351,15 @@ public class BattleScreen implements Screen {
                 attackEvent.skill = skill;
                 System.out.println("This player is attacking");
                 DarwinsDuel.getClient().sendTCP(attackEvent);
+                skillButton.setTouchable(Touchable.disabled);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
     }
 
-    public void addPetListener(TextImageButton button, Creature pet, int i) {
+    public void addPetListener(TextImageButton petButton, Creature pet, int i) {
         if (i == 0) {
-            button.addListener(new ClickListener() {
+            petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
@@ -378,11 +368,12 @@ public class BattleScreen implements Screen {
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet1");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
         } else if (i == 1) {
-            button.addListener(new ClickListener() {
+            petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
@@ -391,11 +382,12 @@ public class BattleScreen implements Screen {
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet2");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
         } else if (i == 2) {
-            button.addListener(new ClickListener() {
+            petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
@@ -404,40 +396,47 @@ public class BattleScreen implements Screen {
                     changePetEvent.id = myId;
                     System.out.println("Changing to pet3");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
+                    petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
         }
-
     }
 
     @Override
     public void render(float delta) {
 
         //logic for battle
-        /*if (BattleHandler.changePet) {
-            // currently not in use
+        if (BattleHandler.updatePetInfo) {
             initialisePlayers();
-            initialisePetInfo();
-            initialisePetImages();
-            BattleHandler.changePet = false;
-        } else */if (BattleHandler.updatePetInfo) {
             // for both attacking and changing pets updates
-            BattleHandler.loadTextures(() -> {
-                initialisePlayers();
+
+            // pet has attacked
+            if (BattleHandler.petAttacked()) {
+                System.out.println("A pet has attacked.");
                 initialisePetInfo();
-                initialisePetImages();
-                initialiseSkillsWindow();
-                initialisePetsWindow();
-                BattleHandler.updatePetInfo = false;
-            });
-        } else if (BattleHandler.battleEnd) {
+                //updatePetsWindow();
+            }
+
+            // pet change has occurred
+            if (BattleHandler.petChanged()) {
+                System.out.println("A pet change has occurred.");
+                opponentPlayer.getCurrentPet().loadTexture(() -> {
+                    initialisePetInfo();
+                    initialisePetImages();
+                    initialiseSkillsWindow();
+                    initialisePetsWindow();
+                });
+            }
+            BattleHandler.updatePetInfo = false;
+        }
+
+        // battle has ended
+        if (BattleHandler.battleEnd) {
             setAllsSkillNotTouchable();
             // todo load end battle screen
-            // if this doesn't work, consider implementing stack
             DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
             BattleHandler.battleEnd = false;
-            // todo automatic change of pets when one pet dies, but battle hasn't ended
         }
 
         // enable/disable skillButtons

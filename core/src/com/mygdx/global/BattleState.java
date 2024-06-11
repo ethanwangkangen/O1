@@ -1,14 +1,9 @@
 package com.mygdx.global;
 
-import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 
-import java.io.Serializable;
-import java.nio.file.FileSystemNotFoundException;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class BattleState{
 
@@ -25,6 +20,8 @@ public class BattleState{
     private Boolean battleStarted;
     public Boolean battleEnded;
     public Boolean firstRound;
+    public Boolean petChanged;
+    public Boolean petAttacked;
     private int numofTurns;
 
     public BattleState() {
@@ -34,6 +31,8 @@ public class BattleState{
         battleStarted = false;
         battleEnded = false;
         firstRound = true;
+        petChanged = false;
+        petAttacked = false;
     }
 
     public int getNumPlayers() {
@@ -92,11 +91,17 @@ public class BattleState{
 
     public void attack(String id, Skill skill) {
         if (!Objects.equals(player1.getIdString(), id)) {
-            player1.takeDamage(skill);
+            if (player1.takeDamage(skill)) {
+                petChanged = true;
+            }
         } else {
-            player2.takeDamage(skill);
+            if (player2.takeDamage(skill)) {
+                petChanged = true;
+            }
         }
+
         changeTurn();
+        petAttacked = true;
         System.out.println("Changing turns");
 
         if (!playerAlive()) {
@@ -120,6 +125,7 @@ public class BattleState{
             player2.changePet(pet);
         }
         changeTurn();
+        petChanged = true;
     }
 
     public void update(BattleState newState) {
@@ -129,6 +135,8 @@ public class BattleState{
         battleEnded = newState.battleEnded;
         battleStarted = newState.battleStarted;
         firstRound = newState.firstRound;
+        petChanged = newState.petChanged;
+        petAttacked = newState.petAttacked;
     }
 
 }

@@ -81,7 +81,6 @@ public abstract class Creature extends Entity implements Serializable{
 
 
     public void loadTexture(Runnable callback) {
-        System.out.println("here.");
         Gdx.app.postRunnable(() -> {
             try {
                 System.out.println("loading texture of creature");

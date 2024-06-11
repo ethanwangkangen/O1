@@ -8,8 +8,8 @@ import com.mygdx.global.ChangePetEvent;
 
 import java.io.Serializable;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class Player extends Entity implements Serializable{
 
@@ -34,24 +34,28 @@ public class Player extends Entity implements Serializable{
 
 
     //int skill (0, 1, or 2): corresponds to the skill used
-    public void takeDamage(Skill skill) {
+    public Boolean takeDamage(Skill skill) {
+        // returns true if petchange (ie a pet has died)
         if (currentPet == Pet.PET1) {
             pet1.takeDamage(skill);
             if (!pet1.isAlive()) {
                 changeNextPet();
+                return true;
             }
         } else if (currentPet == Pet.PET2) {
             pet2.takeDamage(skill);
             if (!pet2.isAlive()) {
                 changeNextPet();
+                return true;
             }
         } else if (currentPet == Pet.PET3) {
             pet3.takeDamage(skill);
             if (!pet3.isAlive()) {
                 changeNextPet();
+                return true;
             }
         }
-
+        return false;
     }
 
     public boolean isAlive() {

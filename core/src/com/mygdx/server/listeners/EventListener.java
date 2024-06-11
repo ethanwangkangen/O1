@@ -62,6 +62,8 @@ public class EventListener extends Listener {
                 System.out.println("Sending EndBattleEvent");
                 server.sendToAllTCP(new EndBattleEvent());
             }
+            battleState.petAttacked = false;
+            battleState.petChanged = false;
         } else if (object instanceof StartBattleEvent) {
             System.out.println("StartBattleEvent received by server");
             if (battleState.getNumPlayers() == 2) {
@@ -82,6 +84,8 @@ public class EventListener extends Listener {
                 System.out.println("Sending EndBattleEvent");
                 server.sendToAllTCP(new EndBattleEvent());
             }
+            battleState.petAttacked = false;
+            battleState.petChanged = false;
         } else {
             System.out.println("unknown object received.");
         }

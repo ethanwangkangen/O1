@@ -3,9 +3,6 @@ package com.mygdx.game.handlers;
 import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.global.BattleState;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-
-import java.util.concurrent.CompletableFuture;
 
 public class BattleHandler {
     private static BattleState battleState;
@@ -45,5 +42,12 @@ public class BattleHandler {
         } else {
             battleState.update(newState);
         }
+    }
+
+    public static Boolean petChanged () {
+        return battleState.petChanged;
+    }
+    public static Boolean petAttacked() {
+        return battleState.petAttacked;
     }
 }
