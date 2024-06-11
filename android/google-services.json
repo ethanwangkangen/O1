@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "663589859590",
+    "project_id": "darwinduel",
+    "storage_bucket": "darwinduel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663589859590:android:52a870463008fca54bee87",
+        "android_client_info": {
+          "package_name": "com.mygdx.game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3fDKGjnnvJPpAtpodgqmCTEF09ZSbl30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

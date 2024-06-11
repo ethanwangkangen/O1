@@ -1,7 +1,8 @@
+
 android {
     namespace "com.mygdx.game"
-    buildToolsVersion "33.0.2"
-    compileSdkVersion 33
+    buildToolsVersion "34.0.0"
+    compileSdkVersion 34
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -19,8 +20,8 @@ android {
     }
     defaultConfig {
         applicationId "com.mygdx.game"
-        minSdkVersion 19
-        targetSdkVersion 33
+        minSdkVersion 23
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
     }
@@ -86,4 +87,20 @@ tasks.register('run', Exec) {
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.mygdx.game/com.mygdx.game.AndroidLauncher'
 }
 
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    // 'com.android.tools.build:gradle:7.3.0'
+    //implementation 'com.google.gms:google-services:4.3.14' // Specify the version here
+
+    //add dependencies that i will need (firebase analytics eg.)
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+
+}
+
+apply plugin: 'com.android.application'
 eclipse.project.name = appName + "-android"
+apply plugin: 'com.google.gms.google-services'

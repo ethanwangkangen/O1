@@ -2,22 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
-import com.mygdx.game.entities.*;
-import com.mygdx.game.listeners.EventListener;
 import com.mygdx.game.screens.*;
-import com.mygdx.global.BattleState;
-import com.mygdx.global.JoinRequestEvent;
-import com.mygdx.global.JoinResponseEvent;
-import com.sun.org.apache.xpath.internal.operations.Or;
-
-
-import java.io.IOException;
 
 
 public class DarwinsDuel extends Game {
@@ -26,6 +16,8 @@ public class DarwinsDuel extends Game {
 	private static DarwinsDuel instance;
 	private OrthographicCamera camera;
 	public static Client client;
+
+	public AuthService authService;
 
 	float y = 0;
 
@@ -46,6 +38,15 @@ public class DarwinsDuel extends Game {
 	public static void setClient(Client client) {
 		client = client;
 	}*/
+
+	public DarwinsDuel(AuthService authService) {
+		this.authService = authService;
+		//this is an instance of FireBaseAuthServiceAndroid
+	}
+
+	public DarwinsDuel() {
+
+	}
 
 	@Override
 	public void create () {

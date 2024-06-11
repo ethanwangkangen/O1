@@ -43,6 +43,10 @@ tasks.register('dist', Jar) {
     with jar
 }
 
+dependencies {
+    // Other dependencies
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
 
 dist.dependsOn classes
 

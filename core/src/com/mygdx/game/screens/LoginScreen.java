@@ -1,22 +1,32 @@
 package com.mygdx.game.screens;
 
+import static com.badlogic.gdx.utils.Align.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.server.UUIDSerializer;
+import com.mygdx.game.AuthService;
+import org.w3c.dom.ls.LSOutput;
+//import com.mygdx.game.FirebaseAuthServiceAndroid;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -25,39 +35,83 @@ public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private final Stage stage;
     private final Table table;
-    private Texture background;
+    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
     private final TextButton loginButton;
     private final TextField usernameField;
     private Label errorLabel;
     boolean login = false;
     boolean joined = false;
+    int height = Gdx.graphics.getHeight();
+    int width = Gdx.graphics.getWidth();
+
+    private BitmapFont font;
+
+
 
 
     public LoginScreen(DarwinsDuel gameObj) {
 
+        /*
+        For reference:
+        Firebase placeholder logic start (for sk)
+         */
+
+        AuthService authService1 = gameObj.authService;
+        String email = "user@gmail.com";
+        String password = "password123";
+
+        //to sign in:
+        authService1.signIn(email, password, new AuthResultCallback() {
+            @Override
+            public void onSuccess() {
+                //change login screen to game screen or wtv
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+            }
+        });
+
+        //to sign up/register:
+        authService1.signUp(email, password, new AuthResultCallback() {
+            @Override
+            public void onSuccess() {
+                //change login screen to game screen or wtv
+            }
+
+            @Override
+            public void onFailure(Exception exception) {
+                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+            }
+        });
+
+        //to check if use is signed in:
+        authService1.isUserSignedIn();
+
+        //to sign out:
+        authService1.signOut();
+
+        /*
+        Firebase placeholder logic end (for sk)
+         */
+
+
         System.out.println("LoginScreen created");
-        this.gameObj = gameObj;
-        this.stage = new Stage();
-        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+        stage = new Stage(new ScreenViewport());
 
-        this.table = new Table();
-        this.table.setFillParent(true);
-        //this.table.setBackground("mainscreen.png"); //to change
-
-//        Texture background = new Texture("mainscreen.png");
-//        stage.act(Gdx.graphics.getDeltaTime());
-//        stage.getBatch().begin();
-//        stage.getBatch().draw(background, 0, 0, stage.getWidth(), stage.getHeight());
-//        stage.getBatch().end();
-
-//        Drawable background = new TextureRegionDrawable(new TextureRegion(new Texture("mainscreen.png")));
-//        table.background(background);
+        table = new Table();
+        table.setFillParent(true);
+        table.setBackground(background);
 
         final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-        this.usernameField = new TextField("Username", skin);
+        skin.getFont("default-font").getData().setScale((int) (2.5 * Gdx.graphics.getDensity()));
 
-        this.loginButton = new TextButton("Login", skin);
-        this.loginButton.addListener(new ClickListener() {
+        usernameField = new TextField("Username", skin);
+
+        loginButton = new TextButton("Login", skin);
+
+        loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 //connect
@@ -67,14 +121,15 @@ public class LoginScreen implements Screen {
 
             }
         });
-        this.stage.addActor(this.table);
-        this.setTable();
+        stage.addActor(table);
+        setTable();
     }
 
     public void setTable() {
-        this.table.clear();
-        this.table.add(this.usernameField).center().width(250).padTop(50).row();
-        this.table.add(this.loginButton).center().size(250, 50).padTop(100).row();
+        table.clear();
+
+        table.add(usernameField).center().padTop(100).width(0.3f * Gdx.graphics.getWidth()).height(0.1f * Gdx.graphics.getHeight()).row();
+        table.add(loginButton).center().padTop(100).width(0.3f * width).height(0.1f * height).row();
     }
 
     @Override
@@ -88,8 +143,8 @@ public class LoginScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         //System.out.println("currently rendering BattleScreen");
-        this.stage.draw();
-        this.stage.act(delta);
+        stage.act(delta);
+        stage.draw();
 
         if (login && !joined) {
             joined = true;
@@ -168,7 +223,7 @@ public class LoginScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
