@@ -121,8 +121,8 @@ public class BattleScreen implements Screen {
 
             bgTable.add(changeTable).expandY().bottom();
             bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
-
         });
+        stage.setDebugAll(true);
     }
     public void initialisePlayers() {
         // set players

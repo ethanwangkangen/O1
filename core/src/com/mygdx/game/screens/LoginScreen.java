@@ -75,6 +75,7 @@ public class LoginScreen implements Screen {
         });
         stage.addActor(table);
         setTable();
+        stage.isDebugAll();
     }
 
     public void setTable() {
