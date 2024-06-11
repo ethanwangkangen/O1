@@ -2,7 +2,6 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -26,62 +26,156 @@ import java.util.UUID;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
+
     private final Stage stage;
-
-    private final Table table;
     Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
+    final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
 
-    private final TextButton loginButton;
-    private final TextField usernameField;
+    private final Table loginTable = new Table();
+    private final Table signupTable = new Table();
+    private final Table bgTable = new Table();
+
+    // UI for login
+    private Label loginLabel;
+    private TextButton loginButton;
+    private TextField usernameLField;
+    private TextField passwordLField;
+    private TextButton changeToSignUp;
+
+    // UI for sign up
+    private Label signUpLabel;
+    private TextButton signUpButton;
+    private TextField usernameSField;
+    private TextField passwordSField;
+    private TextButton changeToLogin;
+
     private Label errorLabel;
     boolean login = false;
+    boolean signUp = false;
     boolean joined = false;
 
     /*
     stuff for firebase login (to be refactored):
-
-
-
-
      */
 
 
     public LoginScreen(DarwinsDuel gameObj) {
 
         System.out.println("LoginScreen created");
-        this.gameObj = gameObj;
-        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        //stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
-        //camera = new PerspectiveCamera(70, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        table = new Table();
-        table.setFillParent(true);
-        table.setBackground(background); //to change
+        initialiseBgTable();
+        initialiseLoginTable();
+        initialiseSignUpTable();
+
+        Stack stack = new Stack();
+        stack.setFillParent(true);
+        stack.add(bgTable);
+        stack.add(loginTable);
+        stack.add(signupTable);
 
 
-        final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-        usernameField = new TextField("Username", skin);
+        stage.addActor(stack);
+        //stage.addActor(signupTable);
+//        stage.setDebugAll(true);
+    }
 
-        loginButton = new TextButton("Login", skin);
+    public void initialiseBgTable() {
+        bgTable.setFillParent(true);
+        bgTable.setBackground(new TextureRegionDrawable(new Texture("mainscreen.png")));
+    }
+
+    public void initialiseLoginTable() {
+        // login table
+        loginTable.setFillParent(true);
+
+        loginLabel = new Label("Login", skin);
+
+        usernameLField = new TextField("", skin);
+        usernameLField.setMessageText("Username");
+
+        passwordLField = new TextField("", skin);
+        passwordLField.setMessageText("Password");
+        passwordLField.setPasswordCharacter('*');
+        passwordLField.setPasswordMode(true);
+
+        loginButton = new TextButton("Log In", skin);
         loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                //connect
+                // connect to Firebase and get player info
                 login = true;
+
+                return super.touchDown(event, x, y, pointer, button);
+                //create client, connect client to server. start battle
+            }
+        });
+
+        changeToSignUp = new TextButton("Sign up", skin);
+        changeToSignUp.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // change to sign up interface
+                loginTable.setVisible(false);
+                signupTable.setVisible(true);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        loginTable.clear();
+        loginTable.add(loginLabel).colspan(3).row();
+        loginTable.add(usernameLField).width(250).padTop(50).colspan(3).row();
+        loginTable.add(passwordLField).width(250).padTop(10).colspan(3).row();
+        loginTable.add().uniform().padTop(100);
+        loginTable.add(loginButton).uniform();
+        loginTable.add(changeToSignUp).uniform().right();
+        loginTable.setVisible(true);
+    }
+
+    public void initialiseSignUpTable() {
+        // sign up table
+        signupTable.setFillParent(true);
+
+        signUpLabel = new Label("Sign Up", skin);
+
+        usernameSField = new TextField("", skin);
+        usernameSField.setMessageText("Username");
+
+        passwordSField = new TextField("", skin);
+        passwordSField.setMessageText("Password");
+        passwordSField.setPasswordCharacter('*');
+        passwordSField.setPasswordMode(true);
+
+        signUpButton = new TextButton("Sign Up", skin);
+        signUpButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // create new player, connect to Firebase, and upload new player info
+
                 return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
 
             }
         });
-        stage.addActor(table);
-        setTable();
-        stage.isDebugAll();
-    }
+        changeToLogin = new TextButton("Login", skin);
+        changeToLogin.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                // change to login interface
+                loginTable.setVisible(true);
+                signupTable.setVisible(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
-    public void setTable() {
-        table.clear();
-        table.add(usernameField).center().width(250).padTop(50).row();
-        table.add(loginButton).center().size(250, 50).padTop(100).row();
+        signupTable.clear();
+        signupTable.add(signUpLabel).colspan(3).row();
+        signupTable.add(usernameSField).width(250).padTop(50).colspan(3).row();
+        signupTable.add(passwordSField).width(250).padTop(10).colspan(3).row();
+        signupTable.add().uniform().padTop(100);
+        signupTable.add(signUpButton).uniform();
+        signupTable.add(changeToLogin).uniform().right();
+        signupTable.setVisible(false);
     }
 
     @Override
@@ -148,7 +242,7 @@ public class LoginScreen implements Screen {
             }
 
             AddPlayerEvent addPlayerEvent = new AddPlayerEvent();
-            addPlayerEvent.username = usernameField.getText();
+            addPlayerEvent.username = usernameLField.getText();
             myClient.sendTCP(addPlayerEvent);
         }
     }

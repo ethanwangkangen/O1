@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
         //Texture player = PlayerHandler.getTexture();
 
         this.stage = new Stage();
-        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
+//        this.stage.getViewport().setCamera(DarwinsDuel.getInstance().getCamera());
 
         this.table = new Table();
         this.table.setFillParent(true);
@@ -51,8 +51,8 @@ public class GameScreen implements Screen {
             }
         });
 
-        this.stage.addActor(this.table);
         this.table.add(startBattle).size(250, 50).padTop(100).row();
+        this.stage.addActor(this.table);
     }
 
     @Override
