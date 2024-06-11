@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.PlayerCallback;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.Screen;
 import com.mygdx.server.UUIDSerializer;
 import com.mygdx.game.AuthService;
 import org.w3c.dom.ls.LSOutput;
+import com.mygdx.game.handlers.*;
 //import com.mygdx.game.FirebaseAuthServiceAndroid;
 
 import java.io.IOException;
@@ -74,23 +76,45 @@ public class LoginScreen implements Screen {
         });
 
         //to sign up/register:
-        authService1.signUp(email, password, new AuthResultCallback() {
-            @Override
-            public void onSuccess() {
-                //change login screen to game screen or wtv
-            }
+//        authService1.signUp(email, password, new AuthResultCallback() {
+//            @Override
+//            public void onSuccess() {
+//                //change login screen to game screen or wtv
+//            }
+//
+//            @Override
+//            public void onFailure(Exception exception) {
+//                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+//            }
+//        });
 
+        //to check if use is signed in:
+        //authService1.isUserSignedIn();
+
+        //to sign out:
+        //authService1.signOut();
+
+        //retrieve Player from database
+
+
+        authService1.sendPlayerToFirebase(PlayerHandler.getPlayer());
+        authService1.getPlayerFromFirebase(new PlayerCallback() {
             @Override
-            public void onFailure(Exception exception) {
-                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+            public void onCallback(Player player) {
+                if (player != null) {
+                    // Player data retrieved successfully
+                    System.out.println("Player data: " + player.toString());
+                    
+                    // Do something with the player data
+                    PlayerHandler.updatePlayer(player);
+                } else {
+                    // Handle the case when player data is not retrieved
+                    System.out.println("No player data found or error occurred.");
+                }
             }
         });
 
-        //to check if use is signed in:
-        authService1.isUserSignedIn();
 
-        //to sign out:
-        authService1.signOut();
 
         /*
         Firebase placeholder logic end (for sk)
@@ -183,7 +207,6 @@ public class LoginScreen implements Screen {
             // Connect to server
             // Connect to the server in a separate thread
             Thread connectThread = getThread(myClient);
-            //client.sendTCP(new JoinRequestEvent(new Player(5, 5)));
 
             try {
                 connectThread.join();
@@ -191,8 +214,12 @@ public class LoginScreen implements Screen {
                 e.printStackTrace();
             }
 
+
+
+            //myClient.sendTCP(new JoinRequestEvent());
             AddPlayerEvent addPlayerEvent = new AddPlayerEvent();
             addPlayerEvent.username = usernameField.getText();
+            //addPlayerEvent.player = retrievedPlayer;
             myClient.sendTCP(addPlayerEvent);
         }
     }
