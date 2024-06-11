@@ -77,13 +77,10 @@ public class EventListener extends Listener {
             System.out.println("ChangePetEvent received by server");
             ChangePetEvent changePetEvent = (ChangePetEvent) object;
             battleState.changePet(changePetEvent.id, changePetEvent.pet);
-            if (!battleState.battleEnded) {
-                System.out.println("Sending battleState");
-                server.sendToAllTCP(battleState);
-            } else {
-                System.out.println("Sending EndBattleEvent");
-                server.sendToAllTCP(new EndBattleEvent());
-            }
+
+            System.out.println("Sending battleState");
+            server.sendToAllTCP(battleState);
+
             battleState.petAttacked = false;
             battleState.petChanged = false;
         } else {

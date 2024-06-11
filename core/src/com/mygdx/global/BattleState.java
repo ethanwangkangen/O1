@@ -92,6 +92,7 @@ public class BattleState{
     public void attack(String id, Skill skill) {
         if (!Objects.equals(player1.getIdString(), id)) {
             if (player1.takeDamage(skill)) {
+                // takeDamage is true if pet had died from attack
                 petChanged = true;
             }
         } else {
@@ -114,7 +115,7 @@ public class BattleState{
         player1.loadTextures(() -> {
             player2.loadTextures(callback);
         });
-        System.out.println("battlestate textures loading");
+//        System.out.println("battlestate textures loading");
 
     }
 

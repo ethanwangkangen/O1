@@ -424,7 +424,7 @@ public class BattleScreen implements Screen {
             // pet change has occurred
             if (BattleHandler.petChanged()) {
                 System.out.println("A pet change has occurred.");
-                opponentPlayer.getCurrentPet().loadTexture(() -> {
+                opponentPet.loadTexture(() -> {
                     initialisePetInfo();
                     initialisePetImages();
                     initialiseSkillsWindow();
