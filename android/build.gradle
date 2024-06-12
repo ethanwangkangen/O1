@@ -90,16 +90,23 @@ tasks.register('run', Exec) {
 
 
 dependencies {
+    //kryonet dependencies (manual added, jar files)
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     // 'com.android.tools.build:gradle:7.3.0'
     //implementation 'com.google.gms:google-services:4.3.14' // Specify the version here
 
-    //add dependencies that i will need (firebase analytics eg.)
+    //firebase dependencies
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
 
+    //Maps sdk for android
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+
+    //androidX?
+    implementation 'androidx.appcompat:appcompat:1.4.1'
 }
 
 apply plugin: 'com.android.application'
