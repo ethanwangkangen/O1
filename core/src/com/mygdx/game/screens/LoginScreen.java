@@ -14,8 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.PlayerCallback;
@@ -88,7 +86,7 @@ public class LoginScreen implements Screen {
 
         stage.addActor(stack);
 
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
     }
 
@@ -98,8 +96,7 @@ public class LoginScreen implements Screen {
     }
 
     public void initialiseErrorLabel() {
-        errorLabel = new Label("testing", skin);
-        errorLabel.clear();
+        errorLabel = new Label("", skin);
         errorLabel.setFontScale(10);
     }
 
@@ -159,7 +156,7 @@ public class LoginScreen implements Screen {
                 // change to sign up interface
                 loginTable.setVisible(false);
                 signupTable.setVisible(true);
-                errorLabel.clear();
+                errorLabel.setText("");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -171,7 +168,7 @@ public class LoginScreen implements Screen {
         loginTable.add().uniform();
         loginTable.add(loginButton).padTop(100).size(200, 80).uniform();
         loginTable.add(changeToSignUp).uniform().top().row();
-        loginTable.add(errorLabel).colspan(3).center().padTop(100);
+//        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         loginTable.setVisible(true);
     }
 
@@ -232,7 +229,7 @@ public class LoginScreen implements Screen {
                 // change to login interface
                 loginTable.setVisible(true);
                 signupTable.setVisible(false);
-                errorLabel.clear();
+                errorLabel.setText("");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -244,7 +241,7 @@ public class LoginScreen implements Screen {
         signupTable.add().uniform();
         signupTable.add(signUpButton).padTop(100).size(200, 80).uniform();
         signupTable.add(changeToLogin).uniform().top().row();
-        loginTable.add(errorLabel).colspan(3).center().padTop(100);
+//        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         signupTable.setVisible(false);
     }
 
