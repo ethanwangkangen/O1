@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import static com.badlogic.gdx.utils.Align.*;
+import static com.mygdx.game.EmailValidator.isValidEmail;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,6 +21,10 @@ import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.AuthService;
+import com.mygdx.game.EmailValidator;
+
+
+import sun.jvm.hotspot.debugger.AddressException;
 //import com.mygdx.game.FirebaseAuthServiceAndroid;
 
 public class LoginScreen implements Screen {
@@ -361,9 +366,14 @@ public class LoginScreen implements Screen {
             return Situations.PASSWORD_TOO_SHORT;
         } else if (username.isEmpty()) {
             return Situations.EMPTY_USERNAME;
+        } else if (!isValidEmail(username)) {
+            return Situations.INVALID_EMAIL;
         } else {
             return Situations.ALL_GOOD;
         }
+
         //todo implement conditions for username taken and invalid email
     }
+
+
 }
