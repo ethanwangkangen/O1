@@ -80,16 +80,18 @@ public class DarwinsDuel extends Game {
 			case FREEROAM:
 				if (!(getScreen() instanceof GameScreen)) {
 					this.setScreen(new GameScreen(this));
+					System.out.println("Changing to Gamescreen");
 				}
 				break;
 			case BATTLE:
 				if (!(getScreen() instanceof BattleScreen)) {
-					System.out.println("BattleScreen started");
+					System.out.println("Changing to Battlescreen");
 					this.setScreen(new BattleScreen(this));
 				}
 				break;
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
+					System.out.println("Changing to Loginscreen");
 					this.setScreen(new LoginScreen(this));
 				}
 				break;

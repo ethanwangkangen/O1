@@ -12,4 +12,5 @@ public interface AuthService {
     public void signOut();
     public void sendPlayerToFirebase(Player player);
     public void getPlayerFromFirebase(PlayerCallback playerCallback);
+
 }
