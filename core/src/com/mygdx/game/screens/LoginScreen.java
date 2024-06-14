@@ -12,9 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
@@ -88,7 +86,7 @@ public class LoginScreen implements Screen {
 
         stage.addActor(stack);
 
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
     }
 
@@ -170,7 +168,7 @@ public class LoginScreen implements Screen {
         loginTable.add().uniform();
         loginTable.add(loginButton).padTop(100).size(200, 80).uniform();
         loginTable.add(changeToSignUp).uniform().top().row();
-//        loginTable.add(errorLabel).colspan(3).center().padTop(100);
+        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         loginTable.setVisible(true);
     }
 
@@ -243,7 +241,7 @@ public class LoginScreen implements Screen {
         signupTable.add().uniform();
         signupTable.add(signUpButton).padTop(100).size(200, 80).uniform();
         signupTable.add(changeToLogin).uniform().top().row();
-//        loginTable.add(errorLabel).colspan(3).center().padTop(100);
+        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         signupTable.setVisible(false);
     }
 
