@@ -88,6 +88,7 @@ public class PetChangeScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     removeButton(button);
+                    //todo move to other list
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
@@ -105,4 +106,21 @@ public class PetChangeScreen implements Screen {
         scrollTable.invalidateHierarchy(); // Refresh table layout
     }
 
+    private void addButton(Creature pet) {
+        TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+
+        // Add click listener to handle button removal
+        button.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                removeButton(button);
+                //todo move to other list
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        textImageButtons.add(button);
+        scrollTable.add(button).expandX().fillX().row();
+        scrollTable.invalidateHierarchy(); // Refresh table layout
+    }
 }
