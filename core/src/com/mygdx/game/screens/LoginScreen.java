@@ -59,7 +59,7 @@ public class LoginScreen implements Screen {
 
     public LoginScreen(DarwinsDuel gameObj) {
 
-        authService1 = gameObj.authService;
+        authService1 = gameObj.authService; //  has error in intellij. taking Authservice from services instead of game
 
 //        //to check if use is signed in:
 //        authService1.isUserSignedIn();
