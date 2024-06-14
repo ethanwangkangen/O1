@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.global.ChangePetEvent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,16 +16,17 @@ public class Player extends Entity implements Serializable{
 
     //private Texture texture;
     public String username;
+
     public Creature pet1;
     public Creature pet2;
     public Creature pet3;
+    public ArrayList<Creature> pets = new ArrayList<>();
+
     private transient UUID id;
     private String idString;
     private transient Texture texturePath;
     private String path;
     private Pet currentPet;
-
-    private Creature[] pets = {pet1, pet2, pet3};
 
     public enum Pet {
         PET1,
@@ -32,33 +34,53 @@ public class Player extends Entity implements Serializable{
         PET3
     }
 
+    public Player() {
+        this.pet1 = new MeowmadAli();
+        this.pet2 = new CrocLesnar();
+        this.pet3 = new Froggy();
+        this.id = UUID.randomUUID();
+        this.idString = id.toString();
+        path = "player1(1).png";
+        currentPet = Pet.PET1;
+    } //no arg constructor for serialisation
+
+    public ArrayList<Creature> getPets() {
+        return pets;
+    }
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
         // returns true if petchange (ie a pet has died)
-        if (currentPet == Pet.PET1) {
-            pet1.takeDamage(skill);
-            if (!pet1.isAlive()) {
-                changeNextPet();
-                return true;
-            }
-        } else if (currentPet == Pet.PET2) {
-            pet2.takeDamage(skill);
-            if (!pet2.isAlive()) {
-                changeNextPet();
-                return true;
-            }
-        } else if (currentPet == Pet.PET3) {
-            pet3.takeDamage(skill);
-            if (!pet3.isAlive()) {
-                changeNextPet();
-                return true;
-            }
-        }
-        if (currentPet == Pet.PET2) {
-            System.out.println("Pet 2 is current pet");
+//        if (currentPet == Pet.PET1) {
+//            pet1.takeDamage(skill);
+//            if (!pet1.isAlive()) {
+//                changeNextPet();
+//                return true;
+//            }
+//        } else if (currentPet == Pet.PET2) {
+//            pet2.takeDamage(skill);
+//            if (!pet2.isAlive()) {
+//                changeNextPet();
+//                return true;
+//            }
+//        } else if (currentPet == Pet.PET3) {
+//            pet3.takeDamage(skill);
+//            if (!pet3.isAlive()) {
+//                changeNextPet();
+//                return true;
+//            }
+//        }
+//        if (currentPet == Pet.PET2) {
+//            System.out.println("Pet 2 is current pet");
+//        }
+//        return false;
+        getCurrentPet().takeDamage(skill);
+        if (!getCurrentPet().isAlive()) {
+            changeNextPet();
+            return true;
         }
         return false;
+
     }
 
     public boolean isAlive() {
@@ -95,15 +117,6 @@ public class Player extends Entity implements Serializable{
 //    public void switchpet(int target) {
 //        CurrentPet = pets[target];
 //    }
-
-    public Player() {
-        this.pet1 = new MeowmadAli();
-        this.pet2 = new CrocLesnar();
-        this.id = UUID.randomUUID();
-        this.idString = id.toString();
-        path = "player1(1).png";
-        currentPet = Pet.PET1;
-    } //no arg constructor for serialisation
 
     public void loadTexture() {
         texturePath = new Texture(path);

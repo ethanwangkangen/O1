@@ -214,12 +214,14 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(StartBattleEvent.class);
             myClient.getKryo().register(ChangePetEvent.class);
             myClient.getKryo().register(java.util.UUID.class);
+            myClient.getKryo().register(java.util.ArrayList.class);
 
             myClient.getKryo().register(Player.class);
             myClient.getKryo().register(Player.Pet.class);
             myClient.getKryo().register(Entity.class);
             myClient.getKryo().register(MeowmadAli.class);
             myClient.getKryo().register(CrocLesnar.class);
+            myClient.getKryo().register(Froggy.class);
             myClient.getKryo().register(Creature.class);
             myClient.getKryo().register(Creature[].class);
             myClient.getKryo().register(Skill.class);
