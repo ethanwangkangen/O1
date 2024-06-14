@@ -120,8 +120,12 @@ public class Player extends Entity implements Serializable{
     }
 
 
-    public String username() {
+    public String getUsername() {
         return this.username;
+    }
+
+    public void setUsername(String newUsername) {
+        this.username = newUsername;
     }
 
     public void loadTextures(Runnable callback) {

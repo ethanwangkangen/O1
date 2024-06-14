@@ -15,7 +15,7 @@ public class PlayerHandler {
     public static String getIdString() {return player.getIdString(); }
 
     public static String getUsername() {
-        return player.username();
+        return player.getUsername();
     }
 
     public static void updatePlayer(Player update) {
@@ -25,6 +25,10 @@ public class PlayerHandler {
     public static Texture getTexture() {
         player.loadTexture();
         return player.getTexture();
+    }
+
+    public static Player getPlayer() {
+        return player;
     }
 
     // used to store info about player

@@ -37,6 +37,8 @@ public class EventListener extends Listener {
 
         } else if (object instanceof EndBattleEvent) {
             BattleHandler.battleEnd = true;
+            //send new Player object to the firebase database to save it under account
+
             System.out.println("Client has received EndBattleEvent");
         }
     }
