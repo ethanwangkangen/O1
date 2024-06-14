@@ -14,22 +14,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.esotericsoftware.kryonet.Client;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.mygdx.game.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.PlayerCallback;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.handlers.PlayerHandler;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.AuthService;
-import com.mygdx.game.EmailValidator;
 
-
-import sun.jvm.hotspot.debugger.AddressException;
 //import com.mygdx.game.FirebaseAuthServiceAndroid;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
-    private final Stage stage;
+    private Stage stage;
     Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
 
     private final Table loginTable = new Table();
@@ -58,21 +59,6 @@ public class LoginScreen implements Screen {
     int width = Gdx.graphics.getWidth();
     AuthService authService1;
 
-    public enum Situations{
-        PASSWORD_TOO_SHORT,
-        EMPTY_USERNAME,
-        INVALID_EMAIL, // for incorrect email format
-        USERNAME_TAKEN,
-        INCORRECT_INPUT,
-        ALL_GOOD,
-    }
-
-    public enum Status {
-        LOGIN,
-        SIGNUP
-    }
-
-
     public LoginScreen(DarwinsDuel gameObj) {
 
         authService1 = gameObj.authService;
@@ -87,7 +73,8 @@ public class LoginScreen implements Screen {
         skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         skin.getFont("default-font").getData().setScale((int) (Gdx.graphics.getDensity()));
 
-        //initialise tables
+        // initialise tables
+        initialiseErrorLabel();
         initialiseBgTable();
         initialiseLoginTable();
         initialiseSignUpTable();
@@ -110,6 +97,12 @@ public class LoginScreen implements Screen {
         bgTable.setBackground(background);
     }
 
+    public void initialiseErrorLabel() {
+        errorLabel = new Label("testing", skin);
+        errorLabel.clear();
+        errorLabel.setFontScale(10);
+    }
+
     public void initialiseLoginTable() {
         // login table
         loginTable.setFillParent(true);
@@ -130,29 +123,29 @@ public class LoginScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // connect to Firebase and get player info
                 String email, password;
-                email = usernameLField.getMessageText();
-                password = passwordLField.getMessageText();
-                validateInput(email, password, Status.LOGIN);
+                email = usernameLField.getText();
+                password = passwordLField.getText();
+                validateInput(email, password);
 
                 //to sign in:
                 authService1.signIn(email, password, new AuthResultCallback() {
                     @Override
                     public void onSuccess() {
                         System.out.println("Player has logged in");
-                        //change login screen to game screen or wtv
-                        //todo retrieve player info -> go to game screen
-
-                        DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                        authService1.getPlayerFromFirebase(player -> {
+                            PlayerHandler.updatePlayer(player);
+                            System.out.println("Player info updated to playerHandler");
+                            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                        });
+                        // todo what if getPlayerFromFirebase fails
                     }
 
                     @Override
                     public void onFailure(Exception exception) {
-                        //todo pop-up appear
+                        errorLabel.setText("Login failed: " + exception.getLocalizedMessage());
                         Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                     }
                 });
-
-                // todo if empty email or empty password
 
                 return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
@@ -166,6 +159,7 @@ public class LoginScreen implements Screen {
                 // change to sign up interface
                 loginTable.setVisible(false);
                 signupTable.setVisible(true);
+                errorLabel.clear();
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -176,7 +170,8 @@ public class LoginScreen implements Screen {
         loginTable.add(passwordLField).width(500).height(80).padTop(10).colspan(3).row();
         loginTable.add().uniform();
         loginTable.add(loginButton).padTop(100).size(200, 80).uniform();
-        loginTable.add(changeToSignUp).uniform().top();
+        loginTable.add(changeToSignUp).uniform().top().row();
+        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         loginTable.setVisible(true);
     }
 
@@ -200,8 +195,8 @@ public class LoginScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // create new player, connect to Firebase, and upload new player info
 
-                String email = usernameSField.getMessageText();
-                String password = passwordSField.getMessageText();
+                String email = usernameSField.getText();
+                String password = passwordSField.getText();
 
                 //to sign up/register:
                 authService1.signUp(email, password, new AuthResultCallback() {
@@ -209,15 +204,20 @@ public class LoginScreen implements Screen {
                     public void onSuccess() {
                         //change login screen to game screen or wtv
                         Player newPlayer = new Player();
-                        newPlayer.setUsername(usernameSField.getMessageText());
-//                        newPlayer.password(passwordSField.getMessageText());
-
+                        newPlayer.setUsername(usernameSField.getText());
+                        authService1.sendPlayerToFirebase(newPlayer);
+                        System.out.println("Registered player successfully");
+                        PlayerHandler.updatePlayer(newPlayer);
+                        DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                     }
 
                     @Override
                     public void onFailure(Exception exception) {
+                        String errorMessage = exception.getLocalizedMessage();
+                        errorLabel.setText("Sign up failed: " + exception.getLocalizedMessage());
                         Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                     }
+
                 });
 
                 return super.touchDown(event, x, y, pointer, button);
@@ -232,6 +232,7 @@ public class LoginScreen implements Screen {
                 // change to login interface
                 loginTable.setVisible(true);
                 signupTable.setVisible(false);
+                errorLabel.clear();
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -242,7 +243,8 @@ public class LoginScreen implements Screen {
         signupTable.add(passwordSField).size(500, 80).padTop(10).colspan(3).row();
         signupTable.add().uniform();
         signupTable.add(signUpButton).padTop(100).size(200, 80).uniform();
-        signupTable.add(changeToLogin).uniform().top();
+        signupTable.add(changeToLogin).uniform().top().row();
+        loginTable.add(errorLabel).colspan(3).center().padTop(100);
         signupTable.setVisible(false);
     }
 
@@ -360,20 +362,17 @@ public class LoginScreen implements Screen {
 
     }
 
-    public Situations validateInput(String username, String password, Status status) {
+    public void validateInput(String username, String password) {
 
         if (password.length() < 6) {
-            return Situations.PASSWORD_TOO_SHORT;
+            errorLabel.setText("Password has to be at least 6 characters");
         } else if (username.isEmpty()) {
-            return Situations.EMPTY_USERNAME;
+            errorLabel.setText("Username / email cannot be empty");
         } else if (!isValidEmail(username)) {
-            return Situations.INVALID_EMAIL;
-        } else {
-            return Situations.ALL_GOOD;
+            errorLabel.setText("Email format is invalid");
+        }   else {
+            // no errors
+            errorLabel.setText("");
         }
-
-        //todo implement conditions for username taken and invalid email
     }
-
-
 }
