@@ -1,12 +1,12 @@
 package com.mygdx.game.listeners;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.bullet.collision._btMprSupport_t;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.DarwinsDuel;
-import com.mygdx.global.AddPlayerEvent;
-import com.mygdx.global.JoinRequestEvent;
+import com.mygdx.game.oldEvents.AddPlayerEvent;
+import com.mygdx.game.oldEvents.EndBattleEvent;
+import com.mygdx.game.oldEvents.JoinResponseEvent;
+import com.mygdx.game.oldEvents.StartBattleEvent;
 import com.mygdx.global.*;
 import com.mygdx.game.handlers.*;
 

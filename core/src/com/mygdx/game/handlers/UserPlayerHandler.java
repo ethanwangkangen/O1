@@ -3,16 +3,11 @@ package com.mygdx.game.handlers;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.entities.Player;
 
-import java.util.UUID;
 
 public class PlayerHandler {
     private static Player player;
 
-    public static UUID getId() {
-        return player.getId();
-    }
-
-    public static String getIdString() {return player.getIdString(); }
+    public static String getUserId() {return player.getUserId(); }
 
     public static String getUsername() {
         return player.getUsername();
@@ -31,6 +26,9 @@ public class PlayerHandler {
         return player;
     }
 
-    // used to store info about player
+    public static void updateIdOfPlayer(String id) {
+        player.setUserId(id);
+    }
+
 
 }
