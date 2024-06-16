@@ -29,6 +29,13 @@ public class PlayerHandler {
         return player.getTexture();
     }
 
+    public static void loadTextures(Runnable callback) {
+        try{
+            player.loadTextures(callback);
+            System.out.println("PlayerHandler textures loading");
+        } catch (Exception e) {
+        }    }
+
     public static ArrayList<Creature> getBattlePets() {
         return player.getBattlePets();
     }

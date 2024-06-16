@@ -26,6 +26,7 @@ public class DarwinsDuel extends Game {
 		FREEROAM,
 		BATTLE,
 		LOGIN,
+		PETCHANGE,
 		WIN,
 		LOSS
 	}
@@ -93,6 +94,10 @@ public class DarwinsDuel extends Game {
 					this.setScreen(new LoginScreen(this));
 				}
 				break;
+			case PETCHANGE:
+				if (!(getScreen() instanceof PetChangeScreen)) {
+					this.setScreen(new PetChangeScreen(this));
+				}
 			case WIN:
 				break;
 			case LOSS:

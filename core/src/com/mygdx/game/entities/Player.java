@@ -42,6 +42,7 @@ public class Player extends Entity implements Serializable{
         pets.add(pet1);
         pets.add(pet2);
         pets.add(pet3);
+        reservePets.add(new BadLogic());
     } //no arg constructor for serialisation
 
     public ArrayList<Creature> getBattlePets() {
@@ -52,29 +53,7 @@ public class Player extends Entity implements Serializable{
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
         // returns true if petchange (ie a pet has died)
-//        if (currentPet == Pet.PET1) {
-//            pet1.takeDamage(skill);
-//            if (!pet1.isAlive()) {
-//                changeNextPet();
-//                return true;
-//            }
-//        } else if (currentPet == Pet.PET2) {
-//            pet2.takeDamage(skill);
-//            if (!pet2.isAlive()) {
-//                changeNextPet();
-//                return true;
-//            }
-//        } else if (currentPet == Pet.PET3) {
-//            pet3.takeDamage(skill);
-//            if (!pet3.isAlive()) {
-//                changeNextPet();
-//                return true;
-//            }
-//        }
-//        if (currentPet == Pet.PET2) {
-//            System.out.println("Pet 2 is current pet");
-//        }
-//        return false;
+
         getCurrentPet().takeDamage(skill);
         if (!getCurrentPet().isAlive()) {
             changeNextPet();
@@ -142,28 +121,45 @@ public class Player extends Entity implements Serializable{
         AtomicInteger loadedCreatureCount = new AtomicInteger(0);
 
         // Load textures for each pet
-        if (pet1 != null) {
-            pet1.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-                    // All creatures' textures are loaded, invoke callback
+//        if (pet1 != null) {
+//            pet1.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+//                    // All creatures' textures are loaded, invoke callback
+//                    callback.run();
+//                }
+//            });
+//        }
+//
+//        if (pet2 != null) {
+//            pet2.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+//                    // All creatures' textures are loaded, invoke callback
+//                    callback.run();
+//                }
+//            });
+//        }
+//
+//        if (pet3 != null) {
+//            pet3.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
+//                    // All creatures' textures are loaded, invoke callback
+//                    callback.run();
+//                }
+//            });
+//        }
+
+        int petNum = pets.size() + reservePets.size();
+
+        for (Creature pet : pets) {
+            pet.loadTexture(() -> {
+                if (loadedCreatureCount.incrementAndGet() == petNum) {
                     callback.run();
                 }
             });
         }
-
-        if (pet2 != null) {
-            pet2.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-                    // All creatures' textures are loaded, invoke callback
-                    callback.run();
-                }
-            });
-        }
-
-        if (pet3 != null) {
-            pet3.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-                    // All creatures' textures are loaded, invoke callback
+        for (Creature pet : reservePets) {
+            pet.loadTexture(() -> {
+                if (loadedCreatureCount.incrementAndGet() == petNum) {
                     callback.run();
                 }
             });

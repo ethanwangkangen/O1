@@ -22,6 +22,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
     private TextButton startBattle;
+    private TextButton changePet;
     private Stage stage;
     private Table table;
 
@@ -51,6 +52,16 @@ public class GameScreen implements Screen {
             }
         });
 
+        changePet = new TextButton("Change pets", skin);
+        changePet.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                DarwinsDuel.gameState = DarwinsDuel.GameState.PETCHANGE;
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        table.add(changePet).size(250, 50).padTop(100).row();
         this.table.add(startBattle).size(250, 50).padTop(100).row();
         this.stage.addActor(this.table);
     }

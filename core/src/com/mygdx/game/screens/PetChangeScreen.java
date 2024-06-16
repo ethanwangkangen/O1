@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-
+    private Table table;
     private Texture emptyBox = new Texture("crossedbox.png");
 
     // to be located on the left side of the screen
@@ -29,7 +30,7 @@ public class PetChangeScreen implements Screen {
     private ArrayList<Creature> pets1 = PlayerHandler.getBattlePets();
     private ScrollPane pane1;
     private Table table1;
-    private ArrayList<TextImageButton> buttonList1;
+    private ArrayList<TextImageButton> buttonList1 = new ArrayList<>();
 
     // to be located on the right side of the screen
     // for pets that are in player's storage
@@ -50,10 +51,20 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void show() {
-        initialiseScrollPanes();
-        createButtonList1();
-        createButtonList2();
-        refreshTables();
+        PlayerHandler.loadTextures(() -> {
+            initialiseScrollPanes();
+            createButtonList1();
+            createButtonList2();
+            refreshTables();
+
+            table = new Table();
+            table.setFillParent(true);
+            table.add(new Label("Pet Change", skin)).colspan(2).row();
+            table.add(pane1);
+            table.add(pane2);
+            stage.addActor(table);
+        });
+
     }
 
     @Override
@@ -98,9 +109,11 @@ public class PetChangeScreen implements Screen {
     public void initialiseScrollPanes() {
         table1 = new Table();
         pane1 = new ScrollPane(table1);
+        pane1.setWidth(250);
 
         table2 = new Table();
         pane2 = new ScrollPane(pane2);
+        pane2.setWidth(250);
     }
 
 //    public void removeButton(int button) {
@@ -183,7 +196,7 @@ public class PetChangeScreen implements Screen {
         buttonList1.remove(selectedButton1);
         buttonList2.remove(selectedButton2);
 
-        // Update the pet references in the buttons
+        //todo Update the pet references in the buttons
 
 
         // Refresh the tables
