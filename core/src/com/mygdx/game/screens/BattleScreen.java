@@ -40,7 +40,7 @@ public class BattleScreen implements Screen {
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-    private Texture crossedBox = new Texture("crossedBox.png");
+    private Texture crossedBox = new Texture("crossedbox.png");
     private Label winLabel;
     private Label loseLabel;
     private Label turnLabel;
