@@ -5,30 +5,34 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
-import com.mygdx.game.entities.Skill;
 import com.mygdx.game.handlers.PlayerHandler;
-import com.mygdx.global.AttackEvent;
 import com.mygdx.global.TextImageButton;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-    private ScrollPane pane;
 
-    private Table scrollTable;
-    private ArrayList<TextImageButton> textImageButtons = new ArrayList<>();
+
+    // to be located on the left side of the screen
+    // for pets that will be carried into battle by the player
+    private Table scrollTable1;
+    private ArrayList<TextImageButton> buttonList1 = new ArrayList<>();
+
+    // to be located on the right side of the screen
+    // for pets that are in player's storage
+    private ScrollPane pane;
+    private Table scrollTable2;
+    private ArrayList<TextImageButton> buttonList2 = new ArrayList<>();
 
 
 
@@ -76,12 +80,12 @@ public class PetChangeScreen implements Screen {
     }
 
     public void initialiseScrollTable() {
-        scrollTable = new Table();
+        scrollTable1 = new Table();
 
     }
 
     public void initialiseTextImageButtons() {
-        scrollTable.clearChildren();
+        scrollTable1.clearChildren();
         for (Creature pet : PlayerHandler.getPets()) {
             TextImageButton newButton = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
             newButton.addListener(new ClickListener() {
@@ -92,18 +96,18 @@ public class PetChangeScreen implements Screen {
                     return super.touchDown(event, x, y, pointer, button);
                 }
             });
-            scrollTable.add(newButton).pad(5).row();
+            scrollTable1.add(newButton).pad(5).row();
 
         }
     }
 
     public void removeButton(int button) {
-        textImageButtons.remove(button);
-        scrollTable.clearChildren();
-        for (TextImageButton btn : textImageButtons) {
-            scrollTable.add(btn).pad(5).row();
+        buttonList1.remove(button);
+        scrollTable1.clearChildren();
+        for (TextImageButton btn : buttonList1) {
+            scrollTable1.add(btn).pad(5).row();
         }
-        scrollTable.invalidateHierarchy(); // Refresh table layout
+        scrollTable1.invalidateHierarchy(); // Refresh table layout
     }
 
     private void addButton(Creature pet) {
@@ -119,8 +123,8 @@ public class PetChangeScreen implements Screen {
             }
         });
 
-        textImageButtons.add(button);
-        scrollTable.add(button).expandX().fillX().row();
-        scrollTable.invalidateHierarchy(); // Refresh table layout
+        buttonList1.add(button);
+        scrollTable1.add(button).expandX().fillX().row();
+        scrollTable1.invalidateHierarchy(); // Refresh table layout
     }
 }
