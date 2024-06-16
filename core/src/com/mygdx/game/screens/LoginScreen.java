@@ -1,6 +1,5 @@
 package com.mygdx.game.screens;
 
-import static com.badlogic.gdx.utils.Align.*;
 import static com.mygdx.game.EmailValidator.isValidEmail;
 
 import com.badlogic.gdx.Gdx;
@@ -13,18 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.esotericsoftware.kryonet.Client;
-import com.mygdx.game.AuthResultCallback;
+import com.mygdx.game.callbacks.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
-import com.mygdx.game.PlayerCallback;
+import com.mygdx.game.callbacks.PlayerCallback;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.handlers.PlayerHandler;
-import com.mygdx.game.listeners.EventListener;
-import com.mygdx.global.*;
+import com.mygdx.game.handlers.UserPlayerHandler;
 import com.badlogic.gdx.Screen;
-import com.mygdx.game.AuthService;
+import com.mygdx.game.interfaces.AuthService;
+import com.mygdx.game.MyClient;
 
-//import com.mygdx.game.FirebaseAuthServiceAndroid;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
@@ -51,8 +47,6 @@ public class LoginScreen implements Screen {
     private Label errorLabel;
 
     Skin skin;
-    boolean login = false;
-    boolean joined = false;
     int height = Gdx.graphics.getHeight();
     int width = Gdx.graphics.getWidth();
     AuthService authService1;
@@ -65,6 +59,35 @@ public class LoginScreen implements Screen {
 //        authService1.isUserSignedIn();
 //        //to sign out:
 //        authService1.signOut();
+
+        //for testing: start
+//        authService1.signIn("testing@gmail.com", "password123", new AuthResultCallback() {
+//            @Override
+//            public void onSuccess() { //on success of signIn
+//                System.out.println("Player has logged in");
+//                authService1.getPlayerFromFirebase(new PlayerCallback() {
+//                    @Override
+//                    public void onCallback(Player player) { //on success of getPlayerFromFirebase
+//                        PlayerHandler.updatePlayer(player);
+//                        String userId = authService1.getUserId(); //get unique Id from firebase
+//                        PlayerHandler.updateIdOfPlayer(userId);
+//                        connectToServer();
+//                    }
+//                    @Override
+//                    public void onFailure() { //on failure of getPlayerFromFirebase
+//                        // todo what if getPlayerFromFirebase fails
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(Exception exception) { //on failure of signIn
+//                errorLabel.setText("Login failed: " + exception.getLocalizedMessage());
+//                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+//            }
+//        });
+//
+         //for testing: end
 
         System.out.println("LoginScreen created");
         stage = new Stage(new FitViewport(width, height));
@@ -85,8 +108,7 @@ public class LoginScreen implements Screen {
         stack.add(signupTable);
 
         stage.addActor(stack);
-
-//        stage.setDebugAll(true);
+//        stage.setDebugAll(true);  for testing
 
     }
 
@@ -127,18 +149,27 @@ public class LoginScreen implements Screen {
                 //to sign in:
                 authService1.signIn(email, password, new AuthResultCallback() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess() { //on success of signIn
                         System.out.println("Player has logged in");
-                        authService1.getPlayerFromFirebase(player -> {
-                            PlayerHandler.updatePlayer(player);
-                            System.out.println("Player info updated to playerHandler");
-                            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                        authService1.getPlayerFromFirebase(new PlayerCallback() {
+                            @Override
+                            public void onCallback(Player player) { //on success of getPlayerFromFirebase
+                                UserPlayerHandler.updatePlayer(player);
+                                String userId = authService1.getUserId(); //get unique Id from firebase
+                                UserPlayerHandler.updateIdOfPlayer(userId);
+
+                                MyClient.connectToServer();
+                                DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                            }
+                            @Override
+                            public void onFailure() { //on failure of getPlayerFromFirebase
+                                // todo what if getPlayerFromFirebase fails
+                            }
                         });
-                        // todo what if getPlayerFromFirebase fails
                     }
 
                     @Override
-                    public void onFailure(Exception exception) {
+                    public void onFailure(Exception exception) { //on failure of signIn
                         errorLabel.setText("Login failed: " + exception.getLocalizedMessage());
                         Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                     }
@@ -203,9 +234,16 @@ public class LoginScreen implements Screen {
                         Player newPlayer = new Player();
                         newPlayer.setUsername(usernameSField.getText());
                         authService1.sendPlayerToFirebase(newPlayer);
+
                         System.out.println("Registered player successfully");
-                        PlayerHandler.updatePlayer(newPlayer);
+                        UserPlayerHandler.updatePlayer(newPlayer);
+
+                        String userId = authService1.getUserId(); //get unique Id from firebase
+                        UserPlayerHandler.updateIdOfPlayer(userId);
+
+                        MyClient.connectToServer();
                         DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+
                     }
 
                     @Override
@@ -245,6 +283,8 @@ public class LoginScreen implements Screen {
         signupTable.setVisible(false);
     }
 
+
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -259,80 +299,7 @@ public class LoginScreen implements Screen {
         stage.act(delta);
         stage.draw();
 
-//        if (login && !joined) {
-//            joined = true;
-//            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
-//
-//            DarwinsDuel.client = new Client();
-//            Client myClient = DarwinsDuel.getClient();
-//
-//
-//            myClient.addListener(new EventListener());
-//            //client.addListener(new ConnectionStateListener());
-//
-//            myClient.getKryo().register(UUID.class,  new UUIDSerializer());
-//
-//            myClient.getKryo().register(AddPlayerEvent.class);
-//            myClient.getKryo().register(AttackEvent.class);
-//            myClient.getKryo().register(BattleState.class);
-//            myClient.getKryo().register(EndBattleEvent.class);
-//            myClient.getKryo().register(JoinRequestEvent.class);
-//            myClient.getKryo().register(JoinResponseEvent.class);
-//            myClient.getKryo().register(StartBattleEvent.class);
-//            myClient.getKryo().register(java.util.UUID.class);
-//
-//            myClient.getKryo().register(Player.class);
-//            myClient.getKryo().register(Entity.class);
-//            myClient.getKryo().register(MeowmadAli.class);
-//            myClient.getKryo().register(Creature.class);
-//            myClient.getKryo().register(Creature[].class);
-//            myClient.getKryo().register(Skill.class);
-//            myClient.getKryo().register(Skill[].class);
-//            myClient.getKryo().register(BattleState.Turn.class);
-//
-//            //start the client
-//            myClient.start();
-//
-//            // Connect to server
-//            // Connect to the server in a separate thread
-//            Thread connectThread = getThread(myClient);
-//            //client.sendTCP(new JoinRequestEvent(new Player(5, 5)));
-//
-//            try {
-//                connectThread.join();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            AddPlayerEvent addPlayerEvent = new AddPlayerEvent();
-//            addPlayerEvent.username = usernameLField.getText();
-//            myClient.sendTCP(addPlayerEvent);
-//        }
     }
-
-//    private Thread getThread(Client client) {
-//        Thread connectThread = new Thread(() -> {
-//            String host = "localhost"; // Server's IP address if not running locally
-//            int tcpPort = 55555;       // Must match the server's TCP port
-//            int udpPort = 55577;       // Must match the server's UDP port
-//
-//            try {
-//                client.connect(5000, host, tcpPort, udpPort);
-//                System.out.println("Connected to the server.");
-//
-//                JoinRequestEvent joinRequestEvent = new JoinRequestEvent();
-//                client.sendTCP(joinRequestEvent);
-//                System.out.println("JoinRequestEvent sent");
-//
-//            } catch (IOException e) {
-//                System.err.println("Error connecting to the server: " + e.getMessage());
-//                e.printStackTrace();
-//                //errorLabel.setText(e.getMessage());
-//            }
-//        });
-//        connectThread.start(); // Start the thread
-//        return connectThread;
-//    }
 
     @Override
     public void resize(int width, int height) {

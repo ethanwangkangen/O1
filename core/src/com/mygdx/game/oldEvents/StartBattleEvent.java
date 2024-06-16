@@ -1,4 +1,4 @@
-package com.mygdx.global;
+package com.mygdx.game.oldEvents;
 
 //import jdk.javadoc.internal.tool.Start;
 

@@ -1,4 +1,5 @@
-package com.mygdx.game;
+package com.mygdx.game.interfaces;
 
 public interface MapInterface {
+    public void showMap();
 }

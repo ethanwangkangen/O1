@@ -11,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
-import com.mygdx.game.handlers.BattleHandler;
-import com.mygdx.game.handlers.PlayerHandler;
+import com.mygdx.game.handlers.UserBattleHandler;
+import com.mygdx.game.handlers.UserPlayerHandler;
+import com.mygdx.game.oldEvents.AttackEvent;
+import com.mygdx.game.oldEvents.ChangePetEvent;
 import com.mygdx.global.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -24,7 +26,7 @@ import java.util.Objects;
 
 public class BattleScreen implements Screen {
     private Stage stage;
-    private String myId = PlayerHandler.getIdString(); //id of current player
+    private String myId = UserPlayerHandler.getUserId(); //id of current player
     private Player thisPlayer;
     private Player opponentPlayer;
     private FlippedImage pet1Image;
@@ -82,7 +84,7 @@ public class BattleScreen implements Screen {
     public void show() {
         System.out.println("show() run");
         //load textures
-        BattleHandler.loadTextures(() -> {
+        UserBattleHandler.loadTextures(() -> {
             System.out.println("finished loading all textures");
 
             //set Players, Creatures, etc.
@@ -126,12 +128,12 @@ public class BattleScreen implements Screen {
     }
     public void initialisePlayers() {
         // set players
-        if (Objects.equals(myId, BattleHandler.getPlayer1().getIdString())) {
-            thisPlayer = BattleHandler.getPlayer1();
-            opponentPlayer = BattleHandler.getPlayer2();
+        if (Objects.equals(myId, UserBattleHandler.getPlayer1().getUserId())) {
+            thisPlayer = UserBattleHandler.getPlayer1();
+            opponentPlayer = UserBattleHandler.getPlayer2();
         } else {
-            thisPlayer = BattleHandler.getPlayer2();
-            opponentPlayer = BattleHandler.getPlayer1();
+            thisPlayer = UserBattleHandler.getPlayer2();
+            opponentPlayer = UserBattleHandler.getPlayer1();
         }
         thisPet = thisPlayer.getCurrentPet();
         opponentPet = opponentPlayer.getCurrentPet();
@@ -416,12 +418,12 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
 
         //logic for battle
-        if (BattleHandler.updatePetInfo) {
+        if (UserBattleHandler.updatePetInfo) {
             initialisePlayers();
             // for both attacking and changing pets updates
 
             // pet has attacked
-            if (BattleHandler.petAttacked()) {
+            if (UserBattleHandler.petAttacked()) {
                 System.out.println("A pet has attacked.");
                 initialisePetInfo();
                 initialisePetImages();
@@ -431,7 +433,7 @@ public class BattleScreen implements Screen {
             }
 
             // pet change has occurred
-            if (BattleHandler.petChanged()) {
+            if (UserBattleHandler.petChanged()) {
                 System.out.println("A pet change has occurred.");
                 opponentPet.loadTexture(() -> {
                     initialisePetInfo();
@@ -440,20 +442,20 @@ public class BattleScreen implements Screen {
                     initialisePetsWindow();
                 });
             }
-            BattleHandler.updatePetInfo = false;
+            UserBattleHandler.updatePetInfo = false;
         }
 
         // battle has ended
-        if (BattleHandler.battleEnd) {
+        if (UserBattleHandler.battleEnd) {
             setAllsSkillNotTouchable();
             // todo load end battle screen
             DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
-            BattleHandler.battleEnd = false;
+            UserBattleHandler.battleEnd = false;
         }
 
         // enable/disable skillButtons
-        if (BattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(BattleHandler.getPlayer1().getIdString(), myId)
-                || BattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(BattleHandler.getPlayer2().getIdString(), myId)) {
+        if (UserBattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(UserBattleHandler.getPlayer1().getUserId(), myId)
+                || UserBattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(UserBattleHandler.getPlayer2().getUserId(), myId)) {
             // this player's turn
             setAllSkillTouchable();
         } else {

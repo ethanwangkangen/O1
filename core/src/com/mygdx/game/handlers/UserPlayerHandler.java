@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.entities.Player;
 
 
-public class PlayerHandler {
+public class UserPlayerHandler {
     private static Player player;
 
     public static String getUserId() {return player.getUserId(); }

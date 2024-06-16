@@ -3,17 +3,20 @@ package com.mygdx.server;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
 import com.mygdx.global.*;
-import com.mygdx.server.handlers.PlayerHandler;
-import com.mygdx.server.listeners.EventListener;
-import java.util.UUID;
+import com.mygdx.server.handlers.ServerPlayerHandler;
+import com.mygdx.server.listeners.ServerEventListener;
+import com.esotericsoftware.kryonet.Connection;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import java.io.IOException;
 
 public class ServerFoundation {
     private static Server server;
     public static ServerFoundation instance;
-    public static BattleState battleState = new BattleState();
-    public static PlayerHandler playerHandler = new PlayerHandler();
+    public static ServerPlayerHandler serverPlayerHandler = new ServerPlayerHandler();
+    public static Map<String, Connection> connectionTable = new HashMap<>();
 
     public static void main(String[] args) {
         ServerFoundation instance = new ServerFoundation();
@@ -22,19 +25,16 @@ public class ServerFoundation {
 
     public ServerFoundation() {
         this.server = new Server();
-
-        server.getKryo().register(UUID.class,  new UUIDSerializer());
-
         // Add all global events
-        server.getKryo().register(AddPlayerEvent.class);
-        server.getKryo().register(AttackEvent.class);
-        server.getKryo().register(BattleState.class);
-        server.getKryo().register(EndBattleEvent.class);
-        server.getKryo().register(JoinRequestEvent.class);
-        server.getKryo().register(JoinResponseEvent.class);
-        server.getKryo().register(StartBattleEvent.class);
-        server.getKryo().register(ChangePetEvent.class);
-        server.getKryo().register(java.util.UUID.class);
+//        server.getKryo().register(AddPlayerEvent.class);
+//        server.getKryo().register(AttackEvent.class);
+//        server.getKryo().register(BattleState.class);
+//        server.getKryo().register(EndBattleEvent.class);
+//        server.getKryo().register(JoinRequestEvent.class);
+//        server.getKryo().register(JoinResponseEvent.class);
+//        server.getKryo().register(StartBattleEvent.class);
+//        server.getKryo().register(ChangePetEvent.class);
+//        server.getKryo().register(java.util.UUID.class);
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.Pet.class);
@@ -49,7 +49,7 @@ public class ServerFoundation {
         server.getKryo().register(TextImageButton.class);
 
         // Add all listeners of server
-        this.server.addListener(new EventListener());
+        this.server.addListener(new ServerEventListener());
     }
 
     public void startServer() {
@@ -73,6 +73,10 @@ public class ServerFoundation {
 
     public static Server getServer() {
         return server;
+    }
+
+    public static void addConnection(String userId, Connection connection) {
+        connectionTable.put(userId, connection);
     }
 
 }

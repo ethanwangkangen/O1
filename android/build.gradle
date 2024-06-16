@@ -107,7 +107,10 @@ dependencies {
 
     //androidX?
     implementation 'androidx.appcompat:appcompat:1.4.1'
+
+
 }
 
 apply plugin: 'com.android.application'
 eclipse.project.name = appName + "-android"
+apply plugin: 'com.google.gms.google-services'

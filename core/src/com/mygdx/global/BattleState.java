@@ -8,7 +8,8 @@ import java.util.Objects;
 public class BattleState{
 
     //public static final BattleState INSTANCE = new BattleState();
-    private Player player1, player2;
+    private Player p1Player, p2Player;
+    private String p1UID, p2UID;
 
     public enum Turn {
         PLAYERONETURN,
@@ -35,30 +36,46 @@ public class BattleState{
         petAttacked = false;
     }
 
+    public BattleState(Player p1Player, String p1UID, Player p2Player, String p2UID) {
+        this.turn = Turn.PLAYERONETURN;
+        this.numPlayers = 0;
+        this.numofTurns = 1;
+        battleStarted = false;
+        battleEnded = false;
+        firstRound = true;
+        petChanged = false;
+        petAttacked = false;
+
+        this.p1Player = p1Player;
+        this.p1UID = p1UID;
+        this.p2Player = p2Player;
+        this.p2UID = p2UID;
+    }
+
     public int getNumPlayers() {
         return this.numPlayers;
     }
 
     public Player getPlayer1() {
-        return player1;
+        return p1Player;
     }
 
     public Player getPlayer2() {
-        return player2;
+        return p2Player;
     }
 
     public boolean playersAlive() {
-        return player1.isAlive() && player2.isAlive();
+        return p1Player.isAlive() && p2Player.isAlive();
     }
 
 
     //first player to connect to server will be set as player1, second set as player2
     public void addPlayer(Player player) {
-        if (this.player1 == null) {
-            this.player1 = player;
+        if (this.p1Player == null) {
+            this.p1Player = player;
             this.numPlayers = 1;
-        } else if (this.player2 == null) {
-            this.player2 = player;
+        } else if (this.p2Player == null) {
+            this.p2Player = player;
             this.numPlayers = 2;
         } else {
             System.out.println("max players"); //to do: throw error
@@ -90,13 +107,13 @@ public class BattleState{
     }
 
     public void attack(String id, Skill skill) {
-        if (!Objects.equals(player1.getIdString(), id)) {
-            if (player1.takeDamage(skill)) {
+        if (!Objects.equals(p1Player.getUserId(), id)) {
+            if (p1Player.takeDamage(skill)) {
                 // takeDamage is true if pet had died from attack
                 petChanged = true;
             }
         } else {
-            if (player2.takeDamage(skill)) {
+            if (p2Player.takeDamage(skill)) {
                 petChanged = true;
             }
         }
@@ -112,26 +129,26 @@ public class BattleState{
     }
 
     public void loadTextures(Runnable callback) {
-        player1.loadTextures(() -> {
-            player2.loadTextures(callback);
+        p1Player.loadTextures(() -> {
+            p2Player.loadTextures(callback);
         });
 //        System.out.println("battlestate textures loading");
 
     }
 
     public void changePet(String id, Player.Pet pet) {
-        if (Objects.equals(player1.getIdString(), id)) {
-            player1.changePet(pet);
-        } else if (Objects.equals(player2.getIdString(), id)) {
-            player2.changePet(pet);
+        if (Objects.equals(p1Player.getUserId(), id)) {
+            p1Player.changePet(pet);
+        } else if (Objects.equals(p2Player.getUserId(), id)) {
+            p2Player.changePet(pet);
         }
         changeTurn();
         petChanged = true;
     }
 
     public void update(BattleState newState) {
-        player1.update(newState.player1);
-        player2.update(newState.player2);
+        p1Player.update(newState.p1Player);
+        p2Player.update(newState.p2Player);
         turn = newState.turn;
         battleEnded = newState.battleEnded;
         battleStarted = newState.battleStarted;

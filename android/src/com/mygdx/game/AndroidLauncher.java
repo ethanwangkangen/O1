@@ -1,36 +1,40 @@
 package com.mygdx.game;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
-import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.FirebaseApp;
-import androidx.appcompat.app.AppCompatActivity;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mygdx.game.interfaces.GameCommunication;
+import com.mygdx.game.interfaces.MapInterface;
 
 
+public class AndroidLauncher extends AndroidApplication implements MapInterface {
 
-public class AndroidLauncher extends AndroidApplication implements MapInterface, OnMapReadyCallback{
-
-//	private WebView webView;
-//	private WebAppInterface webAppInterface;
+	private static GameCommunication gameCommunication; //will be the game instance
+	private MyBroadcastReceiver receiver;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new DarwinsDuel(new FirebaseAuthServiceAndroid()), config);
+		DarwinsDuel game = new DarwinsDuel(new FirebaseAuthServiceAndroid());
+
+		// Initialize the game
+		initialize(game, config);
+
+		//Initialise GameCommunication
+		gameCommunication = game;
+
+		// Register the broadcast receiver
+		receiver = new MyBroadcastReceiver();
+		IntentFilter intentFilter = new IntentFilter("com.example.ACTION_SEND_INFO");
+		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
 		// Initialize Firebase
 		FirebaseApp.initializeApp(this);
@@ -41,23 +45,28 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface,
 		} else {
 			System.out.println("Firebase initialization failed");
 		}
+		//FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
 	}
 
-	public void showMap() {
-//		setContentView(R.layout.activity_main);
+	protected void onDestroy() {
+		super.onDestroy();
+		// Unregister the broadcast receiver when no longer needed
+		if (receiver != null) {
+			LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+		}
+	}
 
-		// Get a handle to the fragment and register the callback.
-//		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//				.findFragmentById(R.id.map);
-//		mapFragment.getMapAsync(this);
+	public static GameCommunication getGameCommunication() {
+		return gameCommunication;
 	}
 
 	@Override
-	public void onMapReady(@NonNull GoogleMap googleMap) {
-		googleMap.addMarker(new MarkerOptions()
-				.position(new LatLng(0, 0))
-				.title("Marker"));
+	public void showMap() {
+		Intent intent = new Intent(this, MapActivity.class);
+		intent.putExtra("latitude", 37.7749); // Example latitude
+		intent.putExtra("longitude", -122.4194); // Example longitude
+		startActivity(intent);
 	}
 
 

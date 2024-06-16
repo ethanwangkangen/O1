@@ -1,10 +1,6 @@
 package com.mygdx.game.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.esotericsoftware.kryonet.Connection;
-import com.mygdx.global.ChangePetEvent;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -14,12 +10,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Player extends Entity implements Serializable{
 
     //private Texture texture;
+
+    /**
+     * Username to be displayed. Not unique. DO NOT use for identification!
+     */
     public String username;
     public Creature pet1;
     public Creature pet2;
     public Creature pet3;
-    private transient UUID id;
-    private String idString;
+
+    /**
+     * Unique ID taken from firebase to identify players.
+     * Use this for identification
+     */
+    private String userId;
     private transient Texture texturePath;
     private String path;
     private Pet currentPet;
@@ -32,6 +36,13 @@ public class Player extends Entity implements Serializable{
         PET3
     }
 
+
+    public Player() {
+        this.pet1 = new MeowmadAli();
+        this.pet2 = new CrocLesnar();
+        path = "player1(1).png";
+        currentPet = Pet.PET1;
+    } //no arg constructor for serialisation
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
@@ -72,10 +83,6 @@ public class Player extends Entity implements Serializable{
         return false;
     }
 
-    public UUID getId() {
-        return id;
-    }
-    public String getIdString() {return idString;}
     public Creature getCurrentPet() {
         if (currentPet == Pet.PET1) {
             return pet1;
@@ -90,36 +97,12 @@ public class Player extends Entity implements Serializable{
         return currentPet;
     }
 
-    // consider replacing pets array to reservePets array in future
-    // to better display pet screen
-//    public void switchpet(int target) {
-//        CurrentPet = pets[target];
-//    }
-
-    public Player() {
-        this.pet1 = new MeowmadAli();
-        this.pet2 = new CrocLesnar();
-        this.id = UUID.randomUUID();
-        this.idString = id.toString();
-        path = "player1(1).png";
-        currentPet = Pet.PET1;
-    } //no arg constructor for serialisation
-
     public void loadTexture() {
         texturePath = new Texture(path);
     }
     public Texture getTexture() {
         return texturePath;
     }
-
-    public void Move() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) xpos -= 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) xpos += 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) ypos += 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) ypos -= 200 * Gdx.graphics.getDeltaTime();
-    }
-
-
     public String getUsername() {
         return this.username;
     }
@@ -127,6 +110,12 @@ public class Player extends Entity implements Serializable{
     public void setUsername(String newUsername) {
         this.username = newUsername;
     }
+
+    public String getUserId() {return this.userId;}
+    public void setUserId(String id) {
+        this.userId = id;
+    }
+
 
     public void loadTextures(Runnable callback) {
         AtomicInteger loadedCreatureCount = new AtomicInteger(0);

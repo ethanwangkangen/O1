@@ -4,20 +4,14 @@ package com.mygdx.server.listeners;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
-import com.mygdx.game.oldEvents.AddPlayerEvent;
-import com.mygdx.game.oldEvents.AttackEvent;
-import com.mygdx.game.oldEvents.ChangePetEvent;
-import com.mygdx.game.oldEvents.EndBattleEvent;
-import com.mygdx.game.oldEvents.JoinRequestEvent;
-import com.mygdx.game.oldEvents.JoinResponseEvent;
-import com.mygdx.game.oldEvents.StartBattleEvent;
+import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.server.ServerFoundation;
 import com.esotericsoftware.kryonet.Server;
-import com.mygdx.global.BattleState;
-import com.mygdx.server.handlers.PlayerHandler;
+import com.mygdx.server.handlers.ServerBattleHandler;
 
-public class EventListener extends Listener {
+public class ServerEventListener extends Listener {
 
     Server server = ServerFoundation.getServer();
     @Override
@@ -28,6 +22,25 @@ public class EventListener extends Listener {
             ServerFoundation.addConnection(playerJoinServerEvent.userId, connection);
         }
 
+        if (object instanceof PlayerRequestBattleEvent) {
+            System.out.println("Player has requested to fight an opponent.");
+            PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
+            String opponentUID = request.opponentUID;
+            String requesterUID = request.requesterUID;
+            Connection enemyConnection = ServerFoundation.connectionTable.get(opponentUID);
+            enemyConnection.sendTCP(request);
+        }
+
+        if (object instanceof PlayerAcceptBattleEvent) {
+            System.out.println("Battle starting between 2 players");
+            PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
+            Player p1Player = event.opponentPlayer;
+            String p1UID = event.opponentUID;
+            Player p2Player = event.requesterPlayer;
+            String p2UID =  event.requesterUID;
+            ServerBattleHandler.initialiseBattle(p1Player, p1UID, p2Player, p2UID);
+            //todo sk continue from here, send ServerStartBattleEvent to players etc.
+        }
     }
 
 

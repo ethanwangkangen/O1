@@ -1,14 +1,17 @@
 package com.mygdx.server.handlers;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.entities.Player;
 
-public class PlayerHandler {
+
+/**
+ * Is this even necessary anymore?
+ */
+public class ServerPlayerHandler {
 
     static public Player player1;
     static public Player player2;
 
-    public PlayerHandler() {
+    public ServerPlayerHandler() {
         player1 = null;
         player2 = null;
     };

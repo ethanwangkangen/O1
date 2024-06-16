@@ -1,6 +1,5 @@
-package com.mygdx.game.screens;
+package com.mygdx.game;
 
-import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.MeowmadAli;
@@ -8,7 +7,7 @@ import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
-import com.mygdx.game.handlers.PlayerHandler;
+import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.BattleState;
 
@@ -65,7 +64,7 @@ public class MyClient {
                 System.out.println("Connected to the server.");
 
                 PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
-                playerJoinServerEvent.userId = PlayerHandler.getUserId();
+                playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
                 myClient.sendTCP(playerJoinServerEvent);
                 System.out.println("playerJoinServerEvent sent");
 
@@ -81,9 +80,9 @@ public class MyClient {
 
     public static void sendBattleRequest(String userId) {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
-        playerRequestBattleEvent.requesterUID = PlayerHandler.getUserId();
+        playerRequestBattleEvent.requesterUID = UserPlayerHandler.getUserId();
         playerRequestBattleEvent.opponentUID = userId;
-        playerRequestBattleEvent.requesterPlayer = PlayerHandler.getPlayer();
+        playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
         myClient.sendTCP(playerRequestBattleEvent);
     }
 }
