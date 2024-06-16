@@ -29,8 +29,11 @@ public class PlayerHandler {
         return player.getTexture();
     }
 
-    public static ArrayList<Creature> getPets() {
-        return player.getPets();
+    public static ArrayList<Creature> getBattlePets() {
+        return player.getBattlePets();
+    }
+    public static ArrayList<Creature> getReservePets() {
+        return player.getReservePets();
     }
 
     // used to store info about player

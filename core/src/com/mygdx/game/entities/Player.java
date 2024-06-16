@@ -1,10 +1,6 @@
 package com.mygdx.game.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.esotericsoftware.kryonet.Connection;
-import com.mygdx.global.ChangePetEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,6 +17,7 @@ public class Player extends Entity implements Serializable{
     public Creature pet2;
     public Creature pet3;
     public ArrayList<Creature> pets = new ArrayList<>();
+    public ArrayList<Creature> reservePets = new ArrayList<>();
 
     private transient UUID id;
     private String idString;
@@ -42,11 +39,15 @@ public class Player extends Entity implements Serializable{
         this.idString = id.toString();
         path = "player1(1).png";
         currentPet = Pet.PET1;
+        pets.add(pet1);
+        pets.add(pet2);
+        pets.add(pet3);
     } //no arg constructor for serialisation
 
-    public ArrayList<Creature> getPets() {
+    public ArrayList<Creature> getBattlePets() {
         return pets;
     }
+    public ArrayList<Creature> getReservePets() {return reservePets;}
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {

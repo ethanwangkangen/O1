@@ -222,6 +222,7 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(MeowmadAli.class);
             myClient.getKryo().register(CrocLesnar.class);
             myClient.getKryo().register(Froggy.class);
+            myClient.getKryo().register(BadLogic.class);
             myClient.getKryo().register(Creature.class);
             myClient.getKryo().register(Creature[].class);
             myClient.getKryo().register(Skill.class);
