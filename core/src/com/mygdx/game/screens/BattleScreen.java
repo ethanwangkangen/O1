@@ -165,8 +165,8 @@ public class BattleScreen implements Screen {
         pet2Name = new Label(opponentPet.getName(), skin);
         pet1Level = new Label("(" + ((Integer)thisPet.getLevel()).toString() + ")", skin);
         pet2Level = new Label("(" + ((Integer)opponentPet.getLevel()).toString() + ")", skin);
-        health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
-        health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
+        //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
+        //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
         healthBar1 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
         healthBar1.setAnimateDuration(1f);
         healthBar1.setValue(thisPet.getHealth());
@@ -177,21 +177,21 @@ public class BattleScreen implements Screen {
         pet1Info.add(pet1Name);
         pet1Info.add(pet1Level).padLeft(2.5f);
         pet1Info.row();
-        pet1Info.add(health1).center().padLeft(10);
+        //pet1Info.add(health1).center().padLeft(10);
         pet1Info.add(healthBar1).colspan(2);
         pet1Info.padLeft(5);
 
         pet2Info.add(pet2Name);
         pet2Info.add(pet2Level).padLeft(2.5f);
         pet2Info.row();
-        pet2Info.add(health2).center().padRight(10);
+        //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
         pet2Info.padRight(5);
     }
 
     public void updatePetInfo() {
-        health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());
-        health2.setText(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth());
+        //health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());
+        //health2.setText(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth());
         healthBar1.setValue(thisPet.getHealth());
         healthBar2.setValue(opponentPet.getHealth());
     }
@@ -427,7 +427,7 @@ public class BattleScreen implements Screen {
                 initialisePetImages();
                 initialiseSkillsWindow();
                 initialisePetsWindow();
-                updatePetInfo();
+                //updatePetInfo();
                 //updatePetsWindow();
             }
 
