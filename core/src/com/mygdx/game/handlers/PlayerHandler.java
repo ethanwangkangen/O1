@@ -43,6 +43,10 @@ public class PlayerHandler {
         return player.getReservePets();
     }
 
+    public static void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        player.updatePets(pets1, pets2);
+    }
+
     // used to store info about player
 
 }

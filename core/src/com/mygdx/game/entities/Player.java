@@ -121,33 +121,6 @@ public class Player extends Entity implements Serializable{
         AtomicInteger loadedCreatureCount = new AtomicInteger(0);
 
         // Load textures for each pet
-//        if (pet1 != null) {
-//            pet1.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-//                    // All creatures' textures are loaded, invoke callback
-//                    callback.run();
-//                }
-//            });
-//        }
-//
-//        if (pet2 != null) {
-//            pet2.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-//                    // All creatures' textures are loaded, invoke callback
-//                    callback.run();
-//                }
-//            });
-//        }
-//
-//        if (pet3 != null) {
-//            pet3.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == this.getNumPets()) {
-//                    // All creatures' textures are loaded, invoke callback
-//                    callback.run();
-//                }
-//            });
-//        }
-
         int petNum = pets.size() + reservePets.size();
 
         for (Creature pet : pets) {
@@ -212,5 +185,11 @@ public class Player extends Entity implements Serializable{
             pet3.update(player.pet3);
         }
         changePet(player.getPet());
+    }
+
+    public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        pets = pets1;
+        reservePets = pets2;
+
     }
 }

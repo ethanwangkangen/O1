@@ -47,14 +47,16 @@ public class PetChangeScreen implements Screen {
 
 
     public PetChangeScreen(DarwinsDuel gameObj) {
-        System.out.println("PetChangeScreen created");
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
+        System.out.println("PetChangeScreen created");
+
+        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        Gdx.input.setInputProcessor(stage);
+
         PlayerHandler.loadTextures(() -> {
             initialiseScrollPanes();
             createButtonList1();
@@ -73,7 +75,7 @@ public class PetChangeScreen implements Screen {
 
             stage.addActor(table);
         });
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
     @Override
@@ -112,6 +114,14 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void dispose() {
+        // Dispose of textures, skins, stages, and other resources
+        skin.dispose();
+        stage.dispose();
+        emptyBox.dispose(); // Assuming emptyBox is a Texture
+
+        // Dispose of any other resources specific to your application
+        // Example: Dispose of textures in the buttonList1 and buttonList2
+
 
     }
 
@@ -337,7 +347,19 @@ public class PetChangeScreen implements Screen {
     }
 
     private void updatePetChanges() {
+        pets1.clear();
+        for (TextImageButton button : buttonList1) {
+            if (button.getPet() != null) {
+                pets1.add(button.getPet());
+            }
+        }
 
+        pets2.clear();
+        for (TextImageButton button : buttonList2) {
+            pets2.add(button.getPet());
+        }
+
+        PlayerHandler.updatePets(pets1, pets2);
     }
 
 }
