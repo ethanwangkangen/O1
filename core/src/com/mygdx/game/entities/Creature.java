@@ -101,7 +101,6 @@ public abstract class Creature extends Entity implements Serializable{
                 System.out.println("Creature texture not loaded");
             }
         });
-
     }
     public Texture getTexturePath() {
         if (texturePath == null) {

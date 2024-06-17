@@ -47,17 +47,17 @@ public class PetChangeScreen implements Screen {
 
 
     public PetChangeScreen(DarwinsDuel gameObj) {
+        System.out.println("PetChangeScreen created");
 
+        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
     @Override
     public void show() {
-        System.out.println("PetChangeScreen created");
-
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
         PlayerHandler.loadTextures(() -> {
+            System.out.println("test1");
             initialiseScrollPanes();
             createButtonList1();
             createButtonList2();
@@ -76,6 +76,7 @@ public class PetChangeScreen implements Screen {
             stage.addActor(table);
         });
         stage.setDebugAll(true);
+        System.out.println("Petchangescreen shown");
     }
 
     @Override
@@ -119,9 +120,14 @@ public class PetChangeScreen implements Screen {
         stage.dispose();
         emptyBox.dispose(); // Assuming emptyBox is a Texture
 
-        // Dispose of any other resources specific to your application
-        // Example: Dispose of textures in the buttonList1 and buttonList2
+        // Dispose of Textures in buttonList1 and buttonList2
+        for (TextImageButton button : buttonList1) {
+            button.dispose();
+        }
 
+        for (TextImageButton button : buttonList2) {
+            button.dispose();
+        }
 
     }
 
@@ -151,6 +157,7 @@ public class PetChangeScreen implements Screen {
     }
 
     public void initialiseScrollPanes() {
+
         table1 = new Table();
         pane1 = new ScrollPane(table1);
         pane1.setWidth(250);
@@ -177,7 +184,6 @@ public class PetChangeScreen implements Screen {
 //            @Override
 //            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 //                removeButton(button);
-//                //todo move to other list
 //                return super.touchDown(event, x, y, pointer, button);
 //            }
 //        });
@@ -188,6 +194,7 @@ public class PetChangeScreen implements Screen {
 //    }
 
     private void createButtonList1() {
+
         for (Creature pet: pets1) {
             TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
             button.addListener(new ClickListener() {
@@ -202,6 +209,7 @@ public class PetChangeScreen implements Screen {
     }
 
     private void createButtonList2() {
+
         for (Creature pet : pets2) {
             TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
             button.addListener(new ClickListener() {
@@ -216,6 +224,7 @@ public class PetChangeScreen implements Screen {
     }
 
     private void refreshTables() {
+
         // add buttons from buttonLists to tables
         // table1
         table1.clearChildren();
@@ -311,9 +320,6 @@ public class PetChangeScreen implements Screen {
 
         System.out.println("buttonList1 size after addition: " + buttonList1.size());
         System.out.println("buttonList2 size after addition: " + buttonList2.size());
-
-        //todo Update the pet references in the buttons
-
 
         // Refresh the tables
         refreshTables();
