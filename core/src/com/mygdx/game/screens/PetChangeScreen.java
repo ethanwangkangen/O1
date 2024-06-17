@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
@@ -20,10 +18,13 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.utils.Align.center;
+
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
     private Table table;
+    Stack stack = new Stack();
     private Texture emptyBox = new Texture("crossedbox.png");
 
     // to be located on the left side of the screen
@@ -59,16 +60,20 @@ public class PetChangeScreen implements Screen {
             createButtonList1();
             createButtonList2();
             refreshTables();
+            initialiseTopBar();
 
             table = new Table();
             table.setFillParent(true);
-            table.add(new Label("Pet Change", skin)).colspan(2).row();
-            table.add(pane1);
-            table.add(pane2).row();
+
+            table.add(stack).colspan(2).fillX().center().row();
+            table.add(new Label("Battle Pets", skin)).padTop(10);
+            table.add(new Label("Reserve Pets", skin)).row();
+            table.add(pane1).expand();
+            table.add(pane2).expand().row();
 
             stage.addActor(table);
         });
-
+//        stage.setDebugAll(true);
     }
 
     @Override
@@ -108,6 +113,31 @@ public class PetChangeScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public void initialiseTopBar() {
+        // Stack to overlay the label and the back button
+
+        // Create the label for "Pet Change" and add it to the stack
+        Label petChangeLabel = new Label("Pet Change", skin);
+        petChangeLabel.setAlignment(center);
+        stack.add(petChangeLabel);
+
+        // Create a table for the back button and make it fill parent (right side)
+        Table backButtonTable = new Table();
+        stack.add(backButtonTable);
+
+        // Create the back button and add it to backButtonTable
+        TextButton backButton = new TextButton("Save changes", skin);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                updatePetChanges();
+                System.out.println("Changes to pets have been saved");
+                DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });        backButtonTable.add(backButton).right().pad(10).expandX();
     }
 
     public void initialiseScrollPanes() {
@@ -304,6 +334,10 @@ public class PetChangeScreen implements Screen {
             }
         });
         return button;
+    }
+
+    private void updatePetChanges() {
+
     }
 
 }
