@@ -80,11 +80,11 @@ public class Player extends Entity implements Serializable{
     public String getIdString() {return idString;}
     public Creature getCurrentPet() {
         if (currentPet == Pet.PET1) {
-            return pet1;
+            return pets.get(0);
         } else if (currentPet == Pet.PET2) {
-            return pet2;
+            return pets.get(1);
         } else {
-            return pet3;
+            return pets.get(2);
         }
     }
 
@@ -179,7 +179,6 @@ public class Player extends Entity implements Serializable{
         }
         if (pet2 != null) {
             pet2.update(player.pet2);
-            System.out.println("Crocs health is:" + player.pet2.getHealth());
         }
         if (pet3 != null) {
             pet3.update(player.pet3);

@@ -275,10 +275,10 @@ public class BattleScreen implements Screen {
             petAvailable[i] = false;
         }
         System.out.println("initialising initialisePetsWindow");
-        final Creature[] pets = {thisPlayer.pet1, thisPlayer.pet2, thisPlayer.pet3};
-        TextImageButton pet1 = createPetButton(thisPlayer.pet1);
-        TextImageButton pet2 = createPetButton(thisPlayer.pet2);
-        TextImageButton pet3 = createPetButton(thisPlayer.pet3);
+
+        TextImageButton pet1 = createPetButton(thisPlayer.getBattlePets().get(0));
+        TextImageButton pet2 = createPetButton(thisPlayer.getBattlePets().get(1));
+        TextImageButton pet3 = createPetButton(thisPlayer.getBattlePets().get(2));
         petButtons.add(pet1);
         petButtons.add(pet2);
         petButtons.add(pet3);
@@ -288,7 +288,7 @@ public class BattleScreen implements Screen {
             if (petButtons.get(i).isTouchable()) {
                 petAvailable[i] = true;
             }
-            addPetListener(petButtons.get(i), pets[i], i);
+            addPetListener(petButtons.get(i), thisPlayer.getBattlePets().get(i), i);
         }
         if (pet2.isTouchable()) {
             System.out.println("Pet 2 is touchable");
@@ -427,6 +427,7 @@ public class BattleScreen implements Screen {
                 initialisePetImages();
                 initialiseSkillsWindow();
                 initialisePetsWindow();
+                updatePetInfo();
                 //updatePetsWindow();
             }
 
