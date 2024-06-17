@@ -252,10 +252,18 @@ public class PetChangeScreen implements Screen {
             System.out.println("button1 has been clicked");
             // Handle clicks for buttonList1
             if (button == lastClickedButton && buttonList1.indexOf(button) != 0) {
-                // Button clicked twice in a row
-                // Move to the other list and replace with empty button
+                // same button clicked twice in a row
+                // Move to list1 and replace with empty button
                 removeButtonFromList1(button);
                 selectedButton1 = null;
+                selectedButton2 = null;
+                lastClickedButton = null;
+            } else if (lastClickedButton != null) {
+                // 2 different buttons from buttonList1 have been clicked in succession
+                // swap these 2 buttons
+                swapList1Buttons(button);
+                selectedButton1 = null;
+                selectedButton2 = null;
                 lastClickedButton = null;
             } else {
                 // Single click detected, update selected button
@@ -287,6 +295,32 @@ public class PetChangeScreen implements Screen {
         refreshTables();
     }
 
+    private void swapList1Buttons(TextImageButton button) {
+        int index1 = buttonList1.indexOf(button);
+        int index2 = buttonList1.indexOf(lastClickedButton);
+
+        if (index1 == -1) {
+            System.err.println("Error: selectedButton1 not found in buttonList1: " + button.getText());
+            return;
+        } else if (index2 == -1) {
+            System.err.println("Error: lastClickedButton not found in buttonList1: " + lastClickedButton.getText());
+            return;
+        } else if (index1 == index2) {
+            System.err.println("Error lastClickedButton and selectedButton1 have the same index:"
+                     + "\nselectedButton1: " + button.getText()
+                     + "\nlastClickedButton: " + lastClickedButton.getText());
+            return;
+        }
+
+        buttonList1.remove(button);
+        buttonList1.add(index1, lastClickedButton);
+
+        buttonList1.remove(index2);
+        buttonList1.add(button);
+
+        refreshTables();
+    }
+
 
     private void swapSelectedButtons() {
 
@@ -299,8 +333,6 @@ public class PetChangeScreen implements Screen {
         // Check if index is valid
         if (index == -1) {
             System.err.println("Error: selectedButton1 not found in buttonList1: " + selectedButton1.getText());
-            selectedButton1 = null;
-            selectedButton2 = null;
             return;
         }
 

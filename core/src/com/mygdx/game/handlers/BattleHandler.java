@@ -23,8 +23,10 @@ public class BattleHandler {
     public static void loadTextures(Runnable callback) {
         try{
             battleState.loadTextures(callback);
-            System.out.println("battlehandler textures loading");
+            System.out.println("Battlehandler textures loading");
         } catch (Exception e) {
+            System.err.println("BattleHandler texture loading error");
+
         }
     }
 
