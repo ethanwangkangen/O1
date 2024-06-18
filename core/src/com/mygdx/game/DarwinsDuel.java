@@ -32,7 +32,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		LOSS
 	}
 
-	public static GameState gameState = GameState.FREEROAM;
+	public static GameState gameState = GameState.LOGIN;
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;
