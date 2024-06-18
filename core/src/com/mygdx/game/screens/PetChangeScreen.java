@@ -311,11 +311,9 @@ public class PetChangeScreen implements Screen {
             return;
         }
 
-        buttonList1.remove(button);
-        buttonList1.add(index1, lastClickedButton);
-
-        buttonList1.remove(index2);
-        buttonList1.add(button);
+        // Swap the buttons
+        buttonList1.set(index1, lastClickedButton);
+        buttonList1.set(index2, button);
 
         refreshTables();
     }
