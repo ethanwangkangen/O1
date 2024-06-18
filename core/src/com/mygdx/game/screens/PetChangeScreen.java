@@ -298,6 +298,8 @@ public class PetChangeScreen implements Screen {
     private void swapList1Buttons(TextImageButton button) {
         int index1 = buttonList1.indexOf(button);
         int index2 = buttonList1.indexOf(lastClickedButton);
+        System.out.println("Index1: " + index1);
+        System.out.println("Index2: " + index2);
 
         if (index1 == -1) {
             System.err.println("Error: selectedButton1 not found in buttonList1: " + button.getText());
@@ -312,11 +314,9 @@ public class PetChangeScreen implements Screen {
             return;
         }
 
-        buttonList1.remove(button);
-        buttonList1.add(index1, lastClickedButton);
-
-        buttonList1.remove(index2);
-        buttonList1.add(button);
+        // Swap the buttons
+        buttonList1.set(index1, lastClickedButton);
+        buttonList1.set(index2, button);
 
         refreshTables();
     }
