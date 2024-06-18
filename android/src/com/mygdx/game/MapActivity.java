@@ -105,6 +105,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     .title(userId));
                             playerMarkers.put(userId, marker);
                         }
+                        // todo remove markers
+                        // todo make button for menuscreen
                     }
                 }
             }

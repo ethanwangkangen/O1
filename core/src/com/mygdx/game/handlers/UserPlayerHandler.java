@@ -1,7 +1,10 @@
 package com.mygdx.game.handlers;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
+
+import java.util.ArrayList;
 
 
 public class UserPlayerHandler {
@@ -22,6 +25,15 @@ public class UserPlayerHandler {
         return player.getTexture();
     }
 
+    public static void loadTextures(Runnable callback) {
+        try{
+            player.loadTextures(callback);
+            System.out.println("PlayerHandler textures loading");
+        } catch (Exception e) {
+            System.err.println("PlayerHandler texture loading error");
+        }
+    }
+
     public static Player getPlayer() {
         return player;
     }
@@ -30,5 +42,15 @@ public class UserPlayerHandler {
         player.setUserId(id);
     }
 
+    public static ArrayList<Creature> getBattlePets() {
+        return player.getBattlePets();
+    }
+    public static ArrayList<Creature> getReservePets() {
+        return player.getReservePets();
+    }
+
+    public static void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        player.updatePets(pets1, pets2);
+    }
 
 }
