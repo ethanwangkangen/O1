@@ -18,7 +18,7 @@ public class AddPlayerEvent {
 //    String pet1 = null;
 //    String pet2 = null;
 //    String pet3 = null;
-//    String pets[] = {pet1, pet2, pet3};
+//    String battlePets[] = {pet1, pet2, pet3};
 //
 //    public AddPlayerEvent(String username) {
 //        this.username = username;
@@ -47,7 +47,7 @@ public class AddPlayerEvent {
 //    }
 //
 //    public String[] getPets() {
-//        return pets;
+//        return battlePets;
 //    }
 
 }

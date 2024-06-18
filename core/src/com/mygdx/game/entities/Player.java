@@ -13,10 +13,7 @@ public class Player extends Entity implements Serializable{
     //private Texture texture;
     public String username;
 
-    public Creature pet1;
-    public Creature pet2;
-    public Creature pet3;
-    public ArrayList<Creature> pets = new ArrayList<>();
+    public ArrayList<Creature> battlePets = new ArrayList<>();
     public ArrayList<Creature> reservePets = new ArrayList<>();
 
     private transient UUID id;
@@ -32,21 +29,18 @@ public class Player extends Entity implements Serializable{
     }
 
     public Player() {
-        this.pet1 = new MeowmadAli();
-        this.pet2 = new CrocLesnar();
-        this.pet3 = new Froggy();
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
         currentPet = Pet.PET1;
-        pets.add(pet1);
-        pets.add(pet2);
-        pets.add(pet3);
+        battlePets.add(new MeowmadAli());
+        battlePets.add(new CrocLesnar());
+        battlePets.add(new Froggy());
         reservePets.add(new BadLogic());
     } //no arg constructor for serialisation
 
     public ArrayList<Creature> getBattlePets() {
-        return pets;
+        return battlePets;
     }
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
@@ -64,12 +58,10 @@ public class Player extends Entity implements Serializable{
     }
 
     public boolean isAlive() {
-        if (pet1 != null && pet1.isAlive()) {
-            return true;
-        } else if (pet2 != null && pet2.isAlive()) {
-            return true;
-        } else if (pet3 != null && pet3.isAlive()) {
-            return true;
+        for (Creature pet : battlePets) {
+            if (pet.isAlive()) {
+                return true;
+            }
         }
         return false;
     }
@@ -80,11 +72,11 @@ public class Player extends Entity implements Serializable{
     public String getIdString() {return idString;}
     public Creature getCurrentPet() {
         if (currentPet == Pet.PET1) {
-            return pets.get(0);
+            return battlePets.get(0);
         } else if (currentPet == Pet.PET2) {
-            return pets.get(1);
+            return battlePets.get(1);
         } else {
-            return pets.get(2);
+            return battlePets.get(2);
         }
     }
 
@@ -92,10 +84,10 @@ public class Player extends Entity implements Serializable{
         return currentPet;
     }
 
-    // consider replacing pets array to reservePets array in future
+    // consider replacing battlePets array to reservePets array in future
     // to better display pet screen
 //    public void switchpet(int target) {
-//        CurrentPet = pets[target];
+//        CurrentPet = battlePets[target];
 //    }
 
     public void loadTexture() {
@@ -121,9 +113,9 @@ public class Player extends Entity implements Serializable{
         AtomicInteger loadedCreatureCount = new AtomicInteger(0);
 
         // Load textures for each pet
-        int petNum = pets.size() + reservePets.size();
+        int petNum = battlePets.size() + reservePets.size();
 
-        for (Creature pet : pets) {
+        for (Creature pet : battlePets) {
             pet.loadTexture(() -> {
                 if (loadedCreatureCount.incrementAndGet() == petNum) {
                     callback.run();
@@ -140,54 +132,46 @@ public class Player extends Entity implements Serializable{
     }
 
     public void changePet(Pet pet) {
-        if (pet == Pet.PET1 && pet1 != null) {
-            currentPet = Pet.PET1;
-        } else if (pet == Pet.PET2 && pet2 != null) {
-            currentPet = Pet.PET2;
-        } else if (pet == Pet.PET3 && pet3 != null) {
-            currentPet = Pet.PET3;
+        int index = pet.ordinal();
+        if (isValidPet(index)) {
+            currentPet = pet;
         }
     }
 
+    private boolean isValidPet(int index) {
+        return index >= 0 && index < battlePets.size() && battlePets.get(index) != null;
+    }
+
     public void changeNextPet() {
-        if (pet1 != null && pet1.isAlive()) {
-            changePet(Pet.PET1);
-        } else if (pet2 != null && pet2.isAlive()) {
-            changePet(Pet.PET2);
-        } else if (pet3 != null && pet3.isAlive()) {
-            changePet(Pet.PET3);
+        for (int i = 0; i < battlePets.size(); i++) {
+            Creature pet = battlePets.get(i);
+            if (pet != null && pet.isAlive()) {
+                changePet(Pet.values()[i]);
+                break;
+            }
         }
     }
 
     public int getNumPets() {
-        int numPets = 0;
-        if (pet1 != null) {
-            numPets += 1;
-        }
-        if (pet2 != null) {
-            numPets += 1;
-        }
-        if (pet3 != null) {
-            numPets += 1;
-        }
-        return numPets;
+        return battlePets.size();
     }
 
     public void update(Player player) {
-        if (pet1 != null) {
-            pet1.update(player.pet1);
-        }
-        if (pet2 != null) {
-            pet2.update(player.pet2);
-        }
-        if (pet3 != null) {
-            pet3.update(player.pet3);
+        for (int i = 0; i < battlePets.size(); i++) {
+            Creature pet = battlePets.get(i);
+            Creature playerPet = player.getBattlePets().get(i);
+            if (pet != null && playerPet != null) {
+                pet.update(playerPet);
+                if (i == 1) {
+                    System.out.println("Crocs health is:" + playerPet.getHealth());
+                }
+            }
         }
         changePet(player.getPet());
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
-        pets = pets1;
+        battlePets = pets1;
         reservePets = pets2;
 
     }

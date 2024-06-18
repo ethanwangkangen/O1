@@ -28,14 +28,14 @@ public class PetChangeScreen implements Screen {
     private Texture emptyBox = new Texture("crossedbox.png");
 
     // to be located on the left side of the screen
-    // for pets that will be carried into battle by the player
+    // for battlePets that will be carried into battle by the player
     private ArrayList<Creature> pets1 = PlayerHandler.getBattlePets();
     private ScrollPane pane1;
     private Table table1;
     private ArrayList<TextImageButton> buttonList1 = new ArrayList<>();
 
     // to be located on the right side of the screen
-    // for pets that are in player's storage
+    // for battlePets that are in player's storage
     private ArrayList<Creature> pets2 = PlayerHandler.getReservePets();
     private ScrollPane pane2;
     private Table table2;
@@ -149,7 +149,7 @@ public class PetChangeScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 updatePetChanges();
-                System.out.println("Changes to pets have been saved");
+                System.out.println("Changes to battlePets have been saved");
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }

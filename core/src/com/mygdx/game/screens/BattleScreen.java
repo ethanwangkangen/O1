@@ -51,7 +51,7 @@ public class BattleScreen implements Screen {
 
 
     private Table winOrLoseTable = new Table(); // todo using addActor, overlay this when win/lose
-    private Table bgTable = new Table(); //background + pets + usernames
+    private Table bgTable = new Table(); //background + battlePets + usernames
     private Table pet1Info = new Table();
     private Table pet2Info = new Table();
     private Table pet1imageTable = new Table();
@@ -418,7 +418,7 @@ public class BattleScreen implements Screen {
         //logic for battle
         if (BattleHandler.updatePetInfo) {
             initialisePlayers();
-            // for both attacking and changing pets updates
+            // for both attacking and changing battlePets updates
 
             // pet has attacked
             if (BattleHandler.petAttacked()) {

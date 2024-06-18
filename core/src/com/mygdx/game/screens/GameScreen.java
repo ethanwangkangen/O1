@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
             }
         });
 
-        changePet = new TextButton("Change pets", skin);
+        changePet = new TextButton("Change battlePets", skin);
         changePet.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
