@@ -8,11 +8,13 @@ public class AttackEvent implements Serializable {
     // consider attack, health reduction, pet death
     public Skill skill;
     public String id; // of attacker
+    public String battleId;
 
     public AttackEvent(){}
 
-    public AttackEvent(String id, Skill skill) {
+    public AttackEvent(String battleId, String id, Skill skill) {
         this.skill = skill;
         this.id = id;
+        this.battleId = battleId;
     }
 }

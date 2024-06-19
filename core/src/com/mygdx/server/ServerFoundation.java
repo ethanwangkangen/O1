@@ -9,6 +9,7 @@ import com.mygdx.server.listeners.EventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -18,8 +19,6 @@ public class ServerFoundation {
     public static ServerFoundation instance;
     public static BattleState battleState = new BattleState();
     public static PlayerHandler playerHandler = new PlayerHandler();
-
-    public static Map<String, Connection> connectionTable = new HashMap<>();
 
 
     public static void main(String[] args) {
@@ -39,13 +38,13 @@ public class ServerFoundation {
         server.getKryo().register(EndBattleEvent.class);
         server.getKryo().register(JoinRequestEvent.class);
         server.getKryo().register(JoinResponseEvent.class);
-        server.getKryo().register(StartBattleEvent.class);
+        server.getKryo().register(ServerStartBattleEvent.class);
         server.getKryo().register(ChangePetEvent.class);
         server.getKryo().register(java.util.UUID.class);
         server.getKryo().register(java.util.ArrayList.class);
         server.getKryo().register(PlayerAcceptBattleEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
-        server.getKryo().register(PlayerJoinServerEvent.class);
+        server.getKryo().register(PlayerRequestBattleEvent.class);
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.Pet.class);

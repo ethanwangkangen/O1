@@ -9,6 +9,7 @@ public class BattleState{
 
     //public static final BattleState INSTANCE = new BattleState();
     private Player player1, player2;
+    private String p1UID, p2UID;
 
     public enum Turn {
         PLAYERONETURN,
@@ -33,6 +34,20 @@ public class BattleState{
         firstRound = true;
         petChanged = false;
         petAttacked = false;
+    }
+
+    public BattleState(Player p1Player, Player p2Player) {
+        this.turn = Turn.PLAYERONETURN;
+        this.numPlayers = 0;
+        this.numofTurns = 1;
+        battleStarted = false;
+        battleEnded = false;
+        firstRound = true;
+        petChanged = false;
+        petAttacked = false;
+
+        this.player1 = p1Player;
+        this.player2 = p2Player;
     }
 
     public int getNumPlayers() {

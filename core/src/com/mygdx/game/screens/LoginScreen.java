@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.handlers.PlayerHandler;
 import com.mygdx.game.listeners.EventListener;
 import com.mygdx.global.*;
 import com.badlogic.gdx.Screen;
@@ -233,13 +234,13 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(EndBattleEvent.class);
             myClient.getKryo().register(JoinRequestEvent.class);
             myClient.getKryo().register(JoinResponseEvent.class);
-            myClient.getKryo().register(StartBattleEvent.class);
+            myClient.getKryo().register(ServerStartBattleEvent.class);
             myClient.getKryo().register(ChangePetEvent.class);
             myClient.getKryo().register(java.util.UUID.class);
             myClient.getKryo().register(java.util.ArrayList.class);
             myClient.getKryo().register(PlayerAcceptBattleEvent.class);
             myClient.getKryo().register(PlayerJoinServerEvent.class);
-            myClient.getKryo().register(PlayerJoinServerEvent.class);
+            myClient.getKryo().register(PlayerRequestBattleEvent.class);
 
             myClient.getKryo().register(Player.class);
             myClient.getKryo().register(Player.Pet.class);
@@ -268,10 +269,6 @@ public class LoginScreen implements Screen {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            AddPlayerEvent addPlayerEvent = new AddPlayerEvent();
-            addPlayerEvent.username = usernameLField.getText();
-            myClient.sendTCP(addPlayerEvent);
         }
     }
 
@@ -285,9 +282,13 @@ public class LoginScreen implements Screen {
                 client.connect(5000, host, tcpPort, udpPort);
                 System.out.println("Connected to the server.");
 
-                JoinRequestEvent joinRequestEvent = new JoinRequestEvent();
-                client.sendTCP(joinRequestEvent);
-                System.out.println("JoinRequestEvent sent");
+                Player newPlayer = new Player();
+                PlayerHandler.updatePlayer(newPlayer);
+
+                PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
+                playerJoinServerEvent.userId = PlayerHandler.getIdString();
+                client.sendTCP(playerJoinServerEvent);
+                System.out.println("playerJoinServerEvent sent");
 
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());

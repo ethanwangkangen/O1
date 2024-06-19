@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class BattleScreen implements Screen {
     private Stage stage;
-    private String myId = PlayerHandler.getIdString(); //id of current player
+    private String myId = PlayerHandler.getIdString(); //playerId of current player
     private Player thisPlayer;
     private Player opponentPlayer;
     private FlippedImage pet1Image;
@@ -374,7 +374,7 @@ public class BattleScreen implements Screen {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET1;
-                    changePetEvent.id = myId;
+                    changePetEvent.playerId = myId;
                     System.out.println("Changing to pet1");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
@@ -388,7 +388,7 @@ public class BattleScreen implements Screen {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET2;
-                    changePetEvent.id = myId;
+                    changePetEvent.playerId = myId;
                     System.out.println("Changing to pet2");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
@@ -402,7 +402,7 @@ public class BattleScreen implements Screen {
                     // todo: swap pet1 (current pet) and pet (in argument)
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET3;
-                    changePetEvent.id = myId;
+                    changePetEvent.playerId = myId;
                     System.out.println("Changing to pet3");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);

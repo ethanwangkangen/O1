@@ -24,6 +24,10 @@ public class PlayerHandler {
         player = update;
     }
 
+    public static Player getPlayer() {
+        return player;
+    }
+
     public static Texture getTexture() {
         player.loadTexture();
         return player.getTexture();

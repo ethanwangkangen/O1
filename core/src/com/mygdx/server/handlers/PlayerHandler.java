@@ -1,35 +1,36 @@
 package com.mygdx.server.handlers;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.mygdx.game.entities.Player;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class PlayerHandler {
 
-    static public Player player1;
-    static public Player player2;
+    public static Map<String, Connection> connectionTable;
+
 
     public PlayerHandler() {
-        player1 = null;
-        player2 = null;
+        connectionTable = new HashMap<>();
     };
 
-    public void addPlayer(Player player) {
-        if (player1 == null) {
-            player1 = player;
-        } else if (player2 == null) {
-            player2 = player;
-        }
+    public static void addPlayer(String userId, Connection connection) {
+        connectionTable.put(userId, connection);
     }
 
 
-    /*public Player getPlayerByConnection(Connection connection) {
-        if (player1.getConnection = connection) {
-            return player1;
-        } else if (player2.getConnection = connection) {
-            return player2;
-        } else {
-            return null;
-            // error
+    public static Connection getConnectionById(String id) {
+        return connectionTable.get(id);
+    }
+
+    public static String getOther(String userId) {
+        for (Map.Entry<String, Connection> entry : connectionTable.entrySet()) {
+            if (!Objects.equals(entry.getKey(), userId)) {
+                return entry.getKey();
+            }
         }
-    }*/
+        return null;
+    }
+
 }
