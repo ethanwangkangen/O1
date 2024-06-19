@@ -25,7 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -78,15 +80,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     /**
-     * Add all players
-     * Todo modify logic such that it doesn't re-add current user
+     * Add all players (except self)
      */
     public void displayAll() {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Set<String> previousUsers = new HashSet<>(playerMarkers.keySet()); // Set of userIds of the "existing" players
+                Set<String> currentUsers = new HashSet<>(); // To add: all the current users
+
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
+
+                    if (userId == currentUser.getUid()) { // Skip self
+                        continue;
+                    }
+
+                    currentUsers.add(userId);
+
                     DataSnapshot locationSnapshot = userSnapshot.child("location");
 
                     if (locationSnapshot.exists()) {
@@ -99,14 +111,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             // Update existing marker position
                             playerMarkers.get(userId).setPosition(playerLocation);
                         } else {
-                            // Create a new marker
+                            // Marker doesn't exist, so create a new marker
                             Marker marker = googleMap.addMarker(new MarkerOptions()
                                     .position(playerLocation)
                                     .title(userId));
                             playerMarkers.put(userId, marker);
                         }
-                        // todo remove markers
                         // todo make button for menuscreen
+                    }
+                }
+
+                // Now remove all the old users that might have disconnected
+                previousUsers.removeAll(currentUsers); // previousUsers now only contains disconnected users
+                for (String userId : previousUsers) {
+                    Marker marker = playerMarkers.remove(userId);
+                    // Set marker to the one mapped to this userId and remove the mapping from the Map
+
+                    if (marker != null) {
+                        marker.remove();
                     }
                 }
             }
