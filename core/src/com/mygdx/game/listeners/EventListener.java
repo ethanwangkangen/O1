@@ -11,7 +11,6 @@ import com.mygdx.global.*;
 import com.mygdx.game.handlers.*;
 
 public class EventListener extends Listener {
-
     public void received(Connection connection, final Object object) {
         if (object instanceof JoinResponseEvent) {
             JoinResponseEvent joinObj = (JoinResponseEvent) object;
@@ -38,6 +37,18 @@ public class EventListener extends Listener {
         } else if (object instanceof EndBattleEvent) {
             BattleHandler.battleEnd = true;
             System.out.println("Client has received EndBattleEvent");
+        } else if (object instanceof PlayerRequestBattleEvent) {
+            //todo: accept vs reject screen.
+            //For now: just accept
+
+            //note: here "I" am the "opponent"
+            PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
+            PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
+            accept.opponentUID = request.opponentUID;
+            accept.requesterUID = request.requesterUID;
+            accept.opponentPlayer = UserPlayerHandler.getPlayer();
+            accept.requesterPlayer = request.requesterPlayer;
+            connection.sendTCP(accept);
         }
     }
 }

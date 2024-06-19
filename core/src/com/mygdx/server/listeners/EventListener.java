@@ -9,6 +9,7 @@ import com.mygdx.server.ServerFoundation;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.global.BattleState;
 import com.mygdx.server.handlers.PlayerHandler;
+import com.mygdx.server.handlers.BattleHandler;
 
 public class EventListener extends Listener {
 
@@ -83,6 +84,22 @@ public class EventListener extends Listener {
 
             battleState.petAttacked = false;
             battleState.petChanged = false;
+        } else if (object instanceof PlayerRequestBattleEvent) {
+            System.out.println("Player has requested to fight an opponent.");
+            PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
+            String opponentUID = request.opponentUID;
+//            String requesterUID = request.requesterUID;
+            Connection enemyConnection = ServerFoundation.connectionTable.get(opponentUID);
+            enemyConnection.sendTCP(request);
+        } else if (object instanceof PlayerAcceptBattleEvent) {
+            System.out.println("Battle starting between 2 players");
+            PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
+            Player p1Player = event.opponentPlayer;
+            String p1UID = event.opponentUID;
+            Player p2Player = event.requesterPlayer;
+            String p2UID =  event.requesterUID;
+            BattleHandler.initialiseBattle(p1Player, p1UID, p2Player, p2UID);
+            //todo sk continue from here, send ServerStartBattleEvent to players etc.
         } else {
             System.out.println("unknown object received.");
         }

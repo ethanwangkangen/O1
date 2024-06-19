@@ -1,10 +1,14 @@
 package com.mygdx.server;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
 import com.mygdx.global.*;
 import com.mygdx.server.handlers.PlayerHandler;
 import com.mygdx.server.listeners.EventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -14,6 +18,9 @@ public class ServerFoundation {
     public static ServerFoundation instance;
     public static BattleState battleState = new BattleState();
     public static PlayerHandler playerHandler = new PlayerHandler();
+
+    public static Map<String, Connection> connectionTable = new HashMap<>();
+
 
     public static void main(String[] args) {
         ServerFoundation instance = new ServerFoundation();
@@ -36,6 +43,9 @@ public class ServerFoundation {
         server.getKryo().register(ChangePetEvent.class);
         server.getKryo().register(java.util.UUID.class);
         server.getKryo().register(java.util.ArrayList.class);
+        server.getKryo().register(PlayerAcceptBattleEvent.class);
+        server.getKryo().register(PlayerJoinServerEvent.class);
+        server.getKryo().register(PlayerJoinServerEvent.class);
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.Pet.class);
