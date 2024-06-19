@@ -9,9 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -23,6 +21,8 @@ import com.mygdx.server.UUIDSerializer;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static com.mygdx.game.EmailValidator.isValidEmail;
 
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
@@ -49,10 +49,10 @@ public class LoginScreen implements Screen {
     private TextField passwordSField;
     private TextButton changeToLogin;
 
-    private Label errorLabel;
-    boolean login = false;
-    boolean signUp = false;
-    boolean joined = false;
+    private Label loginErrorLabel;
+    private Label signUpErrorLabel;
+    private boolean login = false;
+    private boolean joined = false;
 
     /*
     stuff for firebase login (to be refactored):
@@ -64,6 +64,7 @@ public class LoginScreen implements Screen {
         System.out.println("LoginScreen created");
         stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
+        initialiseErrorLabel();
         initialiseBgTable();
         initialiseLoginTable();
         initialiseSignUpTable();
@@ -77,12 +78,17 @@ public class LoginScreen implements Screen {
 
         stage.addActor(stack);
         //stage.addActor(signupTable);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
     public void initialiseBgTable() {
         bgTable.setFillParent(true);
         bgTable.setBackground(background);
+    }
+
+    public void initialiseErrorLabel() {
+        loginErrorLabel = new Label("", skin);
+        signUpErrorLabel = new Label("", skin);
     }
 
     public void initialiseLoginTable() {
@@ -104,7 +110,12 @@ public class LoginScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // connect to Firebase and get player info
-                login = true;
+                String email, password;
+                email = usernameLField.getText();
+                password = passwordLField.getText();
+                if (isValidInput(email, password)) {
+                    login = true;
+                }
 
                 return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
@@ -118,17 +129,20 @@ public class LoginScreen implements Screen {
                 // change to sign up interface
                 loginTable.setVisible(false);
                 signupTable.setVisible(true);
+                loginErrorLabel.setText("");
+                signUpErrorLabel.setText("");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         loginTable.clear();
-        loginTable.add(loginLabel).colspan(3).row();
+        loginTable.add(loginLabel).colspan(3).expandX().row();
         loginTable.add(usernameLField).width(250).padTop(50).colspan(3).row();
         loginTable.add(passwordLField).width(250).padTop(10).colspan(3).row();
         loginTable.add().uniform().padTop(100);
         loginTable.add(loginButton).uniform();
-        loginTable.add(changeToSignUp).uniform().right();
+        loginTable.add(changeToSignUp).uniform().top().row();
+        loginTable.add(loginErrorLabel).colspan(3).center().row();
         loginTable.setVisible(true);
     }
 
@@ -151,12 +165,17 @@ public class LoginScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // create new player, connect to Firebase, and upload new player info
-
+                String email, password;
+                email = usernameSField.getText();
+                password = passwordSField.getText();
+                if (isValidInput(email, password)) {
+                    login = true;
+                }
                 return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
-
             }
         });
+
         changeToLogin = new TextButton("Login", skin);
         changeToLogin.addListener(new ClickListener() {
             @Override
@@ -164,17 +183,20 @@ public class LoginScreen implements Screen {
                 // change to login interface
                 loginTable.setVisible(true);
                 signupTable.setVisible(false);
+                loginErrorLabel.setText("");
+                signUpErrorLabel.setText("");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         signupTable.clear();
-        signupTable.add(signUpLabel).colspan(3).row();
+        signupTable.add(signUpLabel).colspan(3).expandX().row();
         signupTable.add(usernameSField).width(250).padTop(50).colspan(3).row();
         signupTable.add(passwordSField).width(250).padTop(10).colspan(3).row();
         signupTable.add().uniform().padTop(100);
         signupTable.add(signUpButton).uniform();
-        signupTable.add(changeToLogin).uniform().right();
+        signupTable.add(changeToLogin).uniform().top().row();
+        signupTable.add(signUpErrorLabel).colspan(3).center().row();
         signupTable.setVisible(false);
     }
 
@@ -267,7 +289,7 @@ public class LoginScreen implements Screen {
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());
                 e.printStackTrace();
-                //errorLabel.setText(e.getMessage());
+                //loginErrorLabel.setText(e.getMessage());
             }
         });
         connectThread.start(); // Start the thread
@@ -297,5 +319,26 @@ public class LoginScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public boolean isValidInput(String username, String password) {
+        if (password.length() < 6) {
+            loginErrorLabel.setText("Password has to be at least 6 characters");
+            signUpErrorLabel.setText("Password has to be at least 6 characters");
+            return false;
+        } else if (username.isEmpty()) {
+            loginErrorLabel.setText("Username / email cannot be empty");
+            signUpErrorLabel.setText("Username / email cannot be empty");
+            return false;
+        } else if (!isValidEmail(username)) {
+            loginErrorLabel.setText("Email format is invalid");
+            signUpErrorLabel.setText("Email format is invalid");
+            return false;
+        }   else {
+            // no errors
+            loginErrorLabel.setText("");
+            signUpErrorLabel.setText("");
+            return true;
+        }
     }
 }
