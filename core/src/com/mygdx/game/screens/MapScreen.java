@@ -35,7 +35,7 @@ public class MapScreen implements Screen{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         System.out.println("rendering MapScreen");
 
-        authService1.sendLocationToFirebase(0.0, 0.0); //todo implement location trackinfg
+        //authService1.sendLocationToFirebase(0.0, 0.0); //todo implement location tracking
         //send location to firebase every frame
     }
 
