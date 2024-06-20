@@ -1,4 +1,4 @@
-package com.mygdx.global;
+package com.mygdx.game.oldEvents;
 
 import com.mygdx.game.entities.Player;
 

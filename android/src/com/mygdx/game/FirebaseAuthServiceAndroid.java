@@ -1,21 +1,16 @@
 package com.mygdx.game;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.AuthResult;
-import com.google.android.gms.tasks.Task;
-import com.badlogic.gdx.Gdx;
-import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mygdx.game.callbacks.AuthResultCallback;
+import com.mygdx.game.callbacks.PlayerCallback;
 import com.mygdx.game.entities.Player;
-
-import javax.security.auth.callback.Callback;
+import com.mygdx.game.interfaces.AuthService;
 
 public class FirebaseAuthServiceAndroid implements AuthService {
     public FirebaseAuth auth;
@@ -45,9 +40,14 @@ public class FirebaseAuthServiceAndroid implements AuthService {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 System.err.println("Failed to retrieve player data.");
-                playerCallback.onCallback(null); // Pass null or handle error appropriately
+                playerCallback.onFailure(); // Pass null or handle error appropriately
             }
         });
+    }
+
+    @Override
+    public String getUserId() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     @Override
@@ -85,11 +85,16 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         auth.signOut();
     }
 
-//    private void handleTaskResult(Task<AuthResult> task, String action) {
-//        if (task.isSuccessful()) {
-//            Gdx.app.log(action, "Successful");
-//        } else {
-//            Gdx.app.log(action, "Failed: " + task.getException().getMessage());
-//        }
-//    }
+    public void sendLocationToFirebase(double latitude, double longitude) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); //unique uid used by firebase only. =/= username
+
+        //set location
+        DatabaseReference locationRef = database.child("users").child(userId).child("location");
+
+        // Update location data
+        locationRef.child("latitude").setValue(latitude);
+        locationRef.child("longitude").setValue(longitude);
+    }
+
+
 }

@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.interfaces.AuthService;
+import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.screens.*;
-import com.mygdx.services.AuthService;
 
 
-public class DarwinsDuel extends Game {
+
+public class DarwinsDuel extends Game implements GameCommunication {
 	SpriteBatch batch;
 	Texture img;
 	private static DarwinsDuel instance;
@@ -30,23 +32,23 @@ public class DarwinsDuel extends Game {
 		LOSS
 	}
 
-	public static GameState gameState = GameState.LOGIN;
-
-	// should make variables above private
-	/*public void changeState(GameState gameState) {
-		this.gameState = gameState;
-	}
-	public static void setClient(Client client) {
-		client = client;
-	}*/
+	public static GameState gameState = GameState.FREEROAM;
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;
 		//this is an instance of FireBaseAuthServiceAndroid
 	}
 
-	public DarwinsDuel() {
+	public DarwinsDuel() { //unused. just for DesktopLauncher. unimportant
+	}
 
+	/**
+	 * Received id of the Player the this user intends to fight.
+	 * @param playerUserId id of enemy player
+	 */
+	@Override
+	public void onPlayerInfoReceived(String playerUserId) {
+		MyClient.sendBattleRequest(playerUserId);
 	}
 
 	@Override
@@ -77,24 +79,25 @@ public class DarwinsDuel extends Game {
 
 
 		switch (gameState) {
+			case LOGIN:
+				if (!(getScreen() instanceof LoginScreen)) {
+					System.out.println("Changing to LoginScreen");
+					this.setScreen(new LoginScreen(this));
+				}
+				break;
 			case FREEROAM:
-				if (!(getScreen() instanceof GameScreen)) {
-					this.setScreen(new GameScreen(this));
-					System.out.println("Changing to Gamescreen");
+				if (!(getScreen() instanceof MapScreen)) {
+					this.setScreen(new MapScreen(this));
+					System.out.println("Changing to MapScreen");
 				}
 				break;
 			case BATTLE:
 				if (!(getScreen() instanceof BattleScreen)) {
-					System.out.println("Changing to Battlescreen");
+					System.out.println("Changing to BattleScreen");
 					this.setScreen(new BattleScreen(this));
 				}
 				break;
-			case LOGIN:
-				if (!(getScreen() instanceof LoginScreen)) {
-					System.out.println("Changing to Loginscreen");
-					this.setScreen(new LoginScreen(this));
-				}
-				break;
+
 			case WIN:
 				break;
 			case LOSS:
