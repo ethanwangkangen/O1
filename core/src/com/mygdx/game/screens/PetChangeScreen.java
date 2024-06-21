@@ -121,20 +121,6 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void dispose() {
-        // Dispose of textures, skins, stages, and other resources
-        skin.dispose();
-        stage.dispose();
-        emptyBox.dispose(); // Assuming emptyBox is a Texture
-
-        // Dispose of Textures in buttonList1 and buttonList2
-        for (TextImageButton button : buttonList1) {
-            button.dispose();
-        }
-
-        for (TextImageButton button : buttonList2) {
-            button.dispose();
-        }
-
     }
 
     public void initialiseTopBar() {
@@ -202,7 +188,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList1() {
 
         for (Creature pet: pets1) {
-            TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+            TextImageButton button = new TextImageButton(pet, skin);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -217,7 +203,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList2() {
 
         for (Creature pet : pets2) {
-            TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+            TextImageButton button = new TextImageButton(pet, skin);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
