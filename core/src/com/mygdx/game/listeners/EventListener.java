@@ -2,6 +2,7 @@ package com.mygdx.game.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.global.*;
 import com.mygdx.game.handlers.*;
@@ -12,13 +13,10 @@ public class EventListener extends Listener {
         if (object instanceof BattleState) {
             BattleState joinObj = (BattleState) object;
             BattleHandler.updateBattleState(joinObj);
-            if (!joinObj.firstRound) {
+//            if (!joinObj.firstRound) {
                 BattleHandler.updatePetInfo = true;
-            }
+//            }
             System.out.println("Client has received the battleState");
-
-        } else if (object instanceof ServerStartBattleEvent) {
-            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
 
         } else if (object instanceof EndBattleEvent) {
             BattleHandler.battleEnd = true;
@@ -33,6 +31,12 @@ public class EventListener extends Listener {
             accept.opponentPlayer = PlayerHandler.getPlayer();
             accept.requesterPlayer = request.requesterPlayer;
             connection.sendTCP(accept);
+        } else if (object instanceof ServerStartBattleEvent) {
+            ServerStartBattleEvent event = (ServerStartBattleEvent) object;
+            BattleHandler.setBattleId(event.battleId);
+            BattleHandler.updateBattleState(event.battleState);
+            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
+            System.out.println("Client has received the StartBattleEvent");
         }
     }
 }

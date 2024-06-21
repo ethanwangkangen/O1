@@ -23,11 +23,9 @@ public class EventListener extends Listener {
             String battleId = attackEvent.battleId;
 
             BattleHandler.getBattleState(battleId).attack(attackEvent.id, attackEvent.skill);
-            System.out.println("Sending battleState");
             BattleHandler.sendBattleState(battleId);
 
             if (!BattleHandler.getBattleState(battleId).playersAlive()){
-                System.out.println("Sending EndBattleEvent");
                 BattleHandler.sendEndBattle(battleId);
             }
         }
@@ -38,7 +36,6 @@ public class EventListener extends Listener {
             String battleId = changePetEvent.battleId;
             BattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.pet);
 
-            System.out.println("Sending battleState");
             BattleHandler.sendBattleState(battleId);
         }
 
@@ -58,21 +55,9 @@ public class EventListener extends Listener {
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
 
             // create new battleState
-            Player p1Player = event.opponentPlayer;
-            Player p2Player = event.requesterPlayer;
-            String battleId = BattleHandler.initialiseBattle(p1Player, p2Player);
+            String battleId = BattleHandler.initialiseBattle(event.requesterPlayer, event.opponentPlayer);
 
-            ServerStartBattleEvent newEvent = new ServerStartBattleEvent();
-            newEvent.battleId = battleId;
-            BattleState newState = BattleHandler.getBattleState(battleId);
-            Connection connection1 = PlayerHandler.getConnectionById(newState.getPlayer1().getIdString());
-            Connection connection2 = PlayerHandler.getConnectionById(newState.getPlayer2().getIdString());
-
-            System.out.println("Sending start battle event");
-            connection1.sendTCP(newEvent);
-            connection2.sendTCP(newEvent);
-
-            //todo sk continue from here, send ServerStartBattleEvent to players etc.
+            BattleHandler.sendStartBattle(battleId);
         } else {
             System.out.println("unknown object received.");
         }

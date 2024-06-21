@@ -63,6 +63,7 @@ public class BattleScreen implements Screen {
 
     private Creature thisPet;
     private Creature opponentPet;
+    private final String battleId = BattleHandler.getBattleId();
 
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
@@ -358,6 +359,7 @@ public class BattleScreen implements Screen {
                 AttackEvent attackEvent = new AttackEvent();
                 attackEvent.id = myId;
                 attackEvent.skill = skill;
+                attackEvent.battleId = battleId;
                 System.out.println("This player is attacking");
                 DarwinsDuel.getClient().sendTCP(attackEvent);
                 skillButton.setTouchable(Touchable.disabled);
@@ -375,6 +377,7 @@ public class BattleScreen implements Screen {
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET1;
                     changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet1");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
@@ -389,6 +392,7 @@ public class BattleScreen implements Screen {
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET2;
                     changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet2");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
@@ -403,6 +407,7 @@ public class BattleScreen implements Screen {
                     ChangePetEvent changePetEvent = new ChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET3;
                     changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet3");
                     DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);

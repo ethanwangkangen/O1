@@ -9,7 +9,6 @@ public class BattleState{
 
     //public static final BattleState INSTANCE = new BattleState();
     private Player player1, player2;
-    private String p1UID, p2UID;
 
     public enum Turn {
         PLAYERONETURN,
@@ -20,7 +19,7 @@ public class BattleState{
     private int numPlayers;
     private Boolean battleStarted;
     public Boolean battleEnded;
-    public Boolean firstRound;
+//    public Boolean firstRound;
     public Boolean petChanged;
     public Boolean petAttacked;
     private int numofTurns;
@@ -31,7 +30,7 @@ public class BattleState{
         this.numofTurns = 1;
         battleStarted = false;
         battleEnded = false;
-        firstRound = true;
+//        firstRound = true;
         petChanged = false;
         petAttacked = false;
     }
@@ -42,7 +41,7 @@ public class BattleState{
         this.numofTurns = 1;
         battleStarted = false;
         battleEnded = false;
-        firstRound = true;
+//        firstRound = true;
         petChanged = false;
         petAttacked = false;
 
@@ -145,12 +144,13 @@ public class BattleState{
     }
 
     public void update(BattleState newState) {
+        // for updating client's battleState with newState during battle
         player1.update(newState.player1);
         player2.update(newState.player2);
         turn = newState.turn;
         battleEnded = newState.battleEnded;
         battleStarted = newState.battleStarted;
-        firstRound = newState.firstRound;
+//        firstRound = newState.firstRound;
         petChanged = newState.petChanged;
         petAttacked = newState.petAttacked;
     }
