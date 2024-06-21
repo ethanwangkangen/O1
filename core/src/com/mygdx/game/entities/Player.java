@@ -157,21 +157,27 @@ public class Player extends Entity implements Serializable{
     }
 
     public void update(Player player) {
+        // to update pet info during battle
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             Creature playerPet = player.getBattlePets().get(i);
             if (pet != null && playerPet != null) {
                 pet.update(playerPet);
-                if (i == 1) {
-                    System.out.println("Crocs health is:" + playerPet.getHealth());
-                }
             }
         }
         changePet(player.getPet());
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        // to update pet info after PetChangeScreen
         battlePets = pets1;
+
+        // todo pets1 is currently empty. To fix
+        System.out.print("Updating pets: ");
+        for (Creature pet : pets1) {
+            System.out.println(pet.getName() + ", ");
+        }
+        System.out.println();
         reservePets = pets2;
 
     }
