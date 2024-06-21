@@ -13,9 +13,7 @@ public class EventListener extends Listener {
         if (object instanceof BattleState) {
             BattleState joinObj = (BattleState) object;
             BattleHandler.updateBattleState(joinObj);
-//            if (!joinObj.firstRound) {
-                BattleHandler.updatePetInfo = true;
-//            }
+            BattleHandler.updatePetInfo = true;
             System.out.println("Client has received the battleState");
 
         } else if (object instanceof EndBattleEvent) {
