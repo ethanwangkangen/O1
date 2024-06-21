@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.DarwinsDuel;
-import com.mygdx.game.oldEvents.StartBattleEvent;
+import com.mygdx.global.StartBattleEvent;
 
 public class GameScreen implements Screen {
 

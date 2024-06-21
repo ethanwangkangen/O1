@@ -2,9 +2,13 @@ package com.mygdx.game.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
+import com.mygdx.game.oldEvents.EndBattleEvent;
+import com.mygdx.global.BattleState;
+import com.mygdx.global.StartBattleEvent;
 
 public class UserEventListener extends Listener {
 
@@ -17,11 +21,29 @@ public class UserEventListener extends Listener {
             //note: here "I" am the "opponent"
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
             PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
-            accept.opponentUID = request.opponentUID;
-            accept.requesterUID = request.requesterUID;
             accept.opponentPlayer = UserPlayerHandler.getPlayer();
             accept.requesterPlayer = request.requesterPlayer;
             connection.sendTCP(accept);
+        }
+
+        if (object instanceof StartBattleEvent) {
+            StartBattleEvent event = (StartBattleEvent) object;
+            UserBattleHandler.setBattleId(event.battleId);
+            UserBattleHandler.updateBattleState(event.battleState);
+            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
+            System.out.println("Client has received the StartBattleEvent");
+        }
+
+        if (object instanceof BattleState) {
+            BattleState joinObj = (BattleState) object;
+            UserBattleHandler.updateBattleState(joinObj);
+            UserBattleHandler.updatePetInfo = true;
+            System.out.println("Client has received the battleState");
+        }
+
+        if (object instanceof EndBattleEvent) {
+            UserBattleHandler.battleEnd = true;
+            System.out.println("Client has received EndBattleEvent");
         }
     }
 //    public void received(Connection connection, final Object object) {
@@ -42,10 +64,6 @@ public class UserEventListener extends Listener {
 //            AddPlayerEvent joinObj = (AddPlayerEvent) object;
 //            PlayerHandler.updatePlayer(joinObj.getPlayer());
 //            System.out.println("Client has received the Player Info");
-//
-//            // todo change to game screen
-//        } else if (object instanceof StartBattleEvent) {
-//            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
 //
 //        } else if (object instanceof EndBattleEvent) {
 //            BattleHandler.battleEnd = true;

@@ -50,6 +50,7 @@ public class UserPlayerHandler {
     }
 
     public static void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        // update player info from PetChangeScreen
         player.updatePets(pets1, pets2);
     }
 
