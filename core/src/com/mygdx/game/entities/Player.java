@@ -90,9 +90,9 @@ public class Player extends Entity implements Serializable{
 //        CurrentPet = battlePets[target];
 //    }
 
-    public void loadTexture() {
-        texturePath = new Texture(path);
-    }
+//    public void loadTexture() {
+//        texturePath = new Texture(path);
+//    }
     public Texture getTexture() {
         return texturePath;
     }
@@ -109,27 +109,27 @@ public class Player extends Entity implements Serializable{
         return this.username;
     }
 
-    public void loadTextures(Runnable callback) {
-        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
-
-        // Load textures for each pet
-        int petNum = battlePets.size() + reservePets.size();
-
-        for (Creature pet : battlePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-        for (Creature pet : reservePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-    }
+//    public void loadTextures(Runnable callback) {
+//        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
+//
+//        // Load textures for each pet
+//        int petNum = battlePets.size() + reservePets.size();
+//
+//        for (Creature pet : battlePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//        for (Creature pet : reservePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//    }
 
     public void changePet(Pet pet) {
         int index = pet.ordinal();

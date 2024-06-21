@@ -29,15 +29,15 @@ public class BattleHandler {
         return battleState.hasStarted();
     }
 
-    public static void loadTextures(Runnable callback) {
-        try{
-            battleState.loadTextures(callback);
-            System.out.println("Battlehandler textures loading");
-        } catch (Exception e) {
-            System.err.println("BattleHandler texture loading error");
-
-        }
-    }
+//    public static void loadTextures(Runnable callback) {
+//        try{
+//            battleState.loadTextures(callback);
+//            System.out.println("Battlehandler textures loading");
+//        } catch (Exception e) {
+//            System.err.println("BattleHandler texture loading error");
+//
+//        }
+//    }
 
     public static Player getPlayer1() {
         return battleState.getPlayer1();

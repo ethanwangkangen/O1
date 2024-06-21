@@ -125,13 +125,13 @@ public class BattleState{
 //        }
     }
 
-    public void loadTextures(Runnable callback) {
-        player1.loadTextures(() -> {
-            player2.loadTextures(callback);
-        });
-        System.out.println("battlestate textures loading");
-
-    }
+//    public void loadTextures(Runnable callback) {
+//        player1.loadTextures(() -> {
+//            player2.loadTextures(callback);
+//        });
+//        System.out.println("battlestate textures loading");
+//
+//    }
 
     public void changePet(String id, Player.Pet pet) {
         if (Objects.equals(player1.getIdString(), id)) {

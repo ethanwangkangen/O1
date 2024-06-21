@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
@@ -15,7 +16,6 @@ import com.mygdx.game.handlers.BattleHandler;
 import com.mygdx.game.handlers.PlayerHandler;
 import com.mygdx.global.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
@@ -23,10 +23,13 @@ import java.util.Objects;
 
 
 public class BattleScreen implements Screen {
-    private Stage stage;
     private String myId = PlayerHandler.getIdString(); //playerId of current player
     private Player thisPlayer;
     private Player opponentPlayer;
+    private Creature thisPet;
+    private Creature opponentPet;
+    private final String battleId = BattleHandler.getBattleId();
+
     private FlippedImage pet1Image;
     private Image pet2Image;
     private Label pet1Level;
@@ -37,33 +40,33 @@ public class BattleScreen implements Screen {
     private Label health2;
     private ProgressBar healthBar1;
     private ProgressBar healthBar2;
+
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
-    private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-    private Texture crossedBox = new Texture("crossedbox.png");
-    private Label winLabel;
-    private Label loseLabel;
-    private Label turnLabel;
     private TextButton changeSkillButton;
     private TextButton changePetButton;
     private ArrayList<TextImageButton> petButtons= new ArrayList<>();
     private Boolean[] petAvailable = {false, false, false};
 
+    private Label winLabel;
+    private Label loseLabel;
+    private Label turnLabel;
+
+    private Skin skin;
+    private Stage stage;
+    private Texture crossedBox;
+    private AssetManager manager = DarwinsDuel.getInstance().getAssetManager();
 
     private Table winOrLoseTable = new Table(); // todo using addActor, overlay this when win/lose
-    private Table bgTable = new Table(); //background + battlePets + usernames
-    private Table pet1Info = new Table();
-    private Table pet2Info = new Table();
-    private Table pet1imageTable = new Table();
-    private Table pet2imageTable = new Table();
-    private Window skillsWindow = new Window("Skills", skin);
-    private Window petsWindow = new Window("Pets", skin);
-    private Table changeTable = new Table();
-    private Stack stack = new Stack();
-
-    private Creature thisPet;
-    private Creature opponentPet;
-    private final String battleId = BattleHandler.getBattleId();
+    private Table bgTable; //background + battlePets + usernames
+    private Table pet1Info;
+    private Table pet2Info;
+    private Table pet1imageTable;
+    private Table pet2imageTable;
+    private Window skillsWindow;
+    private Window petsWindow;
+    private Table changeTable;
+    private Stack stack;
 
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
@@ -81,48 +84,47 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
-        System.out.println("show() run");
-        //load textures
-        BattleHandler.loadTextures(() -> {
-            System.out.println("finished loading all textures");
+        manager = DarwinsDuel.getInstance().getAssetManager();
+        skin = manager.get("buttons/uiskin.json", Skin.class);
+        crossedBox = manager.get("crossedbox.png", Texture.class);
+        //set Players, Creatures, etc.
+        initialisePlayers();
 
-            //set Players, Creatures, etc.
-            initialisePlayers();
+        //initialise UI elements
+        initialiseBgTable();
+        initialisePetInfo();
+        initialisePetImages();
+        initialiseSkillsWindow();
+        initialiseChangeButtons();
+        initialisePetsWindow();
 
-            //initialise UI elements
-            initialiseBgTable();
-            initialisePetInfo();
-            initialisePetImages();
-            initialiseSkillsWindow();
-            initialiseChangeButtons();
-            initialisePetsWindow();
+        //then add all the tables to the stage
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setBackground(new TextureRegionDrawable(manager.get("border.png", Texture.class)));
 
-            //then add all the tables to the stage
-            Table table = new Table();
-            table.setFillParent(true);
-            table.setBackground(new TextureRegionDrawable(new Texture("border.png")));
-            table.add(petsWindow).bottom().center();
+        table.add(petsWindow).bottom().center();
 
-            stack.add(bgTable);
-            stack.add(table);
-            stack.setFillParent(true);
-            stage.addActor(stack);
+        stack = new Stack();
+        stack.add(bgTable);
+        stack.add(table);
+        stack.setFillParent(true);
+        stage.addActor(stack);
 
-            turnLabel = new Label("Testing", skin);
-            bgTable.add(turnLabel).center().colspan(3).top().expandY();
-            bgTable.row();
+        turnLabel = new Label("Testing", skin);
+        bgTable.add(turnLabel).center().colspan(3).top().expandY();
+        bgTable.row();
 
-            bgTable.add(pet1Info).left();
-            bgTable.add(pet2Info).right().expandX();
-            bgTable.row();
+        bgTable.add(pet1Info).left();
+        bgTable.add(pet2Info).right().expandX();
+        bgTable.row();
 
-            bgTable.add(pet1imageTable).left().expandY().padLeft(10);
-            bgTable.add(pet2imageTable).right().padRight(10);
-            bgTable.row();
+        bgTable.add(pet1imageTable).left().expandY().padLeft(10);
+        bgTable.add(pet2imageTable).right().padRight(10);
+        bgTable.row();
 
-            bgTable.add(changeTable).expandY().bottom();
-            bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
-        });
+        bgTable.add(changeTable).expandY().bottom();
+        bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
         stage.setDebugAll(true);
     }
     public void initialisePlayers() {
@@ -140,12 +142,15 @@ public class BattleScreen implements Screen {
 
     public void initialiseBgTable() {
         System.out.println("initialising BG table");
-        Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("Pixel_art_grass_image.png")));
-        bgTable.setBackground(background);
+        bgTable = new Table();
+        bgTable.setBackground(new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class)));
         bgTable.setFillParent(true);
     }
 
     public void initialisePetImages() {
+        pet1imageTable = new Table();
+        pet2imageTable = new Table();
+
         pet1imageTable.clear();
         pet2imageTable.clear();
 
@@ -158,6 +163,9 @@ public class BattleScreen implements Screen {
     }
 
     public void initialisePetInfo() {
+        pet1Info = new Table();
+        pet2Info = new Table();
+
         pet1Info.clear();
         pet2Info.clear();
 
@@ -198,6 +206,7 @@ public class BattleScreen implements Screen {
     }
 
     public void initialiseChangeButtons() {
+        changeTable = new Table();
         changePetButton = new TextButton("Pets", skin);
         changeSkillButton = new TextButton("Attack", skin);
 
@@ -226,6 +235,7 @@ public class BattleScreen implements Screen {
     }
 
     public void initialiseSkillsWindow() {
+        skillsWindow = new Window("Skills", skin);
         skillsWindow.clear();
         skillButtons.clear();
 
@@ -270,6 +280,7 @@ public class BattleScreen implements Screen {
     }
 
     public void initialisePetsWindow() {
+        petsWindow = new Window("Pets", skin);
         petsWindow.clear();
         petButtons.clear();
         for (int i = 0; i < 3; i ++) {
@@ -439,12 +450,10 @@ public class BattleScreen implements Screen {
             // pet change has occurred
             if (BattleHandler.petChanged()) {
                 System.out.println("A pet change has occurred.");
-                opponentPet.loadTexture(() -> {
-                    initialisePetInfo();
-                    initialisePetImages();
-                    initialiseSkillsWindow();
-                    initialisePetsWindow();
-                });
+                initialisePetInfo();
+                initialisePetImages();
+                initialiseSkillsWindow();
+                initialisePetsWindow();
             }
             BattleHandler.updatePetInfo = false;
         }

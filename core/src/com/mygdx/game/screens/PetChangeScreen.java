@@ -64,7 +64,6 @@ public class PetChangeScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        PlayerHandler.loadTextures(() -> {
             System.out.println("test1");
             initialiseScrollPanes();
             createButtonList1();
@@ -82,7 +81,6 @@ public class PetChangeScreen implements Screen {
             table.add(pane2).expand().row();
 
             stage.addActor(table);
-        });
         stage.setDebugAll(true);
         System.out.println("Petchangescreen shown");
     }
@@ -320,6 +318,9 @@ public class PetChangeScreen implements Screen {
                      + "\nselectedButton1: " + button.getText()
                      + "\nlastClickedButton: " + lastClickedButton.getText());
             return;
+        } else if (lastClickedButton.getText().equals("No pet") || button.getText().equals("No pet")) {
+            System.out.println("Cannot swap empty button"); // changed
+            return;
         }
 
         // Swap the buttons
@@ -348,7 +349,7 @@ public class PetChangeScreen implements Screen {
         buttonList1.remove(selectedButton1);
         buttonList2.remove(selectedButton2);
 
-        if (!selectedButton1.getText().toString().equals("No pet")) {
+        if (!selectedButton1.getText().equals("No pet")) {
             // selectedButton1 is not an emptyButton
             buttonList2.add(selectedButton1);
         }

@@ -3,6 +3,8 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.DarwinsDuel;
+
 import java.io.Serializable;
 import java.util.concurrent.CompletableFuture;
 
@@ -80,33 +82,35 @@ public abstract class Creature extends Entity implements Serializable{
 
 
 
-    public void loadTexture(Runnable callback) {
-        Gdx.app.postRunnable(() -> {
-            try {
-                System.out.println("loading texture of creature");
-                System.out.println("path is: " + path);
-                this.texturePath = new Texture(path);
-                if (this.texturePath == null) {
-                    System.out.println("texturePath is null????");
-                } else {
-                    System.out.println("texturePath ok");
-                }
-                if (callback != null) {
-                    callback.run();
-                }
-                System.out.println("finished loading creature texture");
-
-            } catch (Exception e) { // Catching general Exception for simplicity
-                System.out.println(e.getMessage());
-                System.out.println("Creature texture not loaded");
-            }
-        });
-    }
+//    public void loadTexture(Runnable callback) {
+//        Gdx.app.postRunnable(() -> {
+//            try {
+//                System.out.println("loading texture of creature");
+//                System.out.println("path is: " + path);
+//                this.texturePath = new Texture(path);
+//                if (this.texturePath == null) {
+//                    System.out.println("texturePath is null????");
+//                } else {
+//                    System.out.println("texturePath ok");
+//                }
+//                if (callback != null) {
+//                    callback.run();
+//                }
+//                System.out.println("finished loading creature texture");
+//
+//            } catch (Exception e) { // Catching general Exception for simplicity
+//                System.out.println(e.getMessage());
+//                System.out.println("Creature texture not loaded");
+//            }
+//        });
+//    }
     public Texture getTexturePath() {
-        if (texturePath == null) {
-            System.out.println("Cannot find texturePath: " + name);
+        try {
+            return DarwinsDuel.getInstance().manager.get(path, Texture.class);
+        } catch (Exception e) {
+            System.err.println("Cannot find texturePath: " + name);
+            return null;
         }
-        return texturePath;
     }
 
     public int getMaxhealth() {
