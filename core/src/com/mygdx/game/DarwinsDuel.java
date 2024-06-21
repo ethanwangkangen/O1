@@ -2,9 +2,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
@@ -20,6 +21,7 @@ public class DarwinsDuel extends Game {
 	public static Client client;
 
 	public AuthService authService;
+	public AssetManager manager = new AssetManager();
 
 	float y = 0;
 
@@ -29,10 +31,11 @@ public class DarwinsDuel extends Game {
 		LOGIN,
 		PETCHANGE,
 		WIN,
-		LOSS
+		LOSS,
+		SPLASH
 	}
 
-	public static GameState gameState = GameState.LOGIN;
+	public static GameState gameState = GameState.SPLASH;
 
 	// should make variables above private
 	/*public void changeState(GameState gameState) {
@@ -59,7 +62,7 @@ public class DarwinsDuel extends Game {
 
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, 800, 600);
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(new SplashScreen(this));
 
 	}
 
@@ -103,6 +106,10 @@ public class DarwinsDuel extends Game {
 				break;
 			case LOSS:
 				break;
+			case SPLASH:
+				if (!(getScreen() instanceof SplashScreen)) {
+					this.setScreen(new SplashScreen(this));
+				}
 		}
 
 		super.render();
@@ -142,4 +149,30 @@ public class DarwinsDuel extends Game {
 	public static Client getClient() {
 		return client;
 	}
+
+	public void loadTextures()
+	{
+		// UI assets
+		;
+		manager.load("buttons/uiskin.json", Skin.class);
+
+		// background textures
+		manager.load("border.png", Texture.class);
+		manager.load("crossedbox.png", Texture.class);
+		manager.load("mainscreen.png", Texture.class);
+		manager.load("Pixel_art_grass_image.png", Texture.class);
+
+		// Creatures textures
+		manager.load("badlogic.jpg", Texture.class);
+		manager.load("croc lesnar.png", Texture.class);
+		manager.load("froggy.png", Texture.class);
+		manager.load("meowmad_ali.png", Texture.class);
+
+		manager.load("player1(1).png", Texture.class);
+	}
+
+	public AssetManager getAssetManager() {
+		return manager;
+	}
+
 }

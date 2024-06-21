@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,12 +30,12 @@ public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
 
     private final Stage stage;
-    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
-    final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+    private final Skin skin;
+    private AssetManager manager;
 
-    private final Table loginTable = new Table();
-    private final Table signupTable = new Table();
-    private final Table bgTable = new Table();
+    private Table loginTable;
+    private Table signupTable;
+    private Table bgTable;
 
     // UI for login
     private Label loginLabel;
@@ -64,6 +65,8 @@ public class LoginScreen implements Screen {
 
         System.out.println("LoginScreen created");
         stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        manager = DarwinsDuel.getInstance().getAssetManager();
+        skin = manager.get("buttons/uiskin.json");
 
         initialiseErrorLabel();
         initialiseBgTable();
@@ -83,8 +86,9 @@ public class LoginScreen implements Screen {
     }
 
     public void initialiseBgTable() {
+        bgTable = new Table();
         bgTable.setFillParent(true);
-        bgTable.setBackground(background);
+        bgTable.setBackground(new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class)));
     }
 
     public void initialiseErrorLabel() {
@@ -94,6 +98,7 @@ public class LoginScreen implements Screen {
 
     public void initialiseLoginTable() {
         // login table
+        loginTable = new Table();
         loginTable.setFillParent(true);
 
         loginLabel = new Label("Login", skin);
@@ -149,6 +154,7 @@ public class LoginScreen implements Screen {
 
     public void initialiseSignUpTable() {
         // sign up table
+        signupTable = new Table();
         signupTable.setFillParent(true);
 
         signUpLabel = new Label("Sign Up", skin);
