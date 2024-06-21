@@ -2,13 +2,12 @@ package com.mygdx.server;
 
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.events.PlayerAttackEvent;
+import com.mygdx.game.events.PlayerChangePetEvent;
+import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.*;
 import com.mygdx.server.handlers.ServerPlayerHandler;
 import com.mygdx.server.listeners.ServerEventListener;
-import com.esotericsoftware.kryonet.Connection;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import java.io.IOException;
 
@@ -25,17 +24,17 @@ public class ServerFoundation {
     public ServerFoundation() {
         this.server = new Server();
 
-        server.getKryo().register(UUID.class,  new UUIDSerializer());
+//        server.getKryo().register(UUID.class,  new UUIDSerializer());
 
         // Add all global events
 //        server.getKryo().register(AddPlayerEvent.class);
-        server.getKryo().register(AttackEvent.class);
+        server.getKryo().register(PlayerAttackEvent.class);
         server.getKryo().register(BattleState.class);
         server.getKryo().register(EndBattleEvent.class);
 //        server.getKryo().register(JoinRequestEvent.class);
 //        server.getKryo().register(JoinResponseEvent.class);
         server.getKryo().register(StartBattleEvent.class);
-        server.getKryo().register(ChangePetEvent.class);
+        server.getKryo().register(PlayerChangePetEvent.class);
 //        server.getKryo().register(java.util.UUID.class);
 
         server.getKryo().register(Player.class);

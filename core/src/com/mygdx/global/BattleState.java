@@ -45,8 +45,8 @@ public class BattleState{
         petChanged = false;
         petAttacked = false;
 
-        this.player1 = p1Player;
-        this.player2 = p2Player;
+        this.p1Player = p1Player;
+        this.p2Player = p2Player;
     }
 
     public int getNumPlayers() {

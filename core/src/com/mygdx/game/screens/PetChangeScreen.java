@@ -37,7 +37,7 @@ public class PetChangeScreen implements Screen {
 
     // to be located on the right side of the screen
     // for pets that are in player's storage
-    private ArrayList<Creature> pets2 = PlayerHandler.getReservePets();
+    private ArrayList<Creature> pets2 = UserPlayerHandler.getReservePets();
     private ScrollPane pane2;
     private Table table2;
     private ArrayList<TextImageButton> buttonList2 = new ArrayList<>();
@@ -57,7 +57,7 @@ public class PetChangeScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        PlayerHandler.loadTextures(() -> {
+        UserPlayerHandler.loadTextures(() -> {
             System.out.println("test1");
             initialiseScrollPanes();
             createButtonList1();

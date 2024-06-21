@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.events.PlayerRequestBattleEvent;
+import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.StartBattleEvent;
 
 public class GameScreen implements Screen {
@@ -19,6 +21,7 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
     private TextButton startBattle;
+    private TextButton changePet;
     private Stage stage;
     private Table table;
 
@@ -44,7 +47,7 @@ public class GameScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
 //                playerRequestBattleEvent.opponentUID = userId;
-                playerRequestBattleEvent.requesterPlayer = PlayerHandler.getPlayer();
+                playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
                 DarwinsDuel.client.sendTCP(playerRequestBattleEvent);
                 System.out.println("Sending PlayerRequestBattleEvent");
                 return super.touchDown(event, x, y, pointer, button);

@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class PlayerHandler {
+public class ServerPlayerHandler {
 
     public static Map<String, Connection> connectionTable;
 
 
-    public PlayerHandler() {
+    public ServerPlayerHandler() {
         connectionTable = new HashMap<>();
     };
 

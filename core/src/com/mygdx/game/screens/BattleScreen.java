@@ -65,7 +65,7 @@ public class BattleScreen implements Screen {
 
     private Creature thisPet;
     private Creature opponentPet;
-    private final String battleId = BattleHandler.getBattleId();
+    private final String battleId = UserBattleHandler.getBattleId();
 
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
@@ -358,7 +358,7 @@ public class BattleScreen implements Screen {
         skillButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                AttackEvent attackEvent = new AttackEvent();
+                PlayerAttackEvent attackEvent = new PlayerAttackEvent();
                 attackEvent.id = myId;
                 attackEvent.skill = skill;
                 attackEvent.battleId = battleId;
@@ -376,7 +376,7 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET1;
                     changePetEvent.playerId = myId;
                     changePetEvent.battleId = battleId;
@@ -391,7 +391,7 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET2;
                     changePetEvent.playerId = myId;
                     changePetEvent.battleId = battleId;
@@ -406,7 +406,7 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.pet = Player.Pet.PET3;
                     changePetEvent.playerId = myId;
                     changePetEvent.battleId = battleId;

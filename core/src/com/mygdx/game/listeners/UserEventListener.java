@@ -6,7 +6,7 @@ import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
-import com.mygdx.game.oldEvents.EndBattleEvent;
+import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.StartBattleEvent;
 

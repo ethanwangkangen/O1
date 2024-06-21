@@ -26,6 +26,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 	public enum GameState {
 		FREEROAM,
+		PETCHANGE,
 		BATTLE,
 		LOGIN,
 		WIN,
@@ -93,6 +94,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 					this.setScreen(new LoginScreen(this));
 				}
 				break;
+			case PETCHANGE:
+				if (!(getScreen() instanceof PetChangeScreen)) {
+					this.setScreen(new MapScreen(this));
+					System.out.println("Changing to PetChangeScreen");
+			}
 			case FREEROAM:
 				if (!(getScreen() instanceof MapScreen)) {
 					this.setScreen(new MapScreen(this));

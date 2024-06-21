@@ -28,8 +28,6 @@ public class Player extends Entity implements Serializable{
     private String path;
     private Pet currentPet;
 
-    private Creature[] pets = {pet1, pet2, pet3};
-
     public enum Pet {
         PET1,
         PET2,
