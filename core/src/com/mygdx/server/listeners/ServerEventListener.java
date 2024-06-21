@@ -30,7 +30,6 @@ public class ServerEventListener extends Listener {
             System.out.println("Player has requested to fight an opponent.");
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
             String opponentUID = request.opponentUID;
-            String requesterUID = request.requesterUID;
 
             Connection enemyConnection = ServerPlayerHandler.connectionTable.get(opponentUID);
             enemyConnection.sendTCP(request);

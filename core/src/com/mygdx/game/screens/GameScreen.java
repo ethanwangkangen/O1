@@ -46,7 +46,9 @@ public class GameScreen implements Screen {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
-//                playerRequestBattleEvent.opponentUID = userId;
+
+                // todo playerRequestBattleEvent.opponentUID = ??
+
                 playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
                 DarwinsDuel.client.sendTCP(playerRequestBattleEvent);
                 System.out.println("Sending PlayerRequestBattleEvent");
