@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,24 +23,25 @@ import static com.badlogic.gdx.utils.Align.center;
 
 public class PetChangeScreen implements Screen {
     private Stage stage;
-    private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+    private Skin skin;
     private Table table;
-    Stack stack = new Stack();
-    private Texture emptyBox = new Texture("crossedbox.png");
+    Stack stack;
+    private Texture emptyBox;
+    private AssetManager manager;
 
     // to be located on the left side of the screen
     // for battlePets that will be carried into battle by the player
     private ArrayList<Creature> pets1 = PlayerHandler.getBattlePets();
     private ScrollPane pane1;
     private Table table1;
-    private ArrayList<TextImageButton> buttonList1 = new ArrayList<>();
+    private ArrayList<TextImageButton> buttonList1;
 
     // to be located on the right side of the screen
     // for battlePets that are in player's storage
     private ArrayList<Creature> pets2 = PlayerHandler.getReservePets();
     private ScrollPane pane2;
     private Table table2;
-    private ArrayList<TextImageButton> buttonList2 = new ArrayList<>();
+    private ArrayList<TextImageButton> buttonList2;
 
     private TextImageButton selectedButton1 = null;
     private TextImageButton selectedButton2 = null;
@@ -50,6 +52,12 @@ public class PetChangeScreen implements Screen {
         System.out.println("PetChangeScreen created");
 
         stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        buttonList1 = new ArrayList<>();
+        buttonList2 = new ArrayList<>();
+
+        manager = DarwinsDuel.getInstance().getAssetManager();
+        skin = manager.get("buttons/uiskin.json", Skin.class);
+        emptyBox = manager.get("crossedbox.png", Texture.class);
     }
 
     @Override
@@ -133,7 +141,7 @@ public class PetChangeScreen implements Screen {
 
     public void initialiseTopBar() {
         // Stack to overlay the label and the back button
-
+        stack = new Stack();
         // Create the label for "Pet Change" and add it to the stack
         Label petChangeLabel = new Label("Pet Change", skin);
         petChangeLabel.setAlignment(center);
