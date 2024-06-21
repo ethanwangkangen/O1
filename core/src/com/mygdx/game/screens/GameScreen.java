@@ -42,12 +42,25 @@ public class GameScreen implements Screen {
         this.startBattle.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                DarwinsDuel.getClient().sendTCP(new StartBattleEvent());
-                System.out.println("StartBattleEvent sent");
+                PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
+//                playerRequestBattleEvent.opponentUID = userId;
+                playerRequestBattleEvent.requesterPlayer = PlayerHandler.getPlayer();
+                DarwinsDuel.client.sendTCP(playerRequestBattleEvent);
+                System.out.println("Sending PlayerRequestBattleEvent");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
+        changePet = new TextButton("Change battlePets", skin);
+        changePet.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                DarwinsDuel.gameState = DarwinsDuel.GameState.PETCHANGE;
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        table.add(changePet).size(250, 50).padTop(100).row();
         this.table.add(startBattle).size(250, 50).padTop(100).row();
         this.stage.addActor(this.table);
     }

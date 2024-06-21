@@ -37,7 +37,7 @@ public class PetChangeScreen implements Screen {
 
     // to be located on the right side of the screen
     // for pets that are in player's storage
-    private ArrayList<Creature> pets2 = UserPlayerHandler.getReservePets();
+    private ArrayList<Creature> pets2 = PlayerHandler.getReservePets();
     private ScrollPane pane2;
     private Table table2;
     private ArrayList<TextImageButton> buttonList2 = new ArrayList<>();
@@ -57,25 +57,27 @@ public class PetChangeScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
-        System.out.println("test1");
-        initialiseScrollPanes();
-        createButtonList1();
-        createButtonList2();
-        refreshTables();
-        initialiseTopBar();
+        PlayerHandler.loadTextures(() -> {
+            System.out.println("test1");
+            initialiseScrollPanes();
+            createButtonList1();
+            createButtonList2();
+            refreshTables();
+            initialiseTopBar();
 
-        table = new Table();
-        table.setFillParent(true);
+            table = new Table();
+            table.setFillParent(true);
 
-        table.add(stack).colspan(2).fillX().center().row();
-        table.add(new Label("Battle Pets", skin)).padTop(10);
-        table.add(new Label("Reserve Pets", skin)).row();
-        table.add(pane1).expand();
-        table.add(pane2).expand().row();
+            table.add(stack).colspan(2).fillX().center().row();
+            table.add(new Label("Battle Pets", skin)).padTop(10);
+            table.add(new Label("Reserve Pets", skin)).row();
+            table.add(pane1).expand();
+            table.add(pane2).expand().row();
 
-        stage.addActor(table);
-
-//        stage.setDebugAll(true);
+            stage.addActor(table);
+        });
+        stage.setDebugAll(true);
+        System.out.println("Petchangescreen shown");
     }
 
     @Override
@@ -297,6 +299,8 @@ public class PetChangeScreen implements Screen {
     private void swapList1Buttons(TextImageButton button) {
         int index1 = buttonList1.indexOf(button);
         int index2 = buttonList1.indexOf(lastClickedButton);
+        System.out.println("Index1: " + index1);
+        System.out.println("Index2: " + index2);
 
         if (index1 == -1) {
             System.err.println("Error: selectedButton1 not found in buttonList1: " + button.getText());
@@ -306,8 +310,8 @@ public class PetChangeScreen implements Screen {
             return;
         } else if (index1 == index2) {
             System.err.println("Error lastClickedButton and selectedButton1 have the same index:"
-                    + "\nselectedButton1: " + button.getText()
-                    + "\nlastClickedButton: " + lastClickedButton.getText());
+                     + "\nselectedButton1: " + button.getText()
+                     + "\nlastClickedButton: " + lastClickedButton.getText());
             return;
         }
 

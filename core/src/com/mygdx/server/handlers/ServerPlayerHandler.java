@@ -1,27 +1,27 @@
 package com.mygdx.server.handlers;
 
-import com.mygdx.game.entities.Player;
+import com.esotericsoftware.kryonet.Connection;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
+public class PlayerHandler {
+
+    public static Map<String, Connection> connectionTable;
 
 
-/**
- * Is this even necessary anymore?
- */
-public class ServerPlayerHandler {
-
-    static public Player player1;
-    static public Player player2;
-
-    public ServerPlayerHandler() {
-        player1 = null;
-        player2 = null;
+    public PlayerHandler() {
+        connectionTable = new HashMap<>();
     };
 
-    public void addPlayer(Player player) {
-        if (player1 == null) {
-            player1 = player;
-        } else if (player2 == null) {
-            player2 = player;
-        }
+    public static void addPlayer(String userId, Connection connection) {
+        connectionTable.put(userId, connection);
+    }
+
+
+    public static Connection getConnectionById(String id) {
+        return connectionTable.get(id);
     }
 
 

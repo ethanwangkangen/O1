@@ -1,5 +1,6 @@
 package com.mygdx.game.handlers;
 
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.global.BattleState;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -32,8 +33,10 @@ public class UserBattleHandler {
     public static void loadTextures(Runnable callback) {
         try{
             battleState.loadTextures(callback);
-            System.out.println("battlehandler textures loading");
+            System.out.println("Battlehandler textures loading");
         } catch (Exception e) {
+            System.err.println("BattleHandler texture loading error");
+
         }
     }
 

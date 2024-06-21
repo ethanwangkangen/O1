@@ -32,7 +32,15 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		LOSS
 	}
 
-	public static GameState gameState = GameState.FREEROAM;
+	public static GameState gameState = GameState.LOGIN;
+
+	// should make variables above private
+	/*public void changeState(GameState gameState) {
+		this.gameState = gameState;
+	}
+	public static void setClient(Client client) {
+		client = client;
+	}*/
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;

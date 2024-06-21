@@ -42,7 +42,7 @@ public class BattleScreen implements Screen {
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
     private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-    private Texture crossedBox = new Texture("crossedBox.png");
+    private Texture crossedBox = new Texture("crossedbox.png");
     private Label winLabel;
     private Label loseLabel;
     private Label turnLabel;
@@ -53,7 +53,7 @@ public class BattleScreen implements Screen {
 
 
     private Table winOrLoseTable = new Table(); // todo using addActor, overlay this when win/lose
-    private Table bgTable = new Table(); //background + pets + usernames
+    private Table bgTable = new Table(); //background + battlePets + usernames
     private Table pet1Info = new Table();
     private Table pet2Info = new Table();
     private Table pet1imageTable = new Table();
@@ -65,6 +65,7 @@ public class BattleScreen implements Screen {
 
     private Creature thisPet;
     private Creature opponentPet;
+    private final String battleId = BattleHandler.getBattleId();
 
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
@@ -277,6 +278,7 @@ public class BattleScreen implements Screen {
             petAvailable[i] = false;
         }
         System.out.println("initialising initialisePetsWindow");
+
         TextImageButton pet1 = createPetButton(thisPlayer.getBattlePets().get(0));
         TextImageButton pet2 = createPetButton(thisPlayer.getBattlePets().get(1));
         TextImageButton pet3 = createPetButton(thisPlayer.getBattlePets().get(2));
@@ -356,11 +358,12 @@ public class BattleScreen implements Screen {
         skillButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                PlayerAttackEvent playerAttackEvent = new PlayerAttackEvent();
-                playerAttackEvent.id = myId;
-                playerAttackEvent.skill = skill;
+                AttackEvent attackEvent = new AttackEvent();
+                attackEvent.id = myId;
+                attackEvent.skill = skill;
+                attackEvent.battleId = battleId;
                 System.out.println("This player is attacking");
-                DarwinsDuel.getClient().sendTCP(playerAttackEvent);
+                DarwinsDuel.getClient().sendTCP(attackEvent);
                 skillButton.setTouchable(Touchable.disabled);
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -373,11 +376,12 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    PlayerChangePetEvent playerChangePetEvent = new PlayerChangePetEvent();
-                    playerChangePetEvent.pet = Player.Pet.PET1;
-                    playerChangePetEvent.id = myId;
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = Player.Pet.PET1;
+                    changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet1");
-                    DarwinsDuel.getClient().sendTCP(playerChangePetEvent);
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }
@@ -387,11 +391,12 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    PlayerChangePetEvent playerChangePetEvent = new PlayerChangePetEvent();
-                    playerChangePetEvent.pet = Player.Pet.PET2;
-                    playerChangePetEvent.id = myId;
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = Player.Pet.PET2;
+                    changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet2");
-                    DarwinsDuel.getClient().sendTCP(playerChangePetEvent);
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }
@@ -401,11 +406,12 @@ public class BattleScreen implements Screen {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     // todo: swap pet1 (current pet) and pet (in argument)
-                    PlayerChangePetEvent playerChangePetEvent = new PlayerChangePetEvent();
-                    playerChangePetEvent.pet = Player.Pet.PET3;
-                    playerChangePetEvent.id = myId;
+                    ChangePetEvent changePetEvent = new ChangePetEvent();
+                    changePetEvent.pet = Player.Pet.PET3;
+                    changePetEvent.playerId = myId;
+                    changePetEvent.battleId = battleId;
                     System.out.println("Changing to pet3");
-                    DarwinsDuel.getClient().sendTCP(playerChangePetEvent);
+                    DarwinsDuel.getClient().sendTCP(changePetEvent);
                     petButton.setTouchable(Touchable.disabled);
                     return super.touchDown(event, x, y, pointer, button);
                 }

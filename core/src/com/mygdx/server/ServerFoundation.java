@@ -16,7 +16,6 @@ public class ServerFoundation {
     private static Server server;
     public static ServerFoundation instance;
     public static ServerPlayerHandler serverPlayerHandler = new ServerPlayerHandler();
-    public static Map<String, Connection> connectionTable = new HashMap<>();
 
     public static void main(String[] args) {
         ServerFoundation instance = new ServerFoundation();
@@ -25,15 +24,18 @@ public class ServerFoundation {
 
     public ServerFoundation() {
         this.server = new Server();
+
+        server.getKryo().register(UUID.class,  new UUIDSerializer());
+
         // Add all global events
 //        server.getKryo().register(AddPlayerEvent.class);
-//        server.getKryo().register(AttackEvent.class);
-//        server.getKryo().register(BattleState.class);
-//        server.getKryo().register(EndBattleEvent.class);
+        server.getKryo().register(AttackEvent.class);
+        server.getKryo().register(BattleState.class);
+        server.getKryo().register(EndBattleEvent.class);
 //        server.getKryo().register(JoinRequestEvent.class);
 //        server.getKryo().register(JoinResponseEvent.class);
-//        server.getKryo().register(StartBattleEvent.class);
-//        server.getKryo().register(ChangePetEvent.class);
+        server.getKryo().register(StartBattleEvent.class);
+        server.getKryo().register(ChangePetEvent.class);
 //        server.getKryo().register(java.util.UUID.class);
 
         server.getKryo().register(Player.class);
@@ -41,6 +43,8 @@ public class ServerFoundation {
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
+        server.getKryo().register(Froggy.class);
+        server.getKryo().register(BadLogic.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);
@@ -73,10 +77,6 @@ public class ServerFoundation {
 
     public static Server getServer() {
         return server;
-    }
-
-    public static void addConnection(String userId, Connection connection) {
-        connectionTable.put(userId, connection);
     }
 
 }

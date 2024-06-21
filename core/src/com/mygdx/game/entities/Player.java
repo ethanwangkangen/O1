@@ -28,6 +28,8 @@ public class Player extends Entity implements Serializable{
     private String path;
     private Pet currentPet;
 
+    private Creature[] pets = {pet1, pet2, pet3};
+
     public enum Pet {
         PET1,
         PET2,
@@ -84,6 +86,12 @@ public class Player extends Entity implements Serializable{
     public Pet getPet() {
         return currentPet;
     }
+
+    // consider replacing battlePets array to reservePets array in future
+    // to better display pet screen
+//    public void switchpet(int target) {
+//        CurrentPet = battlePets[target];
+//    }
 
     public void loadTexture() {
         texturePath = new Texture(path);
