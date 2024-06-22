@@ -345,7 +345,7 @@ public class LoginScreen implements Screen {
         signupTable.add().uniform().padTop(100);
         signupTable.add(signUpButton).size(200, 80).uniform();
         signupTable.add(changeToLogin).uniform().top().row();
-        loginTable.add(loginErrorLabel).colspan(3).center().row();
+        signupTable.add(signUpErrorLabel).colspan(3).center().row();
         signupTable.setVisible(false);
     }
 

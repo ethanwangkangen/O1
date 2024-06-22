@@ -1,17 +1,26 @@
 package com.mygdx.game.handlers;
 
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
 import com.mygdx.global.BattleState;
 //import com.sun.org.apache.xpath.internal.operations.Bool;
 
 
 public class UserBattleHandler {
+    private static String battleId;
     private static BattleState battleState;
     public static boolean changePet = false;
     public static boolean updatePetInfo = false;
     public static boolean battleEnd = false;
     //note: current implementation is such that BattleState is (and is required to be) mutable. should change this in the future
 
+    public static void setBattleId(String id) {
+        battleId = id;
+    }
+
+    public static String getBattleId() {
+        return battleId;
+    }
 
     public static BattleState.Turn getTurn() {
         return battleState.getPlayerTurn();
@@ -24,8 +33,10 @@ public class UserBattleHandler {
     public static void loadTextures(Runnable callback) {
         try{
             battleState.loadTextures(callback);
-            System.out.println("battlehandler textures loading");
+            System.out.println("Battlehandler textures loading");
         } catch (Exception e) {
+            System.err.println("BattleHandler texture loading error");
+
         }
     }
 

@@ -26,14 +26,24 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 	public enum GameState {
 		FREEROAM,
+		PETCHANGE,
 		BATTLE,
 		LOGIN,
 		WIN,
 		LOSS,
-		PETCHANGE
+
 	}
 
 	public static GameState gameState = GameState.LOGIN;
+
+	// should make variables above private
+	/*public void changeState(GameState gameState) {
+		this.gameState = gameState;
+	}
+	public static void setClient(Client client) {
+		client = client;
+	}*/
+
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;
@@ -92,6 +102,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 					this.setScreen(new LoginScreen(this));
 				}
 				break;
+			case PETCHANGE:
+				if (!(getScreen() instanceof PetChangeScreen)) {
+					this.setScreen(new MapScreen(this));
+					System.out.println("Changing to PetChangeScreen");
+			}
 			case FREEROAM:
 				if (!(getScreen() instanceof MapScreen)) {
 					this.setScreen(new MapScreen(this));
@@ -109,12 +124,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				break;
 			case LOSS:
 				break;
-			case PETCHANGE:
-				if (!(getScreen() instanceof PetChangeScreen)) {
-					System.out.println("Changing to PetChangeScreen");
-					this.setScreen(new PetChangeScreen(this));
-				}
-				break;
+
 		}
 
 		super.render();
