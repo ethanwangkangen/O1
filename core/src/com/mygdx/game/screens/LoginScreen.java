@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import static com.mygdx.game.EmailValidator.isValidEmail;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,7 +26,8 @@ import com.mygdx.game.MyClient;
 public class LoginScreen implements Screen {
     private DarwinsDuel gameObj;
     private Stage stage;
-    Drawable background = new TextureRegionDrawable(new Texture(Gdx.files.internal("mainscreen.png")));
+    private AssetManager manager;
+    Drawable background;
 
     private final Table loginTable = new Table();
     private final Table signupTable = new Table();
@@ -91,8 +93,10 @@ public class LoginScreen implements Screen {
          //for testing: end
 
         System.out.println("LoginScreen created");
+        manager = DarwinsDuel.getInstance().getAssetManager();
+        background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
         stage = new Stage(new FitViewport(width, height));
-        skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        skin = manager.get("buttons/uiskin.json", Skin.class);
         skin.getFont("default-font").getData().setScale((int) (Gdx.graphics.getDensity()));
 
         // initialise tables

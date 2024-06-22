@@ -3,6 +3,8 @@ package com.mygdx.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.DarwinsDuel;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +20,7 @@ public abstract class Creature extends Entity implements Serializable{
     private int health;
     private int maxmana;
     private int mana;
-    private transient Texture texturePath; //path to texture file
+//    private transient Texture texturePath; //path to texture file
     private int level;
     private String name;
     public String path;
@@ -96,33 +98,38 @@ public abstract class Creature extends Entity implements Serializable{
         return result;
     }
 
-    public void loadTexture(Runnable callback) {
-        Gdx.app.postRunnable(() -> {
-            try {
-                System.out.println("loading texture of creature");
-                System.out.println("path is: " + path);
-                this.texturePath = new Texture(path);
-                if (this.texturePath == null) {
-                    System.out.println("texturePath is null????");
-                } else {
-                    System.out.println("texturePath ok");
-                }
-                if (callback != null) {
-                    callback.run();
-                }
-                System.out.println("finished loading creature texture");
-
-            } catch (Exception e) { // Catching general Exception for simplicity
-                System.out.println(e.getMessage());
-                System.out.println("Creature texture not loaded");
-            }
-        });
-    }
+//    public void loadTexture(Runnable callback) {
+//        Gdx.app.postRunnable(() -> {
+//            try {
+//                System.out.println("loading texture of creature");
+//                System.out.println("path is: " + path);
+//                this.texturePath = new Texture(path);
+//                if (this.texturePath == null) {
+//                    System.out.println("texturePath is null????");
+//                } else {
+//                    System.out.println("texturePath ok");
+//                }
+//                if (callback != null) {
+//                    callback.run();
+//                }
+//                System.out.println("finished loading creature texture");
+//
+//            } catch (Exception e) { // Catching general Exception for simplicity
+//                System.out.println(e.getMessage());
+//                System.out.println("Creature texture not loaded");
+//            }
+//        });
+//    }
     public Texture getTexturePath() {
-        if (texturePath == null) {
-            System.out.println("Cannot find texturePath: " + name);
+//        if (texturePath == null) {
+//            System.out.println("Cannot find texturePath: " + name);
+//        }
+//        return texturePath;
+        if (path != null) {
+            return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
         }
-        return texturePath;
+
+        return null;
     }
 
     public int getMaxhealth() {
