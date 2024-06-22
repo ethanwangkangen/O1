@@ -114,6 +114,7 @@ public class Player extends Entity implements Serializable{
         }
     }
 
+
     public void loadTexture() {
         texturePath = new Texture(path);
     }

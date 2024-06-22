@@ -9,7 +9,6 @@ public class BattleState{
 
     //public static final BattleState INSTANCE = new BattleState();
     private Player p1Player, p2Player;
-    private String p1UID, p2UID;
 
     public enum Turn {
         PLAYERONETURN,
@@ -31,25 +30,23 @@ public class BattleState{
         this.numofTurns = 1;
         battleStarted = false;
         battleEnded = false;
-        firstRound = true;
+//        firstRound = true;
         petChanged = false;
         petAttacked = false;
     }
 
-    public BattleState(Player p1Player, String p1UID, Player p2Player, String p2UID) {
+    public BattleState(Player p1Player, Player p2Player) {
         this.turn = Turn.PLAYERONETURN;
         this.numPlayers = 0;
         this.numofTurns = 1;
         battleStarted = false;
         battleEnded = false;
-        firstRound = true;
+//        firstRound = true;
         petChanged = false;
         petAttacked = false;
 
         this.p1Player = p1Player;
-        this.p1UID = p1UID;
         this.p2Player = p2Player;
-        this.p2UID = p2UID;
     }
 
     public int getNumPlayers() {
@@ -132,7 +129,7 @@ public class BattleState{
         p1Player.loadTextures(() -> {
             p2Player.loadTextures(callback);
         });
-//        System.out.println("battlestate textures loading");
+        System.out.println("battlestate textures loading");
 
     }
 
@@ -152,7 +149,7 @@ public class BattleState{
         turn = newState.turn;
         battleEnded = newState.battleEnded;
         battleStarted = newState.battleStarted;
-        firstRound = newState.firstRound;
+//        firstRound = newState.firstRound;
         petChanged = newState.petChanged;
         petAttacked = newState.petAttacked;
     }
