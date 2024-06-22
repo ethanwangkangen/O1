@@ -29,10 +29,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		BATTLE,
 		LOGIN,
 		WIN,
-		LOSS
+		LOSS,
+		PETCHANGE
 	}
 
-	public static GameState gameState = GameState.FREEROAM;
+	public static GameState gameState = GameState.LOGIN;
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;
@@ -49,6 +50,12 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void onPlayerInfoReceived(String playerUserId) {
 		MyClient.sendBattleRequest(playerUserId);
+	}
+
+	@Override
+	public void onQuitMapActivity() {
+		System.out.println("changing screen to PetChangeScreen");
+		gameState = GameState.PETCHANGE;
 	}
 
 	@Override
@@ -101,6 +108,12 @@ public class DarwinsDuel extends Game implements GameCommunication {
 			case WIN:
 				break;
 			case LOSS:
+				break;
+			case PETCHANGE:
+				if (!(getScreen() instanceof PetChangeScreen)) {
+					System.out.println("Changing to PetChangeScreen");
+					this.setScreen(new PetChangeScreen(this));
+				}
 				break;
 		}
 

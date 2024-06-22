@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import android.Manifest;
 import android.os.Looper;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,10 +48,13 @@ import java.util.Set;
 
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-    private double initialLatitude = 1.2431;
-    private double initialLongitude = 103.8198;
+    private double selfLatitude = 1.2431;
+    private double selfLongitude = 103.8198;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
+
+    private long lastUpdateTime = 0;
+    private static final long MIN_TIME_BETWEEN_UPDATES = 5000; // 5 seconds
 
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -63,13 +69,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Map fragment
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
 
+        //Exit button
+        // Initialize the button and set click listener
+        Button exitButton = findViewById(R.id.exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Exit the activity
+                sendQuitToLibGDX();
+                finish();
+            }
+        });
+
+
         // Initialise database
         database = FirebaseDatabase.getInstance().getReference().child("users");
-
 
         // If permission for location not granted, ask for it
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -82,6 +101,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // If permission granted start updating location (send to firebase constantly)
             startLocationUpdates();
         }
+    }
+
+    /**
+     * called automatically when AndroidLauncher starts its MapActivity.
+     * @param map
+     */
+    @Override
+    public void onMapReady(GoogleMap map) {
+        LatLng position = new LatLng(selfLatitude, selfLongitude);
+        this.googleMap = map;
+
+        // Add current player?
+        // Todo refactor into new function. set custom marker for own player
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
+
+        //Add other players
+        displayAll();
     }
 
     @Override
@@ -100,10 +136,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void startLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(10000); // 10 seconds
-        locationRequest.setFastestInterval(5000); // 5 seconds
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(5000)
+                .setMaxUpdateDelayMillis(1000)
+                .build();
 
         LocationCallback locationCallback = new LocationCallback() {
             @Override
@@ -112,18 +149,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
 
-                    // send to firebase
-                    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                    //set location
-                    DatabaseReference locationRef = database.child("users").child(userId).child("location");
-
-                    // Update location data
-                    locationRef.child("latitude").setValue(latitude);
-                    locationRef.child("longitude").setValue(longitude);
+                    sendLocationToFirebase(location);
                 }
             }
         };
@@ -136,25 +163,32 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    private void sendLocationToFirebase(Location location) {
 
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
+            System.out.println("LocationUpdate" + "Location update blocked - too fast");
+            return;
+        }
+        lastUpdateTime = currentTime;
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
 
-    /**
-     * called automatically when AndroidLauncher starts its MapActivity.
-     * @param map
-     */
-    @Override
-    public void onMapReady(GoogleMap map) {
-        LatLng position = new LatLng(initialLatitude, initialLongitude);
-        this.googleMap = map;
+        // send to firebase
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Add current player?
-        // Todo refactor into new function. set custom marker for own player
-        googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(initialLatitude, initialLongitude))
-                .title("You"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
+        //set location
+        DatabaseReference locationRef = database.child(userId).child("location");
 
-        displayAll();
+        // Update location data in database
+        locationRef.child("latitude").setValue(latitude);
+        locationRef.child("longitude").setValue(longitude);
+
+        // Update local location data
+        selfLatitude = latitude;
+        selfLongitude = longitude;
+
+        System.out.println("sending location" + latitude + " " + longitude);
     }
 
     /**
@@ -165,36 +199,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                System.out.println("Data change detected");
                 Set<String> previousUsers = new HashSet<>(playerMarkers.keySet()); // Set of userIds of the "existing" players
                 Set<String> currentUsers = new HashSet<>(); // To add: all the current users
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
 
-                    if (userId == currentUser.getUid()) { // Skip self
-                        continue;
-                    }
+//                    if (userId == currentUser.getUid()) { // Skip self
+//                        continue;
+//                    }
 
                     currentUsers.add(userId);
 
                     DataSnapshot locationSnapshot = userSnapshot.child("location");
 
                     if (locationSnapshot.exists()) {
-                        double latitude = locationSnapshot.child("latitude").getValue(Double.class);
-                        double longitude = locationSnapshot.child("longitude").getValue(Double.class);
+                        System.out.println("Location found");
+                        Double latitude = locationSnapshot.child("latitude").getValue(Double.class);
+                        Double longitude = locationSnapshot.child("longitude").getValue(Double.class);
 
-                        LatLng playerLocation = new LatLng(latitude, longitude);
+                        if (latitude != null && longitude != null) {
+                            LatLng playerLocation = new LatLng(latitude, longitude);
 
-                        if (playerMarkers.containsKey(userId)) {
-                            // Update existing marker position
-                            playerMarkers.get(userId).setPosition(playerLocation);
+                            if (playerMarkers.containsKey(userId)) {
+                                // Update existing marker position
+                                playerMarkers.get(userId).setPosition(playerLocation);
+                                System.out.println("updating key. location is " + latitude + " " + longitude);
+                            } else {
+                                // Marker doesn't exist, so create a new marker
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
+                                        .position(playerLocation)
+                                        .title(userId));
+                                playerMarkers.put(userId, marker);
+                                System.out.println("Player marker added");
+                            }
+
                         } else {
-                            // Marker doesn't exist, so create a new marker
-                            Marker marker = googleMap.addMarker(new MarkerOptions()
-                                    .position(playerLocation)
-                                    .title(userId));
-                            playerMarkers.put(userId, marker);
+                            // Handle the case where latitude or longitude is null
+                            System.out.println("Latitude or Longitude is null");
                         }
+
                         // todo make button for menuscreen
                     }
                 }
@@ -207,6 +252,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     if (marker != null) {
                         marker.remove();
+                        System.out.println("Marker removed");
                     }
                 }
             }
@@ -228,8 +274,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void sendInfoToLibGDX(String playerUserId) {
-        Intent intent = new Intent("com.example.ACTION_SEND_INFO");
+        Intent intent = new Intent("sending playerUserId");
         intent.putExtra("playerUserId", playerUserId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+
+    private void sendQuitToLibGDX() {
+        Intent intent = new Intent("quit map activity");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
 }

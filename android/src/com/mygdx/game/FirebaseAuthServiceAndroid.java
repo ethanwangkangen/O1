@@ -9,8 +9,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mygdx.game.callbacks.AuthResultCallback;
 import com.mygdx.game.callbacks.PlayerCallback;
+import com.mygdx.game.entities.BadLogic;
+import com.mygdx.game.entities.Creature;
+import com.mygdx.game.entities.CrocLesnar;
+import com.mygdx.game.entities.Froggy;
+import com.mygdx.game.entities.MeowmadAli;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.interfaces.AuthService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirebaseAuthServiceAndroid implements AuthService {
     public FirebaseAuth auth;
@@ -33,16 +41,59 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         playerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Player player = dataSnapshot.getValue(Player.class);
+                Player player = new Player();
+
+                // Basic player data
+                player.setUsername(dataSnapshot.child("username").getValue(String.class));
+                player.setUserId(dataSnapshot.child("userId").getValue(String.class));
+                player.setCurrentPet(Player.PetNum.valueOf(dataSnapshot.child("currentPetNum").getValue(String.class)));
+
+                // Deserialize battlePets
+                List<Creature> battlePets = new ArrayList<>();
+                for (DataSnapshot petSnapshot : dataSnapshot.child("battlePets").getChildren()) {
+                    Creature pet = deserializeCreature(petSnapshot);
+                    if (pet != null) {
+                        battlePets.add(pet);
+                    }
+                }
+                player.setBattlePets((ArrayList<Creature>) battlePets);
+
+                // Deserialize reservePets
+                List<Creature> reservePets = new ArrayList<>();
+                for (DataSnapshot petSnapshot : dataSnapshot.child("reservePets").getChildren()) {
+                    Creature pet = deserializeCreature(petSnapshot);
+                    if (pet != null) {
+                        reservePets.add(pet);
+                    }
+                }
+                player.setReservePets((ArrayList<Creature>) reservePets);
+
                 playerCallback.onCallback(player);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.err.println("Failed to retrieve player data.");
+                System.err.println("Failed to retrieve player data: " + databaseError.getMessage());
                 playerCallback.onFailure(); // Pass null or handle error appropriately
             }
         });
+    }
+
+    private Creature deserializeCreature(DataSnapshot dataSnapshot) {
+        String type = dataSnapshot.child("type").getValue(String.class);
+
+        switch (type) {
+            case "MeowmadAli":
+                return dataSnapshot.getValue(MeowmadAli.class);
+            case "CrocLesnar":
+                return dataSnapshot.getValue(CrocLesnar.class);
+            case "Froggy":
+                return dataSnapshot.getValue(Froggy.class);
+            case "BadLogic":
+                return dataSnapshot.getValue(BadLogic.class);
+            default:
+                return null; // Handle unknown types or return appropriate default
+        }
     }
 
     @Override

@@ -6,7 +6,7 @@ public class ChangePetEvent {
     public ChangePetEvent() {
     }
 
-    public Player.Pet pet;
+//    public Player.Pet pet;
     public String id;
 
 

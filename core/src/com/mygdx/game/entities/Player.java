@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -23,12 +25,13 @@ public class Player extends Entity implements Serializable{
      * Unique ID taken from firebase to identify players.
      * Use this for identification
      */
-    private String userId;
+    public String userId;
     private transient Texture texturePath;
-    private String path;
-    private Pet currentPet;
+    public String path = "player1(1).png";
+    public PetNum currentPetNum;
 
-    public enum Pet {
+
+    public enum PetNum {
         PET1,
         PET2,
         PET3
@@ -36,8 +39,7 @@ public class Player extends Entity implements Serializable{
 
 
     public Player() {
-        path = "player1(1).png";
-        currentPet = Pet.PET1;
+        currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
         battlePets.add(new CrocLesnar());
         battlePets.add(new Froggy());
@@ -49,9 +51,30 @@ public class Player extends Entity implements Serializable{
     }
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("username", username);
+        result.put("userId", userId);
+        result.put("currentPetNum", currentPetNum.toString());
+
+        List<Map<String, Object>> battlePetsList = new ArrayList<>();
+        for (Creature pet : battlePets) {
+            battlePetsList.add(pet.toMap());
+        }
+        result.put("battlePets", battlePetsList);
+
+        List<Map<String, Object>> reservePetsList = new ArrayList<>();
+        for (Creature pet : reservePets) {
+            reservePetsList.add(pet.toMap());
+        }
+        result.put("reservePets", reservePetsList);
+
+        return result;
+    }
+
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
-        // returns true if petchange (ie a pet has died)
+        // Returns true if petchange (ie a pet has died)
 
         getCurrentPet().takeDamage(skill);
         if (!getCurrentPet().isAlive()) {
@@ -59,7 +82,17 @@ public class Player extends Entity implements Serializable{
             return true;
         }
         return false;
+    }
 
+    public void setCurrentPet(PetNum p) {
+
+    }
+    public void setBattlePets(ArrayList<Creature> battlePets) {
+        this.battlePets = battlePets;
+    }
+
+    public void setReservePets(ArrayList<Creature> battlePets) {
+        this.reservePets = battlePets;
     }
 
     public boolean isAlive() {
@@ -72,17 +105,13 @@ public class Player extends Entity implements Serializable{
     }
 
     public Creature getCurrentPet() {
-        if (currentPet == Pet.PET1) {
+        if (currentPetNum == PetNum.PET1) {
             return battlePets.get(0);
-        } else if (currentPet == Pet.PET2) {
+        } else if (currentPetNum == PetNum.PET2) {
             return battlePets.get(1);
         } else {
             return battlePets.get(2);
         }
-    }
-
-    public Pet getPet() {
-        return currentPet;
     }
 
     public void loadTexture() {
@@ -127,10 +156,16 @@ public class Player extends Entity implements Serializable{
         }
     }
 
-    public void changePet(Pet pet) {
-        int index = pet.ordinal();
-        if (isValidPet(index)) {
-            currentPet = pet;
+    public void changeCurrentPet(int i) {
+        // Change the current pet being used in  battle
+        if (isValidPet(i)) {
+            if (i == 1) {
+                currentPetNum = PetNum.PET1;
+            } if (i == 2) {
+                currentPetNum = PetNum.PET2;
+            } if (i == 3) {
+                currentPetNum = PetNum.PET3;
+            }
         }
     }
 
@@ -139,13 +174,18 @@ public class Player extends Entity implements Serializable{
     }
 
     public void changeNextPet() {
-        for (int i = 0; i < battlePets.size(); i++) {
-            Creature pet = battlePets.get(i);
-            if (pet != null && pet.isAlive()) {
-                changePet(Pet.values()[i]);
-                break;
-            }
-        }
+        // Automatically when pet dies
+
+
+
+        //don't know what the below is supposed to be lol
+//        for (int i = 0; i < battlePets.size(); i++) {
+//            Creature pet = battlePets.get(i);
+//            if (pet != null && pet.isAlive()) {
+//                changePet(Pet.values()[i]);
+//                break;
+//            }
+//        }
     }
 
     public int getNumPets() {
@@ -163,12 +203,11 @@ public class Player extends Entity implements Serializable{
                 }
             }
         }
-        changePet(player.getPet());
+        //changePet(player.getPet());
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
         battlePets = pets1;
         reservePets = pets2;
-
     }
 }

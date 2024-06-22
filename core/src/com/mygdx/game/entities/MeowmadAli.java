@@ -8,6 +8,7 @@ public class MeowmadAli extends Creature{
         skill1 = new Skill("Cat Scratch", 20);
         skill2 = null;
         skill3 = null;
+        setType("MeowmadAli");
     }
 
 }

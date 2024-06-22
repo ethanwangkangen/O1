@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class Creature extends Entity implements Serializable{
@@ -20,15 +23,18 @@ public abstract class Creature extends Entity implements Serializable{
     private String name;
     public String path;
 
+    private String type;
+
     //private ArrayList<Skill> skillList = new ArrayList();
     public Skill skill1;
     public Skill skill2;
     public Skill skill3 ;
-    public Skill[] skills = {skill1, skill2, skill3};
+    public ArrayList<Skill> skills = new ArrayList<>();
+
 
     private transient SpriteBatch batch;
 
-    public Skill[] getSkills() {
+    public ArrayList<Skill> getSkills() {
         return skills;
     }
 
@@ -42,6 +48,14 @@ public abstract class Creature extends Entity implements Serializable{
         this.name = name;
         this.path = path;
         //this.texturePath = new Texture(path);
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     //public abstract void attack1();
@@ -79,6 +93,12 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
 
+    public Map<String, Object> toMap() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("type", getType());
+        // Add other properties
+        return result;
+    }
 
     public void loadTexture(Runnable callback) {
         Gdx.app.postRunnable(() -> {

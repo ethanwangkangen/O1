@@ -6,5 +6,6 @@ public class Froggy extends Creature {
         skill1 = new Skill("Jump", 10);
         skill2 = new Skill("Acid", 30);
         skill3 = null;
+        setType("Froggy");
     }
 }
