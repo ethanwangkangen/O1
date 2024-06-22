@@ -28,6 +28,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.AdvancedMarker;
 import com.google.android.gms.maps.model.AdvancedMarkerOptions;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,6 +46,7 @@ import com.mygdx.game.interfaces.AuthService;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -59,6 +62,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = auth.getCurrentUser();
+    String myUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private DatabaseReference database;
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
@@ -175,10 +179,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double longitude = location.getLongitude();
 
         // send to firebase
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         //set location
-        DatabaseReference locationRef = database.child(userId).child("location");
+        DatabaseReference locationRef = database.child(myUserId).child("location");
 
         // Update location data in database
         locationRef.child("latitude").setValue(latitude);
@@ -205,10 +209,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
-
-//                    if (userId == currentUser.getUid()) { // Skip self
-//                        continue;
-//                    }
+                    String username = userSnapshot.child("player").child("username").getValue(String.class);
 
                     currentUsers.add(userId);
 
@@ -228,11 +229,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 System.out.println("updating key. location is " + latitude + " " + longitude);
                             } else {
                                 // Marker doesn't exist, so create a new marker
-                                Marker marker = googleMap.addMarker(new MarkerOptions()
-                                        .position(playerLocation)
-                                        .title(userId));
+                                BitmapDescriptor enemy = BitmapDescriptorFactory.fromResource(R.drawable.player1);
+                                BitmapDescriptor self = BitmapDescriptorFactory.fromResource(R.drawable.playerself);
+                                Marker marker;
+
+                                if (Objects.equals(userId, myUserId)) {
+                                    marker = googleMap.addMarker(new MarkerOptions()
+                                            .position(playerLocation)
+                                            .title("You")
+                                            .icon(self));
+                                } else {
+                                    marker = googleMap.addMarker(new MarkerOptions()
+                                            .position(playerLocation)
+                                            .title(username)
+                                            .icon(enemy));
+
+                                }
                                 playerMarkers.put(userId, marker);
                                 System.out.println("Player marker added");
+
                             }
 
                         } else {
