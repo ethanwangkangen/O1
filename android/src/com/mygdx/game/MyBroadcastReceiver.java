@@ -24,7 +24,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         String action = intent.getAction();
         if ("sending playerUserId".equals(action)) {
             String playerUserId = intent.getStringExtra("playerUserId");
-            //Use static reference to communicate with the LibGDX game
+
+            // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
                 gameCommunication.onPlayerInfoReceived(playerUserId);

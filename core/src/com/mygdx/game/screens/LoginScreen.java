@@ -358,13 +358,10 @@ public class LoginScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
-        //System.out.println("currently rendering BattleScreen");
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override

@@ -114,7 +114,6 @@ public class FirebaseAuthServiceAndroid implements AuthService {
                     if (task.isSuccessful()) {
                         callback.onSuccess();
                     } else {
-
                         callback.onFailure(task.getException());
                     }
                 });

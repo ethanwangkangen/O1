@@ -58,10 +58,6 @@ public abstract class Creature extends Entity implements Serializable{
         this.type = type;
     }
 
-    //public abstract void attack1();
-    //public abstract void attack2();
-    //public abstract void attack3();
-
     public void takeDamage(Skill skill) {
         int x = skill.getDamage();
         this.health -= x;
