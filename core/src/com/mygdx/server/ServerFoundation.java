@@ -42,7 +42,6 @@ public class ServerFoundation {
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
         server.getKryo().register(Froggy.class);
-        server.getKryo().register(BadLogic.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);
