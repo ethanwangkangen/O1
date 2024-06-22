@@ -42,10 +42,11 @@ public class SplashScreen implements Screen {
         stage.draw();
         stage.act(delta);
 
-        if (DarwinsDuel.getInstance().getAssetManager().update()) {
-            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
-        }
-
+//        if (DarwinsDuel.getInstance().getAssetManager().update()) {
+//            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
+//        }
+        DarwinsDuel.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
+        DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
     }
 
     @Override
