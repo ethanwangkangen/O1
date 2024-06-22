@@ -9,11 +9,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mygdx.game.callbacks.AuthResultCallback;
 import com.mygdx.game.callbacks.PlayerCallback;
-import com.mygdx.game.entities.BadLogic;
 import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.CrocLesnar;
+import com.mygdx.game.entities.Doge;
+import com.mygdx.game.entities.Dragon;
 import com.mygdx.game.entities.Froggy;
 import com.mygdx.game.entities.MeowmadAli;
+import com.mygdx.game.entities.MouseHunter;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.interfaces.AuthService;
 
@@ -89,8 +91,12 @@ public class FirebaseAuthServiceAndroid implements AuthService {
                 return dataSnapshot.getValue(CrocLesnar.class);
             case "Froggy":
                 return dataSnapshot.getValue(Froggy.class);
-            case "BadLogic":
-                return dataSnapshot.getValue(BadLogic.class);
+            case "Mousehunter":
+                return dataSnapshot.getValue(MouseHunter.class);
+            case "Doge":
+                return dataSnapshot.getValue(Doge.class);
+            case "Dragon":
+                return dataSnapshot.getValue(Dragon.class);
             default:
                 return null; // Handle unknown types or return appropriate default
         }
