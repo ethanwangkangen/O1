@@ -1,6 +1,7 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.DarwinsDuel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Player extends Entity implements Serializable{
      * Use this for identification
      */
     public String userId;
-    private transient Texture texturePath;
+//    private transient Texture texturePath;
     public String path = "player1(1).png";
     public PetNum currentPetNum;
 
@@ -115,11 +116,11 @@ public class Player extends Entity implements Serializable{
     }
 
 
-    public void loadTexture() {
-        texturePath = new Texture(path);
-    }
+//    public void loadTexture() {
+//        texturePath = new Texture(path);
+//    }
     public Texture getTexture() {
-        return texturePath;
+        return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
     }
     public String getUsername() {
         return this.username;
@@ -135,27 +136,27 @@ public class Player extends Entity implements Serializable{
     }
 
 
-    public void loadTextures(Runnable callback) {
-        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
-
-        // Load textures for each pet
-        int petNum = battlePets.size() + reservePets.size();
-
-        for (Creature pet : battlePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-        for (Creature pet : reservePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-    }
+//    public void loadTextures(Runnable callback) {
+//        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
+//
+//        // Load textures for each pet
+//        int petNum = battlePets.size() + reservePets.size();
+//
+//        for (Creature pet : battlePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//        for (Creature pet : reservePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//    }
 
     public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
@@ -200,6 +201,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void update(Player player) {
+        // to update pet info during battle
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             Creature playerPet = player.getBattlePets().get(i);
@@ -214,6 +216,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        // to update pet info after PetChangeScreen
         battlePets = pets1;
         reservePets = pets2;
     }

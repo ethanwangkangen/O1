@@ -30,7 +30,7 @@ public class UserBattleHandler {
         return battleState.hasStarted();
     }
 
-    public static void loadTextures(Runnable callback) {
+/*    public static void loadTextures(Runnable callback) {
         try{
             battleState.loadTextures(callback);
             System.out.println("Battlehandler textures loading");
@@ -38,7 +38,7 @@ public class UserBattleHandler {
             System.err.println("BattleHandler texture loading error");
 
         }
-    }
+    }*/
 
     public static Player getPlayer1() {
         return battleState.getPlayer1();

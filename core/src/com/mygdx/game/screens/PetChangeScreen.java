@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,10 +24,11 @@ import static com.badlogic.gdx.utils.Align.center;
 
 public class PetChangeScreen implements Screen {
     private Stage stage;
-    private final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+    private AssetManager manager;
+    private Skin skin;
     private Table table;
     Stack stack = new Stack();
-    private Texture emptyBox = new Texture("crossedbox.png");
+    private Texture emptyBox;
 
     // to be located on the left side of the screen
     // for pets that will be carried into battle by the player
@@ -51,32 +53,35 @@ public class PetChangeScreen implements Screen {
         System.out.println("PetChangeScreen created");
 
         stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
+        manager = DarwinsDuel.getInstance().getAssetManager();
+        skin = manager.get("buttons/uiskin.json", Skin.class);
+        emptyBox = manager.get("crossedBox.png", Texture.class);
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        System.out.println("test1");
 
-        UserPlayerHandler.loadTextures(() -> {
-            System.out.println("test1");
-            initialiseScrollPanes();
-            createButtonList1();
-            createButtonList2();
-            refreshTables();
-            initialiseTopBar();
+        initialiseScrollPanes();
+        createButtonList1();
+        createButtonList2();
+        refreshTables();
+        initialiseTopBar();
 
-            table = new Table();
-            table.setFillParent(true);
+        table = new Table();
+        table.setFillParent(true);
 
-            table.add(stack).colspan(2).fillX().center().row();
-            table.add(new Label("Battle Pets", skin)).padTop(10);
-            table.add(new Label("Reserve Pets", skin)).row();
-            table.add(pane1).expand();
-            table.add(pane2).expand().row();
+        table.add(stack).colspan(2).fillX().center().row();
+        table.add(new Label("Battle Pets", skin)).padTop(10);
+        table.add(new Label("Reserve Pets", skin)).row();
+        table.add(pane1).expand();
+        table.add(pane2).expand().row();
 
-            stage.addActor(table);
-        });
+        stage.addActor(table);
         stage.setDebugAll(true);
+
         System.out.println("Petchangescreen shown");
     }
 
@@ -197,7 +202,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList1() {
 
         for (Creature pet: pets1) {
-            TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+            TextImageButton button = new TextImageButton(pet, skin);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -212,7 +217,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList2() {
 
         for (Creature pet : pets2) {
-            TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+            TextImageButton button = new TextImageButton(pet, skin);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

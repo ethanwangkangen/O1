@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
         this.table.setFillParent(true);
         //this.table.background("Pixel_art_grass_image.png");
 
-        final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        final Skin skin = DarwinsDuel.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
 
         this.startBattle = new TextButton("Start Battle", skin);
         this.startBattle.addListener(new ClickListener() {

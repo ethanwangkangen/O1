@@ -23,7 +23,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public static Client client;
 
 	public AuthService authService;
-	public AssetManager manager = new AssetManager();
+	private AssetManager manager = new AssetManager();
 
 	float y = 0;
 
@@ -199,7 +199,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 //   get manager
 //	 DarwinsDuel.getInstance().getAssetManager()
 //	 get Skin
-//	 manager.get("skin", Skin.class);
+//	 skin = manager.get("buttons/uiskin.json", Skin.class);
 //	 get Texture
 //	 manager.get("skin", Texture.class);
 //	 get Background
