@@ -5,6 +5,8 @@ package com.mygdx.game.interfaces;
  */
 public interface GameCommunication {
     void onPlayerInfoReceived(String playerUserId);
+
+    void onQuitMapActivity();
 }
 
 /*

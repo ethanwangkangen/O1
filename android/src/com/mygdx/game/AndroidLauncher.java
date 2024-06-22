@@ -29,11 +29,13 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		initialize(game, config);
 
 		//Initialise GameCommunication
-		gameCommunication = game;
+		this.gameCommunication = game;
 
 		// Register the broadcast receiver
 		receiver = new MyBroadcastReceiver();
-		IntentFilter intentFilter = new IntentFilter("com.example.ACTION_SEND_INFO");
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("sending playerUserId");
+		intentFilter.addAction("quit map activity");
 		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
 		// Initialize Firebase

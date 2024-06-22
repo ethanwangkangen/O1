@@ -21,12 +21,19 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        String playerUserId = intent.getStringExtra("playerUserId");
-
-        //Use static reference to communicate with the LibGDX game
-        GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
-        if (gameCommunication != null) {
-            gameCommunication.onPlayerInfoReceived(playerUserId);
+        String action = intent.getAction();
+        if ("sending playerUserId".equals(action)) {
+            String playerUserId = intent.getStringExtra("playerUserId");
+            //Use static reference to communicate with the LibGDX game
+            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
+            if (gameCommunication != null) {
+                gameCommunication.onPlayerInfoReceived(playerUserId);
+            }
+        } else if ("quit map activity".equals(action)) {
+            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
+            if (gameCommunication != null) {
+                gameCommunication.onQuitMapActivity();
+            }
         }
     }
 }

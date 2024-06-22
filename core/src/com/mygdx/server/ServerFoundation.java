@@ -37,7 +37,6 @@ public class ServerFoundation {
 //        server.getKryo().register(java.util.UUID.class);
 
         server.getKryo().register(Player.class);
-        server.getKryo().register(Player.Pet.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);

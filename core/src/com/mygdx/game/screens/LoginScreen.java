@@ -147,9 +147,10 @@ public class LoginScreen implements Screen {
                 String email, password;
                 email = usernameLField.getText();
                 password = passwordLField.getText();
-                if (isValidInput(email, password)) {
+                //for testing
+                if (true) {
                     //to Login:
-                    authService1.signIn(email, password, new AuthResultCallback() {
+                    authService1.signIn("s33d34fsds32@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -180,6 +181,39 @@ public class LoginScreen implements Screen {
                 //create client, connect client to server. start battle
             }
         });
+//                if (isValidInput(email, password)) {
+//                    //to Login:
+//                    authService1.signIn(email, password, new AuthResultCallback() {
+//                        @Override
+//                        public void onSuccess() { //on success of signIn
+//                            System.out.println("Player has logged in");
+//                            authService1.getPlayerFromFirebase(new PlayerCallback() {
+//                                @Override
+//                                public void onCallback(Player player) { //on success of getPlayerFromFirebase
+//                                    UserPlayerHandler.updatePlayer(player);
+//                                    String userId = authService1.getUserId(); //get unique Id from firebase
+//                                    UserPlayerHandler.updateIdOfPlayer(userId);
+//
+//                                    MyClient.connectToServer();
+//                                    DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+//                                }
+//                                @Override
+//                                public void onFailure() { //on failure of getPlayerFromFirebase
+//                                    // todo what if getPlayerFromFirebase fails
+//                                }
+//                            });
+//                        }
+//                        @Override
+//                        public void onFailure(Exception exception) { //on failure of signIn
+//                            loginErrorLabel.setText("Login failed: " + exception.getLocalizedMessage());
+//                            Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+//                        }
+//                    });
+//                }
+//                return super.touchDown(event, x, y, pointer, button);
+//                //create client, connect client to server. start battle
+//            }
+//        });
 
         changeToSignUp = new TextButton("Sign up", skin);
         changeToSignUp.addListener(new ClickListener() {
@@ -228,9 +262,11 @@ public class LoginScreen implements Screen {
                 email = usernameSField.getText();
                 password = passwordSField.getText();
 
-                if (isValidInput(email, password)) {
+
+                // for testing only
+                if (true) {
                     //to sign up/register:
-                    authService1.signUp(email, password, new AuthResultCallback() {
+                    authService1.signUp("s33d34fsds32@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
                             //change login screen to game screen or wtv
@@ -256,6 +292,35 @@ public class LoginScreen implements Screen {
                     });
                 }
                 return super.touchDown(event, x, y, pointer, button);
+
+//                if (isValidInput(email, password)) {
+//                    //to sign up/register:
+//                    authService1.signUp(email, password, new AuthResultCallback() {
+//                        @Override
+//                        public void onSuccess() {
+//                            //change login screen to game screen or wtv
+//                            Player newPlayer = new Player();
+//                            newPlayer.setUsername(usernameSField.getText());
+//                            authService1.sendPlayerToFirebase(newPlayer);
+//
+//                            System.out.println("Registered player successfully");
+//                            UserPlayerHandler.updatePlayer(newPlayer);
+//
+//                            String userId = authService1.getUserId(); //get unique Id from firebase
+//                            UserPlayerHandler.updateIdOfPlayer(userId);
+//
+//                            MyClient.connectToServer();
+//                            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+//                        }
+//                        @Override
+//                        public void onFailure(Exception exception) {
+//                            String errorMessage = exception.getLocalizedMessage();
+//                            loginErrorLabel.setText("Sign up failed: " + errorMessage);
+//                            Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
+//                        }
+//                    });
+//                }
+//                return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
             }
         });
