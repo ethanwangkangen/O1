@@ -104,9 +104,10 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				break;
 			case PETCHANGE:
 				if (!(getScreen() instanceof PetChangeScreen)) {
-					this.setScreen(new MapScreen(this));
+					this.setScreen(new PetChangeScreen(this));
 					System.out.println("Changing to PetChangeScreen");
-			}
+				}
+				break;
 			case FREEROAM:
 				if (!(getScreen() instanceof MapScreen)) {
 					this.setScreen(new MapScreen(this));

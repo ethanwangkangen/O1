@@ -80,7 +80,7 @@ public class MyClient {
 
     public static void sendBattleRequest(String userId) {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
-        playerRequestBattleEvent.requesterUID = UserPlayerHandler.getUserId();
+        //playerRequestBattleEvent.requesterUID = UserPlayerHandler.getUserId();
         playerRequestBattleEvent.opponentUID = userId;
         playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
         myClient.sendTCP(playerRequestBattleEvent);

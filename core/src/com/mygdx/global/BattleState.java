@@ -133,15 +133,15 @@ public class BattleState{
 
     }
 
-//    public void changePet(String id, Player.Pet pet) {
-//        if (Objects.equals(p1Player.getUserId(), id)) {
-//            p1Player.changePet(pet);
-//        } else if (Objects.equals(p2Player.getUserId(), id)) {
-//            p2Player.changePet(pet);
-//        }
-//        changeTurn();
-//        petChanged = true;
-//    }
+    public void changePet(String id, Player.PetNum pet) {
+        if (Objects.equals(p1Player.getUserId(), id)) {
+            p1Player.changeCurrentPet(pet);
+        } else if (Objects.equals(p2Player.getUserId(), id)) {
+            p2Player.changeCurrentPet(pet);
+        }
+        changeTurn();
+        petChanged = true;
+    }
 
     public void update(BattleState newState) {
         p1Player.update(newState.p1Player);

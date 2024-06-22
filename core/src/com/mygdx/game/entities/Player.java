@@ -157,21 +157,27 @@ public class Player extends Entity implements Serializable{
         }
     }
 
-    public void changeCurrentPet(int i) {
+    public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
-        if (isValidPet(i)) {
-            if (i == 1) {
+        if (isValidPet(petNum)) {
+            if (petNum == PetNum.PET1) {
                 currentPetNum = PetNum.PET1;
-            } if (i == 2) {
+            } if (petNum == PetNum.PET2) {
                 currentPetNum = PetNum.PET2;
-            } if (i == 3) {
+            } if (petNum == PetNum.PET3) {
                 currentPetNum = PetNum.PET3;
             }
         }
     }
 
-    private boolean isValidPet(int index) {
-        return index >= 0 && index < battlePets.size() && battlePets.get(index) != null;
+    private boolean isValidPet(Player.PetNum petNum) {
+        if (battlePets.size() == 1) {
+            return petNum == PetNum.PET1;
+        } if (battlePets.size() == 2) {
+            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2);
+        } else {
+            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2) || (petNum == PetNum.PET3);
+        }
     }
 
     public void changeNextPet() {
