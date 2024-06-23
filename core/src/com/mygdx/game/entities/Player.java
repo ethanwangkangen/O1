@@ -161,39 +161,26 @@ public class Player extends Entity implements Serializable{
     public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
         if (isValidPet(petNum)) {
-            if (petNum == PetNum.PET1) {
-                currentPetNum = PetNum.PET1;
-            } if (petNum == PetNum.PET2) {
-                currentPetNum = PetNum.PET2;
-            } if (petNum == PetNum.PET3) {
-                currentPetNum = PetNum.PET3;
-            }
+            currentPetNum = petNum;
         }
     }
 
     private boolean isValidPet(Player.PetNum petNum) {
-        if (battlePets.size() == 1) {
-            return petNum == PetNum.PET1;
-        } if (battlePets.size() == 2) {
-            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2);
-        } else {
-            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2) || (petNum == PetNum.PET3);
-        }
+        // checks if list has the petNum, or if its empty
+        int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        return index < battlePets.size();
     }
 
     public void changeNextPet() {
-        // Automatically when pet dies
+        // Change to next available pet when a pet dies
 
-
-
-        //don't know what the below is supposed to be lol
-//        for (int i = 0; i < battlePets.size(); i++) {
-//            Creature pet = battlePets.get(i);
-//            if (pet != null && pet.isAlive()) {
-//                changePet(Pet.values()[i]);
-//                break;
-//            }
-//        }
+        for (int i = 0; i < battlePets.size(); i++) {
+            Creature pet = battlePets.get(i);
+            if (pet != null && pet.isAlive()) {
+                changeCurrentPet(PetNum.values()[i]);
+                break;
+            }
+        }
     }
 
     public int getNumPets() {
