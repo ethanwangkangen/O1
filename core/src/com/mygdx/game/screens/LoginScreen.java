@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.esotericsoftware.kryonet.Client;
@@ -248,7 +247,7 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(PlayerRequestBattleEvent.class);
 
             myClient.getKryo().register(Player.class);
-            myClient.getKryo().register(Player.Pet.class);
+            myClient.getKryo().register(Player.PetNum.class);
             myClient.getKryo().register(Entity.class);
             myClient.getKryo().register(MeowmadAli.class);
             myClient.getKryo().register(CrocLesnar.class);

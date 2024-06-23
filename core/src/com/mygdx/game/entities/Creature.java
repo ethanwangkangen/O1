@@ -123,7 +123,7 @@ public abstract class Creature extends Entity implements Serializable{
 
     public void update(Creature pet) {
         health = pet.getHealth();
-//        alive = pet.isAlive();
+//        alive = petNum.isAlive();
 //      update mana, level, skills in the future
     }
 

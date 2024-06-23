@@ -126,8 +126,8 @@ public class PetChangeScreen implements Screen {
     public void initialiseTopBar() {
         // Stack to overlay the label and the back button
         stack = new Stack();
-        // Create the label for "Pet Change" and add it to the stack
-        Label petChangeLabel = new Label("Pet Change", skin);
+        // Create the label for "PetNum Change" and add it to the stack
+        Label petChangeLabel = new Label("PetNum Change", skin);
         petChangeLabel.setAlignment(center);
         stack.add(petChangeLabel);
 
@@ -168,8 +168,8 @@ public class PetChangeScreen implements Screen {
 //        table2.invalidateHierarchy(); // Refresh table layout
 //    }
 //
-//    private void addButton(Creature pet) {
-//        TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+//    private void addButton(Creature petNum) {
+//        TextImageButton button = new TextImageButton(petNum.getName(), skin, petNum.getTexturePath());
 //
 //        // Add click listener to handle button removal
 //        button.addListener(new ClickListener() {
@@ -304,7 +304,7 @@ public class PetChangeScreen implements Screen {
                      + "\nselectedButton1: " + button.getText()
                      + "\nlastClickedButton: " + lastClickedButton.getText());
             return;
-        } else if (lastClickedButton.getText().equals("No pet") || button.getText().equals("No pet")) {
+        } else if (lastClickedButton.getText().equals("No petNum") || button.getText().equals("No petNum")) {
             System.out.println("Cannot swap empty button"); // changed
             return;
         }
@@ -335,7 +335,7 @@ public class PetChangeScreen implements Screen {
         buttonList1.remove(selectedButton1);
         buttonList2.remove(selectedButton2);
 
-        if (!selectedButton1.getText().equals("No pet")) {
+        if (!selectedButton1.getText().equals("No petNum")) {
             // selectedButton1 is not an emptyButton
             buttonList2.add(selectedButton1);
         }
@@ -368,7 +368,7 @@ public class PetChangeScreen implements Screen {
     }
 
     public TextImageButton createEmptyButton() {
-        TextImageButton button = new TextImageButton("No pet", skin, emptyBox);
+        TextImageButton button = new TextImageButton("No petNum", skin, emptyBox);
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

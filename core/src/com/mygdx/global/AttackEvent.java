@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.io.Serializable;
 
 public class AttackEvent implements Serializable {
-    // consider attack, health reduction, pet death
+    // consider attack, health reduction, petNum death
     public Skill skill;
     public String id; // of attacker
     public String battleId;

@@ -1,11 +1,10 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.DarwinsDuel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 
 
 public class Player extends Entity implements Serializable{
@@ -20,9 +19,9 @@ public class Player extends Entity implements Serializable{
     private String idString;
     private transient Texture texturePath;
     private String path;
-    private Pet currentPet;
+    private PetNum currentPetNum;
 
-    public enum Pet {
+    public enum PetNum {
         PET1,
         PET2,
         PET3
@@ -32,7 +31,7 @@ public class Player extends Entity implements Serializable{
         this.id = UUID.randomUUID();
         this.idString = id.toString();
         path = "player1(1).png";
-        currentPet = Pet.PET1;
+        currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
         battlePets.add(new CrocLesnar());
         battlePets.add(new Froggy());
@@ -46,7 +45,7 @@ public class Player extends Entity implements Serializable{
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
-        // returns true if petchange (ie a pet has died)
+        // returns true if petchange (ie a petNum has died)
 
         getCurrentPet().takeDamage(skill);
         if (!getCurrentPet().isAlive()) {
@@ -69,23 +68,19 @@ public class Player extends Entity implements Serializable{
     public UUID getId() {
         return id;
     }
+
     public String getIdString() {return idString;}
+
     public Creature getCurrentPet() {
-        if (currentPet == Pet.PET1) {
-            return battlePets.get(0);
-        } else if (currentPet == Pet.PET2) {
-            return battlePets.get(1);
-        } else {
-            return battlePets.get(2);
-        }
+        return battlePets.get(currentPetNum.ordinal());
     }
 
-    public Pet getPet() {
-        return currentPet;
+    public PetNum getPet() {
+        return currentPetNum;
     }
 
     // consider replacing battlePets array to reservePets array in future
-    // to better display pet screen
+    // to better display petNum screen
 //    public void switchpet(int target) {
 //        CurrentPet = battlePets[target];
 //    }
@@ -94,7 +89,7 @@ public class Player extends Entity implements Serializable{
 //        texturePath = new Texture(path);
 //    }
     public Texture getTexture() {
-        return texturePath;
+        return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
     }
 
     public void Move() {
@@ -112,18 +107,18 @@ public class Player extends Entity implements Serializable{
 //    public void loadTextures(Runnable callback) {
 //        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
 //
-//        // Load textures for each pet
+//        // Load textures for each petNum
 //        int petNum = battlePets.size() + reservePets.size();
 //
-//        for (Creature pet : battlePets) {
-//            pet.loadTexture(() -> {
+//        for (Creature petNum : battlePets) {
+//            petNum.loadTexture(() -> {
 //                if (loadedCreatureCount.incrementAndGet() == petNum) {
 //                    callback.run();
 //                }
 //            });
 //        }
-//        for (Creature pet : reservePets) {
-//            pet.loadTexture(() -> {
+//        for (Creature petNum : reservePets) {
+//            petNum.loadTexture(() -> {
 //                if (loadedCreatureCount.incrementAndGet() == petNum) {
 //                    callback.run();
 //                }
@@ -131,22 +126,23 @@ public class Player extends Entity implements Serializable{
 //        }
 //    }
 
-    public void changePet(Pet pet) {
-        int index = pet.ordinal();
-        if (isValidPet(index)) {
-            currentPet = pet;
+    public void changeCurrentPet(PetNum petNum) {
+        if (isValidPet(petNum)) {
+            currentPetNum = petNum;
         }
     }
 
-    private boolean isValidPet(int index) {
-        return index >= 0 && index < battlePets.size() && battlePets.get(index) != null;
+    private boolean isValidPet(PetNum petNum) {
+        // checks if list has the petNum, or if its empty
+        int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        return index < battlePets.size();
     }
 
     public void changeNextPet() {
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             if (pet != null && pet.isAlive()) {
-                changePet(Pet.values()[i]);
+                changeCurrentPet(PetNum.values()[i]);
                 break;
             }
         }
@@ -157,7 +153,10 @@ public class Player extends Entity implements Serializable{
     }
 
     public void update(Player player) {
-        // to update pet info during battle
+        // to update petNum info during battle
+        System.out.println("battlePets size: " + battlePets.size());
+        System.out.println("player battlePets size: " + player.getBattlePets().size());
+
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             Creature playerPet = player.getBattlePets().get(i);
@@ -165,20 +164,18 @@ public class Player extends Entity implements Serializable{
                 pet.update(playerPet);
             }
         }
-        changePet(player.getPet());
+        changeCurrentPet(player.getPet());
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
-        // to update pet info after PetChangeScreen
+        // to update petNum info after PetChangeScreen
         battlePets = pets1;
+        reservePets = pets2;
 
-        // todo pets1 is currently empty. To fix
         System.out.print("Updating pets: ");
         for (Creature pet : pets1) {
             System.out.println(pet.getName() + ", ");
         }
         System.out.println();
-        reservePets = pets2;
-
     }
 }

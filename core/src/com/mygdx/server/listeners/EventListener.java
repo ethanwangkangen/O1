@@ -3,11 +3,9 @@ package com.mygdx.server.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.game.entities.Player;
 import com.mygdx.global.*;
 import com.mygdx.server.ServerFoundation;
 import com.esotericsoftware.kryonet.Server;
-import com.mygdx.global.BattleState;
 import com.mygdx.server.handlers.PlayerHandler;
 import com.mygdx.server.handlers.BattleHandler;
 
@@ -34,7 +32,7 @@ public class EventListener extends Listener {
             System.out.println("ChangePetEvent received by server");
             ChangePetEvent changePetEvent = (ChangePetEvent) object;
             String battleId = changePetEvent.battleId;
-            BattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.pet);
+            BattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.petNum);
 
             BattleHandler.sendBattleState(battleId);
         }

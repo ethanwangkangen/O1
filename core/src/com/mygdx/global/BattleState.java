@@ -106,7 +106,7 @@ public class BattleState{
     public void attack(String id, Skill skill) {
         if (!Objects.equals(player1.getIdString(), id)) {
             if (player1.takeDamage(skill)) {
-                // takeDamage is true if pet had died from attack
+                // takeDamage is true if petNum had died from attack
                 petChanged = true;
             }
         } else {
@@ -133,11 +133,11 @@ public class BattleState{
 //
 //    }
 
-    public void changePet(String id, Player.Pet pet) {
+    public void changePet(String id, Player.PetNum petNum) {
         if (Objects.equals(player1.getIdString(), id)) {
-            player1.changePet(pet);
+            player1.changeCurrentPet(petNum);
         } else if (Objects.equals(player2.getIdString(), id)) {
-            player2.changePet(pet);
+            player2.changeCurrentPet(petNum);
         }
         changeTurn();
         petChanged = true;

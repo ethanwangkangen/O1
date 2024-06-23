@@ -6,7 +6,7 @@ public class ChangePetEvent {
     public ChangePetEvent() {
     }
 
-    public Player.Pet pet;
+    public Player.PetNum petNum;
     public String playerId; // of player changing pets
     public String battleId;
 

@@ -1,15 +1,11 @@
 package com.mygdx.server;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
 import com.mygdx.global.*;
 import com.mygdx.server.handlers.PlayerHandler;
 import com.mygdx.server.listeners.EventListener;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import java.io.IOException;
@@ -47,7 +43,7 @@ public class ServerFoundation {
         server.getKryo().register(PlayerRequestBattleEvent.class);
 
         server.getKryo().register(Player.class);
-        server.getKryo().register(Player.Pet.class);
+        server.getKryo().register(Player.PetNum.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
