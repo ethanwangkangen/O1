@@ -207,9 +207,6 @@ public class Player extends Entity implements Serializable{
             Creature playerPet = player.getBattlePets().get(i);
             if (pet != null && playerPet != null) {
                 pet.update(playerPet);
-                if (i == 1) {
-                    System.out.println("Crocs health is:" + playerPet.getHealth());
-                }
             }
         }
         //changePet(player.getPet());

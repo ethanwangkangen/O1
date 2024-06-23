@@ -37,6 +37,10 @@ public class ServerBattleHandler {
         System.out.println("Sending battleState");
         connection1.sendTCP(battleState);
         connection2.sendTCP(battleState);
+
+        // reset battleState attributes for next turn
+        battleState.petAttacked = false;
+        battleState.petChanged = false;
     }
 
     public static void sendStartBattle(String battleId) {
