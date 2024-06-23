@@ -121,19 +121,6 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void dispose() {
-        // Dispose of textures, skins, stages, and other resources
-        skin.dispose();
-        stage.dispose();
-        emptyBox.dispose(); // Assuming emptyBox is a Texture
-
-        // Dispose of Textures in buttonList1 and buttonList2
-        for (TextImageButton button : buttonList1) {
-            button.dispose();
-        }
-
-        for (TextImageButton button : buttonList2) {
-            button.dispose();
-        }
 
     }
 
