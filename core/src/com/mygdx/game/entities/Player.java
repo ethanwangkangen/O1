@@ -50,6 +50,7 @@ public class Player extends Entity implements Serializable{
     public ArrayList<Creature> getBattlePets() {
         return battlePets;
     }
+
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
     public Map<String, Object> toMap() {
@@ -86,7 +87,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setCurrentPet(PetNum p) {
-
+        // todo implement this method????
     }
     public void setBattlePets(ArrayList<Creature> battlePets) {
         this.battlePets = battlePets;
@@ -106,13 +107,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public Creature getCurrentPet() {
-        if (currentPetNum == PetNum.PET1) {
-            return battlePets.get(0);
-        } else if (currentPetNum == PetNum.PET2) {
-            return battlePets.get(1);
-        } else {
-            return battlePets.get(2);
-        }
+        return battlePets.get(currentPetNum.ordinal());
     }
 
 
@@ -131,6 +126,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public String getUserId() {return this.userId;}
+
     public void setUserId(String id) {
         this.userId = id;
     }
@@ -161,39 +157,25 @@ public class Player extends Entity implements Serializable{
     public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
         if (isValidPet(petNum)) {
-            if (petNum == PetNum.PET1) {
-                currentPetNum = PetNum.PET1;
-            } if (petNum == PetNum.PET2) {
-                currentPetNum = PetNum.PET2;
-            } if (petNum == PetNum.PET3) {
-                currentPetNum = PetNum.PET3;
-            }
+            currentPetNum = petNum;
         }
     }
 
     private boolean isValidPet(Player.PetNum petNum) {
-        if (battlePets.size() == 1) {
-            return petNum == PetNum.PET1;
-        } if (battlePets.size() == 2) {
-            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2);
-        } else {
-            return (petNum == PetNum.PET1) || (petNum == PetNum.PET2) || (petNum == PetNum.PET3);
-        }
+        // checks if list has the petNum, or if its empty
+        int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        return index < battlePets.size();
     }
 
     public void changeNextPet() {
         // Automatically when pet dies
-
-
-
-        //don't know what the below is supposed to be lol
-//        for (int i = 0; i < battlePets.size(); i++) {
-//            Creature pet = battlePets.get(i);
-//            if (pet != null && pet.isAlive()) {
-//                changePet(Pet.values()[i]);
-//                break;
-//            }
-//        }
+        for (int i = 0; i < battlePets.size(); i++) {
+            Creature pet = battlePets.get(i);
+            if (pet != null && pet.isAlive()) {
+                changeCurrentPet(PetNum.values()[i]);
+                break;
+            }
+        }
     }
 
     public int getNumPets() {
@@ -209,7 +191,11 @@ public class Player extends Entity implements Serializable{
                 pet.update(playerPet);
             }
         }
-        //changePet(player.getPet());
+        changeCurrentPet(player.getCurrentPetNum());
+    }
+
+    public PetNum getCurrentPetNum() {
+        return currentPetNum;
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {

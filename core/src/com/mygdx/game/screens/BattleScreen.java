@@ -290,27 +290,12 @@ public class BattleScreen implements Screen {
         }
         System.out.println("initialising initialisePetsWindow");
 
-        TextImageButton pet1 = createPetButton(thisPlayer.getBattlePets().get(0));
-        TextImageButton pet2 = createPetButton(thisPlayer.getBattlePets().get(1));
-        TextImageButton pet3 = createPetButton(thisPlayer.getBattlePets().get(2));
-        petButtons.add(pet1);
-        petButtons.add(pet2);
-        petButtons.add(pet3);
-
         // initialize skillAvailable and skillButtons
         for (int i = 0; i < 3; i ++) {
-            if (petButtons.get(i).isTouchable()) {
-                petAvailable[i] = true;
-            }
-            addPetListener(petButtons.get(i), thisPlayer.getBattlePets().get(i), i);
-        }
-        if (pet2.isTouchable()) {
-            System.out.println("Pet 2 is touchable");
-        }
-        if (petAvailable[1].equals(true)) {
-            System.out.println("Pet 2 is available");
+            createPetButton(i);
         }
 
+        // add buttons to petsWindow
         for (TextImageButton button: petButtons) {
             petsWindow.add(button).pad(1).width(245).height(80);
             petsWindow.row();
@@ -321,21 +306,34 @@ public class BattleScreen implements Screen {
         petsWindow.setVisible(false);
     }
 
-    public TextImageButton createPetButton(Creature pet) {
+    public void createPetButton(int index) {
         TextImageButton newButton;
-        if (pet != null) {
+        ArrayList<Creature> battlePets = thisPlayer.getBattlePets();
+
+        if (index < thisPlayer.getBattlePets().size()) {
+            // player has this pet (ie not out of bounds of arraylist)
+            Creature pet = battlePets.get(index);
             newButton = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
             if (pet.isAlive()) {
                 newButton.setTouchable(Touchable.enabled);
+                // records if pet is available
+                petAvailable[index] = true;
             } else {
                 newButton.setTouchable(Touchable.disabled);
+                petAvailable[index] = false;
             }
         } else {
-            newButton = new TextImageButton("No pet owned", skin, crossedBox);
+            // pet not owned
+            newButton = new TextImageButton("No petNum owned", skin, crossedBox);
             newButton.setTouchable(Touchable.disabled);
+            petAvailable[index] = false;
         }
 
-        return newButton;
+        // add new button to petButtons list
+        petButtons.add(newButton);
+
+        // add pet listener
+        addPetListener(newButton, index);
     }
 
     public void setAllSkillTouchable() {
@@ -381,7 +379,7 @@ public class BattleScreen implements Screen {
         });
     }
 
-    public void addPetListener(TextImageButton petButton, Creature pet, int i) {
+    public void addPetListener(TextImageButton petButton, int i) {
         if (i == 0) {
             petButton.addListener(new ClickListener() {
                 @Override
@@ -441,6 +439,7 @@ public class BattleScreen implements Screen {
             // pet has attacked
             if (UserBattleHandler.petAttacked()) {
                 System.out.println("A pet has attacked.");
+
                 updatePetInfo();
                 initialisePetImages();
                 initialiseSkillsWindow();
