@@ -186,6 +186,7 @@ public class BattleScreen implements Screen {
         //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
         pet2Info.padRight(5);
+        healthBar1.setColor(1, 0, 0, 1);
     }
 
     public void updatePetInfo() {

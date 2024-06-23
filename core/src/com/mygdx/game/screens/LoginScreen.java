@@ -60,7 +60,6 @@ public class LoginScreen implements Screen {
     stuff for firebase login (to be refactored):
      */
 
-
     public LoginScreen(DarwinsDuel gameObj) {
 
         System.out.println("LoginScreen created");
