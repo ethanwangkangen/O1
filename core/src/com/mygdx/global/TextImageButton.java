@@ -30,10 +30,4 @@ public class TextImageButton extends ImageTextButton {
         return this.pet;
     }
 
-    public void dispose() {
-        if (pet.getTexturePath() != null) {
-            pet.getTexturePath().dispose();
-        }
-    }
-
 }

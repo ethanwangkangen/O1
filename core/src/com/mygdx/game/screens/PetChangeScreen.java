@@ -224,9 +224,17 @@ public class PetChangeScreen implements Screen {
         for (TextImageButton button : buttonList1) {
             table1.add(button).pad(5).width(245).height(80).row();
         }
+
+        // Calculate how many empty buttons are needed
+        System.out.println(buttonList1.size());
+        int emptyButtonCount = 3 - buttonList1.size();
+
         // for empty buttons to make 3 buttons
-        for (int i = 0; i < 3 - buttonList1.size(); i ++) {
-            table1.add(createEmptyButton()).pad(5).row();
+        for (int i = 0; i < emptyButtonCount; i ++) {
+            System.out.println(i);
+            TextImageButton emptyButton = createEmptyButton();
+            table1.add(emptyButton).pad(5).width(245).height(80).row();
+            buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
 
@@ -280,11 +288,29 @@ public class PetChangeScreen implements Screen {
 
     private void removeButtonFromList1(TextImageButton button) {
         int index = buttonList1.indexOf(button);
-        buttonList1.remove(button);
-        buttonList2.add(button);
-        updateClickListeners(button, 2);
-        buttonList1.add(index, createEmptyButton()); // Replace with empty button
-        refreshTables();
+        System.out.println("removeButtonFromList1 function called");
+
+        if (button.getPet() == null) {
+            // button is empty button: do nothing
+            System.out.println("Button is empty: cannot be removed");
+            return;
+        }
+        if (index != -1) { // Ensure the button exists in the list
+            buttonList1.remove(button);
+            buttonList2.add(button);
+            updateClickListeners(button, 2);
+
+            // Ensure the index is within the bounds after removal
+            if (index <= buttonList1.size()) {
+                buttonList1.add(index, createEmptyButton()); // Replace with empty button
+            } else {
+                buttonList1.add(createEmptyButton()); // Add to the end if index is out of bounds
+            }
+
+            refreshTables();
+        } else {
+            System.err.println("Button not found in buttonList1");
+        }
     }
 
     private void swapList1Buttons(TextImageButton button) {
@@ -304,7 +330,7 @@ public class PetChangeScreen implements Screen {
                      + "\nselectedButton1: " + button.getText()
                      + "\nlastClickedButton: " + lastClickedButton.getText());
             return;
-        } else if (lastClickedButton.getText().equals("No petNum") || button.getText().equals("No petNum")) {
+        } else if (lastClickedButton.getPet() == null || button.getPet() == null) {
             System.out.println("Cannot swap empty button"); // changed
             return;
         }
@@ -335,7 +361,7 @@ public class PetChangeScreen implements Screen {
         buttonList1.remove(selectedButton1);
         buttonList2.remove(selectedButton2);
 
-        if (!selectedButton1.getText().equals("No petNum")) {
+        if (selectedButton1.getPet() != null) {
             // selectedButton1 is not an emptyButton
             buttonList2.add(selectedButton1);
         }
@@ -368,7 +394,7 @@ public class PetChangeScreen implements Screen {
     }
 
     public TextImageButton createEmptyButton() {
-        TextImageButton button = new TextImageButton("No petNum", skin, emptyBox);
+        TextImageButton button = new TextImageButton("No pet", skin, emptyBox);
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
