@@ -136,10 +136,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-
     private void startLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(5000)
@@ -153,17 +151,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-
                     sendLocationToFirebase(location);
                 }
             }
         };
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
@@ -178,10 +173,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        // send to firebase
-
-
-        //set location
+        // Send to firebase
+        // Set location
         DatabaseReference locationRef = database.child(myUserId).child("location");
 
         // Update location data in database
@@ -243,7 +236,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                             .position(playerLocation)
                                             .title(username)
                                             .icon(enemy));
-
                                 }
                                 playerMarkers.put(userId, marker);
                                 System.out.println("Player marker added");
@@ -264,7 +256,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 for (String userId : previousUsers) {
                     Marker marker = playerMarkers.remove(userId);
                     // Set marker to the one mapped to this userId and remove the mapping from the Map
-
                     if (marker != null) {
                         marker.remove();
                         System.out.println("Marker removed");

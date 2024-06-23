@@ -75,8 +75,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public void create () {
 		//this.create();
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, 800, 600);
 		this.setScreen(new SplashScreen(this));
@@ -92,12 +90,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void render() {
 		ScreenUtils.clear(1, 0, 0, 1);
-
-		batch.begin();
-		batch.draw(img, 0, y);
-		batch.end();
-
-
 		switch (gameState) {
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
@@ -128,6 +120,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 					System.out.println("Changing to SplashScreen");
 					this.setScreen(new SplashScreen(this));
 				}
+				break;
 			case WIN:
 				break;
 			case LOSS:

@@ -144,6 +144,7 @@ public class LoginScreen implements Screen {
         passwordLField.setPasswordMode(true);
 
         loginButton = new TextButton("Log In", skin);
+        System.out.println("here");
         loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -365,10 +366,8 @@ public class LoginScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
-        //System.out.println("currently rendering BattleScreen");
         stage.act(delta);
         stage.draw();
-
     }
 
     @Override
