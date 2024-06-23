@@ -1,0 +1,69 @@
+package com.mygdx.game.entities;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.DarwinsDuel;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class NPC extends Player implements Serializable {
+
+    //private Texture texture;
+    public String username;
+
+    private int count = 0;
+
+    /**/
+    public ArrayList<Creature> battlePets = new ArrayList<>();
+
+    private transient UUID id;
+
+    public String battleId;
+
+    private String idString;
+
+    private String path;
+
+    public NPC() {
+        this.id = UUID.randomUUID();
+        this.idString = id.toString();
+        path = "player1(1).png";
+        battlePets.add(new CrocLesnar());
+    } //no arg constructor for serialisation
+
+    @Override
+    public Boolean takeDamage(Skill skill) {
+        // returns true if petchange (ie a petNum has died)
+        getCurrentPet().takeDamage(skill);
+
+        if (!getCurrentPet().isAlive()) {
+            // pet has died
+            return true;
+        }
+
+        // pet has not died
+
+        return false;
+
+    }
+
+    public int getCount() {
+        // counter to rotate through skills of the pet
+        count += 1;
+        return count;
+    }
+
+    @Override
+    public boolean isAlive() {
+        return battlePets.get(0).isAlive();
+    }
+
+    @Override
+    public Creature getCurrentPet() {
+        return battlePets.get(0);
+    }
+
+    public String getIdString() {return idString;}
+
+}

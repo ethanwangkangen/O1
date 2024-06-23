@@ -25,10 +25,6 @@ public class BattleHandler {
         return battleState.getPlayerTurn();
     }
 
-    public static Boolean hasStarted() {
-        return battleState.hasStarted();
-    }
-
 //    public static void loadTextures(Runnable callback) {
 //        try{
 //            battleState.loadTextures(callback);

@@ -41,6 +41,8 @@ public class ServerFoundation {
         server.getKryo().register(PlayerAcceptBattleEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
         server.getKryo().register(PlayerRequestBattleEvent.class);
+        server.getKryo().register(NPCBattleEvent.class);
+        server.getKryo().register(NPC.class);
 
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.PetNum.class);

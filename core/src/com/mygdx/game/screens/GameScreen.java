@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.handlers.PlayerHandler;
+import com.mygdx.global.NPCBattleEvent;
 import com.mygdx.global.PlayerRequestBattleEvent;
 
 public class GameScreen implements Screen {
@@ -21,6 +22,7 @@ public class GameScreen implements Screen {
     private Texture background;
     private TextButton startBattle;
     private TextButton changePet;
+    private TextButton startNPCBattle;
     private Stage stage;
     private Table table;
 
@@ -62,8 +64,21 @@ public class GameScreen implements Screen {
             }
         });
 
+        startNPCBattle = new TextButton("Fight NPC", skin);
+        startNPCBattle.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                NPCBattleEvent NPCEvent = new NPCBattleEvent();
+                NPCEvent.player = PlayerHandler.getPlayer();
+                DarwinsDuel.client.sendTCP(NPCEvent);
+                System.out.println("Sending NPCBattleEvent");
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
         table.add(changePet).size(250, 50).padTop(100).row();
         this.table.add(startBattle).size(250, 50).padTop(100).row();
+        table.add(startNPCBattle).size(250, 50).padTop(100).row();
         this.stage.addActor(this.table);
     }
 

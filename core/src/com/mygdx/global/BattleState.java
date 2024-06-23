@@ -1,5 +1,6 @@
 package com.mygdx.global;
 
+import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 
@@ -16,41 +17,48 @@ public class BattleState{
     }
 
     public Turn turn;
-    private int numPlayers;
-    private Boolean battleStarted;
+    private int numofTurns;
+
+    private Boolean againstNPC;
     public Boolean battleEnded;
-//    public Boolean firstRound;
+
     public Boolean petChanged;
     public Boolean petAttacked;
-    private int numofTurns;
 
     public BattleState() {
         this.turn = Turn.PLAYERONETURN;
-        this.numPlayers = 0;
         this.numofTurns = 1;
-        battleStarted = false;
+
         battleEnded = false;
-//        firstRound = true;
         petChanged = false;
         petAttacked = false;
+        againstNPC = false;
     }
 
     public BattleState(Player p1Player, Player p2Player) {
         this.turn = Turn.PLAYERONETURN;
-        this.numPlayers = 0;
         this.numofTurns = 1;
-        battleStarted = false;
+
         battleEnded = false;
-//        firstRound = true;
         petChanged = false;
         petAttacked = false;
+        againstNPC = false;
 
         this.player1 = p1Player;
         this.player2 = p2Player;
     }
 
-    public int getNumPlayers() {
-        return this.numPlayers;
+    public BattleState(Player player, NPC npc) {
+        this.turn = Turn.PLAYERONETURN;
+        this.numofTurns = 1;
+        battleEnded = false;
+        petChanged = false;
+        petAttacked = false;
+
+        againstNPC = true; // unique for NPC
+
+        this.player1 = player;
+        this.player2 = npc;
     }
 
     public Player getPlayer1() {
@@ -65,26 +73,12 @@ public class BattleState{
         return player1.isAlive() && player2.isAlive();
     }
 
-
-    //first player to connect to server will be set as player1, second set as player2
-    public void addPlayer(Player player) {
-        if (this.player1 == null) {
-            this.player1 = player;
-            this.numPlayers = 1;
-        } else if (this.player2 == null) {
-            this.player2 = player;
-            this.numPlayers = 2;
-        } else {
-            System.out.println("max players"); //to do: throw error
-        }
-
-        if (this.numPlayers == 2) {
-            battleStarted = true;
-        }
-    }
-
     public Turn getPlayerTurn() {
         return turn;
+    }
+
+    public Boolean isAgainstNPC() {
+        return againstNPC;
     }
 
     public void changeTurn() {
@@ -96,21 +90,16 @@ public class BattleState{
         }
     }
 
-    public boolean hasStarted() {
-        return this.battleStarted;
-    }
-    public void startBattle() {
-        battleStarted = true;
-    }
-
-    public void attack(String id, Skill skill) {
-        if (!Objects.equals(player1.getIdString(), id)) {
-            if (player1.takeDamage(skill)) {
+    public void playerAttack(String id, Skill skill) {
+        // online multiplayer pvp
+        if (Objects.equals(player1.getIdString(), id)) {
+            // player1 has launched the attack
+            if (player2.takeDamage(skill)) {
                 // takeDamage is true if petNum had died from attack
                 petChanged = true;
             }
         } else {
-            if (player2.takeDamage(skill)) {
+            if (player1.takeDamage(skill)) {
                 petChanged = true;
             }
         }
@@ -118,25 +107,31 @@ public class BattleState{
         changeTurn();
         petAttacked = true;
         System.out.println("Changing turns");
-
-//        if (!playersAlive()) {
-//            System.out.println("Changing battleEnded to true");
-//            battleEnded = true;
-//        }
     }
 
-//    public void loadTextures(Runnable callback) {
-//        player1.loadTextures(() -> {
-//            player2.loadTextures(callback);
-//        });
-//        System.out.println("battlestate textures loading");
-//
-//    }
+    public void NPCAttack() {
+        // Player vs NPC
+        Skill skill = player2.npcAttack(numofTurns);
+
+        if (skill == null) {
+            System.out.println("NPC skill is null");
+        }
+        if (player1.takeDamage(skill)) {
+            petChanged = true;
+        }
+
+        changeTurn();
+        petAttacked = true;
+        System.out.println("Changing turns");
+    }
+
 
     public void changePet(String id, Player.PetNum petNum) {
         if (Objects.equals(player1.getIdString(), id)) {
+            // player1 changing pets
             player1.changeCurrentPet(petNum);
         } else if (Objects.equals(player2.getIdString(), id)) {
+            // player2 changing pets
             player2.changeCurrentPet(petNum);
         }
         changeTurn();
@@ -149,8 +144,6 @@ public class BattleState{
         player2.update(newState.player2);
         turn = newState.turn;
         battleEnded = newState.battleEnded;
-        battleStarted = newState.battleStarted;
-//        firstRound = newState.firstRound;
         petChanged = newState.petChanged;
         petAttacked = newState.petAttacked;
     }

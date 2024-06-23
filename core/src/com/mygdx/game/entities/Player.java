@@ -178,4 +178,33 @@ public class Player extends Entity implements Serializable{
         }
         System.out.println();
     }
+
+    public Skill npcAttack(int turns) {
+        Creature npcPet = battlePets.get(0);
+        if (npcPet == null) {
+            System.out.println("NPC pet is null");
+            return null;
+        }
+
+        System.out.println("Checking NPC skills: ");
+                System.out.println( "skill1=" + npcPet.skill1.getName());
+        System.out.println( ", skill2=" + npcPet.skill2.getName());
+        System.out.println( ", skill3=" + npcPet.skill3.getName());
+
+        if (npcPet.skill1 == null || npcPet.skill2 == null || npcPet.skill3 == null) {
+            System.out.println("One of the NPC skills is null");
+            return null;
+        }
+        // todo give errors when there are less than 3 skills
+        // only for NPC use
+        // NPC attacks; skill used depends on count variable and cycles through skills
+        int skillIndex = turns % 3; // This will cycle between 0, 1, and 2
+//        if (skillIndex == 0) {
+            return battlePets.get(0).skill1;
+//        } else if (skillIndex == 1) {
+//            return battlePets.get(0).skill2;
+//        } else {
+//            return battlePets.get(0).skill3;
+//        }
+    }
 }

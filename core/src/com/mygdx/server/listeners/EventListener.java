@@ -3,6 +3,7 @@ package com.mygdx.server.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.entities.NPC;
 import com.mygdx.global.*;
 import com.mygdx.server.ServerFoundation;
 import com.esotericsoftware.kryonet.Server;
@@ -20,11 +21,23 @@ public class EventListener extends Listener {
             AttackEvent attackEvent = (AttackEvent) object;
             String battleId = attackEvent.battleId;
 
-            BattleHandler.getBattleState(battleId).attack(attackEvent.id, attackEvent.skill);
+            BattleHandler.getBattleState(battleId).playerAttack(attackEvent.id, attackEvent.skill);
             BattleHandler.sendBattleState(battleId);
 
             if (!BattleHandler.getBattleState(battleId).playersAlive()){
                 BattleHandler.sendEndBattle(battleId);
+            }
+
+            if (BattleHandler.getBattleState(battleId).isAgainstNPC()) {
+                // fighting against NPC; NPC's turn
+                System.out.println("NPC attacking");
+                BattleHandler.getBattleState(battleId).NPCAttack();
+                BattleHandler.sendBattleState(battleId);
+
+                // if battle has ended
+                if (!BattleHandler.getBattleState(battleId).playersAlive()){
+                    BattleHandler.sendEndBattle(battleId);
+                }
             }
         }
 
@@ -55,6 +68,12 @@ public class EventListener extends Listener {
             // create new battleState
             String battleId = BattleHandler.initialiseBattle(event.requesterPlayer, event.opponentPlayer);
 
+            BattleHandler.sendStartBattle(battleId);
+
+        } else if (object instanceof NPCBattleEvent) {
+            NPCBattleEvent event = (NPCBattleEvent) object;
+            System.out.println("Battle starting between player and NPC");
+            String battleId = BattleHandler.initialiseBattle(event.player, new NPC());
             BattleHandler.sendStartBattle(battleId);
         } else {
             System.out.println("unknown object received.");
