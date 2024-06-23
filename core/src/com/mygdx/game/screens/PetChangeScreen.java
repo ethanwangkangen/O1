@@ -56,7 +56,7 @@ public class PetChangeScreen implements Screen {
 
         manager = DarwinsDuel.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
-        emptyBox = manager.get("crossedBox.png", Texture.class);
+        emptyBox = manager.get("crossedbox.png", Texture.class);
     }
 
     @Override
@@ -225,9 +225,15 @@ public class PetChangeScreen implements Screen {
         for (TextImageButton button : buttonList1) {
             table1.add(button).pad(5).width(245).height(80).row();
         }
+
+        // Calculate how many empty buttons are needed
+        int emptyButtonCount = 3 - buttonList1.size();
+
         // for empty buttons to make 3 buttons
-        for (int i = 0; i < 3 - buttonList1.size(); i ++) {
-            table1.add(createEmptyButton()).pad(5).row();
+        for (int i = 0; i < emptyButtonCount; i ++) {
+            TextImageButton emptyButton = createEmptyButton();
+            table1.add(emptyButton).pad(5).width(245).height(80).row();
+            buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
 
@@ -239,6 +245,7 @@ public class PetChangeScreen implements Screen {
         }
         table2.invalidateHierarchy();
     }
+
 
     private void handleButtonClick(TextImageButton button, int listNumber) {
         if (listNumber == 1) {
@@ -281,11 +288,29 @@ public class PetChangeScreen implements Screen {
 
     private void removeButtonFromList1(TextImageButton button) {
         int index = buttonList1.indexOf(button);
-        buttonList1.remove(button);
-        buttonList2.add(button);
-        updateClickListeners(button, 2);
-        buttonList1.add(index, createEmptyButton()); // Replace with empty button
-        refreshTables();
+        System.out.println("removeButtonFromList1 function called");
+
+        if (button.getPet() == null) {
+            // button is empty button: do nothing
+            System.out.println("Button is empty: cannot be removed");
+            return;
+        }
+        if (index != -1) { // Ensure the button exists in the list
+            buttonList1.remove(button);
+            buttonList2.add(button);
+            updateClickListeners(button, 2);
+
+            // Ensure the index is within the bounds after removal
+            if (index <= buttonList1.size()) {
+                buttonList1.add(index, createEmptyButton()); // Replace with empty button
+            } else {
+                buttonList1.add(createEmptyButton()); // Add to the end if index is out of bounds
+            }
+            refreshTables();
+
+        } else {
+            System.err.println("Button not found in buttonList1");
+        }
     }
 
     private void swapList1Buttons(TextImageButton button) {
@@ -295,15 +320,22 @@ public class PetChangeScreen implements Screen {
         System.out.println("Index2: " + index2);
 
         if (index1 == -1) {
+            // array index out of bounds
             System.err.println("Error: selectedButton1 not found in buttonList1: " + button.getText());
             return;
         } else if (index2 == -1) {
+            // array index out of bounds
             System.err.println("Error: lastClickedButton not found in buttonList1: " + lastClickedButton.getText());
             return;
         } else if (index1 == index2) {
-            System.err.println("Error lastClickedButton and selectedButton1 have the same index:"
+            // clicking on the same button in list1
+            System.out.println("Error lastClickedButton and selectedButton1 have the same index:"
                      + "\nselectedButton1: " + button.getText()
                      + "\nlastClickedButton: " + lastClickedButton.getText());
+            return;
+        } else if (lastClickedButton.getPet() == null || button.getPet() == null) {
+            // trying to swap an empty button in list1
+            System.out.println("Cannot swap empty button");
             return;
         }
 
@@ -333,7 +365,7 @@ public class PetChangeScreen implements Screen {
         buttonList1.remove(selectedButton1);
         buttonList2.remove(selectedButton2);
 
-        if (!selectedButton1.getText().toString().equals("No pet")) {
+        if (selectedButton1.getPet() != null) {
             // selectedButton1 is not an emptyButton
             buttonList2.add(selectedButton1);
         }
