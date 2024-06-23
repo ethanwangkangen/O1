@@ -153,7 +153,7 @@ public class DarwinsDuel extends Game {
 	public void loadTextures()
 	{
 		// UI assets
-		;
+
 		manager.load("buttons/uiskin.json", Skin.class);
 
 		// background textures
