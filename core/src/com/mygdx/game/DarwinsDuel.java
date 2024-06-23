@@ -79,7 +79,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, 800, 600);
-		this.setScreen(new LoginScreen(this));
+		this.setScreen(new SplashScreen(this));
 
 	}
 
