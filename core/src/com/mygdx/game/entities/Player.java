@@ -50,7 +50,6 @@ public class Player extends Entity implements Serializable{
     public ArrayList<Creature> getBattlePets() {
         return battlePets;
     }
-
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
     public Map<String, Object> toMap() {
@@ -87,7 +86,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setCurrentPet(PetNum p) {
-        // todo implement this method????
+
     }
     public void setBattlePets(ArrayList<Creature> battlePets) {
         this.battlePets = battlePets;
@@ -168,7 +167,8 @@ public class Player extends Entity implements Serializable{
     }
 
     public void changeNextPet() {
-        // Automatically when pet dies
+        // Change to next available pet when a pet dies
+
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             if (pet != null && pet.isAlive()) {
