@@ -34,6 +34,7 @@ public class ServerFoundation {
         server.getKryo().register(PlayerAttackEvent.class);
         server.getKryo().register(PlayerChangePetEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
+        server.getKryo().register(StartBattleEvent.class);
 
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
@@ -75,6 +76,8 @@ public class ServerFoundation {
         });
         serverThread.start();
     }
+
+    //todo change such that errors dont stop the server
 
     public static Server getServer() {
         return server;
