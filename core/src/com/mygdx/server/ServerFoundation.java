@@ -31,13 +31,11 @@ public class ServerFoundation {
 
         // Add all global events
         server.getKryo().register(PlayerAcceptBattleEvent.class);
+        server.getKryo().register(PlayerRequestBattleEvent.class);
         server.getKryo().register(PlayerAttackEvent.class);
         server.getKryo().register(PlayerChangePetEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
-        server.getKryo().register(PlayerRequestBattleEvent.class);
 
-        server.getKryo().register(BattleState.class);
-        server.getKryo().register(Player.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
@@ -45,6 +43,10 @@ public class ServerFoundation {
         server.getKryo().register(Dragon.class);
         server.getKryo().register(Doge.class);
         server.getKryo().register(MouseHunter.class);
+
+        server.getKryo().register(BattleState.class);
+        server.getKryo().register(Player.class);
+        server.getKryo().register(Player.PetNum.class);
         server.getKryo().register(ArrayList.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);

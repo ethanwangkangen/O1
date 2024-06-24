@@ -16,41 +16,32 @@ public class BattleState{
     }
 
     public Turn turn;
-    private int numPlayers;
-    private Boolean battleStarted;
+    private int numofTurns;
+
     public Boolean battleEnded;
-    public Boolean firstRound;
+
     public Boolean petChanged;
     public Boolean petAttacked;
-    private int numofTurns;
 
     public BattleState() {
         this.turn = Turn.PLAYERONETURN;
-        this.numPlayers = 0;
         this.numofTurns = 1;
-        battleStarted = false;
+
         battleEnded = false;
-//        firstRound = true;
         petChanged = false;
         petAttacked = false;
     }
 
     public BattleState(Player p1Player, Player p2Player) {
         this.turn = Turn.PLAYERONETURN;
-        this.numPlayers = 0;
         this.numofTurns = 1;
-        battleStarted = false;
+
         battleEnded = false;
-//        firstRound = true;
         petChanged = false;
         petAttacked = false;
 
         this.p1Player = p1Player;
         this.p2Player = p2Player;
-    }
-
-    public int getNumPlayers() {
-        return this.numPlayers;
     }
 
     public Player getPlayer1() {
@@ -66,23 +57,6 @@ public class BattleState{
     }
 
 
-    //first player to connect to server will be set as player1, second set as player2
-    public void addPlayer(Player player) {
-        if (this.p1Player == null) {
-            this.p1Player = player;
-            this.numPlayers = 1;
-        } else if (this.p2Player == null) {
-            this.p2Player = player;
-            this.numPlayers = 2;
-        } else {
-            System.out.println("max players"); //to do: throw error
-        }
-
-        if (this.numPlayers == 2) {
-            battleStarted = true;
-        }
-    }
-
     public Turn getPlayerTurn() {
         return turn;
     }
@@ -94,13 +68,6 @@ public class BattleState{
             this.turn = Turn.PLAYERONETURN;
             this.numofTurns += 1;
         }
-    }
-
-    public boolean hasStarted() {
-        return this.battleStarted;
-    }
-    public void startBattle() {
-        battleStarted = true;
     }
 
     public void attack(String id, Skill skill) {
@@ -148,8 +115,6 @@ public class BattleState{
         p2Player.update(newState.p2Player);
         turn = newState.turn;
         battleEnded = newState.battleEnded;
-        battleStarted = newState.battleStarted;
-//        firstRound = newState.firstRound;
         petChanged = newState.petChanged;
         petAttacked = newState.petAttacked;
     }

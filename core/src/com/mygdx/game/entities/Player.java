@@ -87,6 +87,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setCurrentPet(PetNum p) {
+        this.currentPetNum = p;
     }
 
     public void setBattlePets(ArrayList<Creature> battlePets) {
@@ -157,6 +158,9 @@ public class Player extends Entity implements Serializable{
 
     public void update(Player player) {
         // to update pet info during battle
+        System.out.println("battlePets size: " + battlePets.size());
+        System.out.println("player battlePets size: " + player.getBattlePets().size());
+
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             Creature playerPet = player.getBattlePets().get(i);
@@ -175,5 +179,11 @@ public class Player extends Entity implements Serializable{
         // to update pet info after PetChangeScreen
         battlePets = pets1;
         reservePets = pets2;
+
+        System.out.print("Updating pets: ");
+        for (Creature pet : pets1) {
+            System.out.println(pet.getName() + ", ");
+        }
+        System.out.println();
     }
 }
