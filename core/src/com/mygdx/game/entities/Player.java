@@ -53,26 +53,26 @@ public class Player extends Entity implements Serializable{
 
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> result = new HashMap<>();
-        result.put("username", username);
-        result.put("userId", userId);
-        result.put("currentPetNum", currentPetNum.toString());
-
-        List<Map<String, Object>> battlePetsList = new ArrayList<>();
-        for (Creature pet : battlePets) {
-            battlePetsList.add(pet.toMap());
-        }
-        result.put("battlePets", battlePetsList);
-
-        List<Map<String, Object>> reservePetsList = new ArrayList<>();
-        for (Creature pet : reservePets) {
-            reservePetsList.add(pet.toMap());
-        }
-        result.put("reservePets", reservePetsList);
-
-        return result;
-    }
+//    public Map<String, Object> toMap() {
+//        Map<String, Object> result = new HashMap<>();
+//        result.put("username", username);
+//        result.put("userId", userId);
+//        result.put("currentPetNum", currentPetNum.toString());
+//
+//        List<Map<String, Object>> battlePetsList = new ArrayList<>();
+//        for (Creature pet : battlePets) {
+//            battlePetsList.add(pet.toMap());
+//        }
+//        result.put("battlePets", battlePetsList);
+//
+//        List<Map<String, Object>> reservePetsList = new ArrayList<>();
+//        for (Creature pet : reservePets) {
+//            reservePetsList.add(pet.toMap());
+//        }
+//        result.put("reservePets", reservePetsList);
+//
+//        return result;
+//    }
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {

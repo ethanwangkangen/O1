@@ -363,6 +363,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return false;
     }
     private void setTargetEnemy(String playerUserId) {
+        //todo prevent self from being targeted
         this.enemyUID = playerUserId;
         System.out.println("setting target enemy to " + playerUserId);
     }
