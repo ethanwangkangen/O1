@@ -48,9 +48,7 @@ public class ServerFoundation {
         server.getKryo().register(Player.PetNum.class);
         server.getKryo().register(ArrayList.class);
         server.getKryo().register(Creature.class);
-        server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);
-        server.getKryo().register(Skill[].class);
         server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(TextImageButton.class);
         server.getKryo().register(String.class);

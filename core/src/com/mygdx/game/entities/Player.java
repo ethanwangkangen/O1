@@ -91,7 +91,6 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setBattlePets(ArrayList<Creature> battlePets) {
-
         this.battlePets = battlePets;
     }
 

@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class Creature extends Entity implements Serializable{
 
-    public Creature(){}
 
     //private boolean alive;
     private int maxhealth;
@@ -33,6 +32,9 @@ public abstract class Creature extends Entity implements Serializable{
     public ArrayList<Skill> getSkills() {
         return skills;
     }
+
+
+    public Creature(){}
 
     public Creature(int health, int mana, String name) {
         this.maxhealth = health;
@@ -78,12 +80,12 @@ public abstract class Creature extends Entity implements Serializable{
 //        skillList.add(newSkill);
 //    }
 
-    public Map<String, Object> toMap() {
-        Map<String, Object> result = new HashMap<>();
-        result.put("type", getType());
-        // Add other properties
-        return result;
-    }
+//    public Map<String, Object> toMap() {
+//        Map<String, Object> result = new HashMap<>();
+//        result.put("type", getType());
+//        // Add other properties
+//        return result;
+//    }
 
 //    public void loadTexture(Runnable callback) {
 //        Gdx.app.postRunnable(() -> {
