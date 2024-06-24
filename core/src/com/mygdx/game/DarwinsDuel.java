@@ -93,13 +93,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void render() {
 		ScreenUtils.clear(1, 0, 0, 1);
-		if (!(getScreen() instanceof MapScreen)) {
-			if (Gdx.app.getType() == Application.ApplicationType.Android) {
-				MapInterface map = (MapInterface) Gdx.app;
-				// Stop showing the map if its being shown
-				map.stopMap();
-			}
-		}
 		switch (gameState) {
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
@@ -135,6 +128,17 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				break;
 			case LOSS:
 				break;
+		}
+
+		if (gameState != GameState.FREEROAM) {
+			if (Gdx.app.getType() == Application.ApplicationType.Android) {
+				MapInterface map = (MapInterface) Gdx.app;
+				// Stop showing the map if its being shown
+				System.out.println("Stop showing the map");
+				if (map.mapOn()) {
+					map.stopMap();
+				}
+			}
 		}
 
 		super.render();

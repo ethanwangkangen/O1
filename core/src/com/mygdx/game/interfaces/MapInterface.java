@@ -8,7 +8,9 @@ package com.mygdx.game.interfaces;
 public interface MapInterface {
     public void showMap();
 
-    void stopMap();
+    public void stopMap();
 
     public void acceptOrReject();
+
+    public Boolean mapOn();
 }
