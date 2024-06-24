@@ -78,6 +78,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         LatLng position = new LatLng(selfLatitude, selfLongitude);
         this.googleMap = map;
+        googleMap.setOnMarkerClickListener(this);
 
         // Add current player?
         // Todo refactor into new function. set custom marker for own player
@@ -347,10 +348,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //todo in future: change logic such that only nearby players can be fought
     @Override
     public boolean onMarkerClick(Marker marker) {
+        System.out.println("Registered click");
         String playerUsername = marker.getTitle();
+        System.out.println("Enemy username is" + playerUsername);
         for (Map.Entry entry : playerMarkers.entrySet()) {
             if (entry.getValue().equals(marker)) {
                 String playerUserId = (String) entry.getKey();
+                System.out.println("Found enemyUserId");
                 setTargetEnemy(playerUserId);
                 return false;
             }
@@ -360,6 +364,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private void setTargetEnemy(String playerUserId) {
         this.enemyUID = playerUserId;
+        System.out.println("setting target enemy to " + playerUserId);
     }
     private void sendBattleReqToEnemy(String playerUserId) {
         Intent intent = new Intent("sending battle req");

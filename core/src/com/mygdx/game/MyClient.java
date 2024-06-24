@@ -55,7 +55,7 @@ public class MyClient {
 
     private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "localhost"; // Server's IP address if not running locally
+            String host = "10.0.2.2"; // Server's IP address if not running locally
             int tcpPort = 55555;       // Must match the server's TCP port
             int udpPort = 55577;       // Must match the server's UDP port
 
