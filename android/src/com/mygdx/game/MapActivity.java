@@ -229,6 +229,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 onBattleResponse(true);
+                acceptOrReject.dismiss();
             }
         });
 
@@ -237,6 +238,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 onBattleResponse(false);
+                acceptOrReject.dismiss();
             }
         });
         acceptOrReject.show();
