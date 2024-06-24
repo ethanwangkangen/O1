@@ -350,7 +350,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker) {
         System.out.println("Registered click");
         String playerUsername = marker.getTitle();
-        System.out.println("Enemy username is" + playerUsername);
+        System.out.println("Enemy username is " + playerUsername);
         for (Map.Entry entry : playerMarkers.entrySet()) {
             if (entry.getValue().equals(marker)) {
                 String playerUserId = (String) entry.getKey();
@@ -367,6 +367,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         System.out.println("setting target enemy to " + playerUserId);
     }
     private void sendBattleReqToEnemy(String playerUserId) {
+        System.out.println("Sending battle req to enemy (in map)");
         Intent intent = new Intent("sending battle req");
         intent.putExtra("playerUserId", playerUserId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -374,6 +375,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void sendQuitToLibGDX() {
         Intent intent = new Intent("quit map activity");
+        System.out.println("Going to Pet change screen");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

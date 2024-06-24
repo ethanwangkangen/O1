@@ -11,6 +11,7 @@ import com.mygdx.game.interfaces.GameCommunication;
  */
 public class MyBroadcastReceiver extends BroadcastReceiver{
 
+    private static MyBroadcastReceiver instance = new MyBroadcastReceiver();
     /**
      * gameCommunication is the game instance.
      * when MapActivity wants to send info to the game, i will send out a broadcast which is caught here.
@@ -20,15 +21,18 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        System.out.println("Action is " + action);
         if ("sending battle req".equals(action)) {
+            System.out.println("Sending battle req (in broadcast receiver)");
             String playerUserId = intent.getStringExtra("playerUserId");
-
             // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
+
                 gameCommunication.onEnemyInfoReceived(playerUserId);
             }
         } else if ("quit map activity".equals(action)) {
+            System.out.println("Quitting map");
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
                 gameCommunication.onQuitMapActivity();

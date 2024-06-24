@@ -63,6 +63,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	 */
 	@Override
 	public void onEnemyInfoReceived(String playerUserId) {
+		System.out.println("Sending battle req (in Darwins duel)");
 		MyClient.sendBattleRequest(playerUserId);
 	}
 

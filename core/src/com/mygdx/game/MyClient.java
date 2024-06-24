@@ -1,15 +1,25 @@
 package com.mygdx.game;
 
 import com.mygdx.game.entities.Creature;
+import com.mygdx.game.entities.CrocLesnar;
+import com.mygdx.game.entities.Doge;
+import com.mygdx.game.entities.Dragon;
 import com.mygdx.game.entities.Entity;
+import com.mygdx.game.entities.Froggy;
 import com.mygdx.game.entities.MeowmadAli;
+import com.mygdx.game.entities.MouseHunter;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
+import com.mygdx.game.events.PlayerAcceptBattleEvent;
+import com.mygdx.game.events.PlayerAttackEvent;
+import com.mygdx.game.events.PlayerChangePetEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.BattleState;
+import com.mygdx.global.TextImageButton;
+import com.mygdx.server.listeners.ServerEventListener;
 
 import java.io.IOException;
 
@@ -19,27 +29,31 @@ public class MyClient {
         DarwinsDuel.client = new com.esotericsoftware.kryonet.Client();
         myClient = DarwinsDuel.getClient();
 
-        myClient.addListener(new UserEventListener());
+        // Add all global events
+        myClient.getKryo().register(PlayerAcceptBattleEvent.class);
+        myClient.getKryo().register(PlayerAttackEvent.class);
+        myClient.getKryo().register(PlayerChangePetEvent.class);
+        myClient.getKryo().register(PlayerJoinServerEvent.class);
+        myClient.getKryo().register(PlayerRequestBattleEvent.class);
 
-//        myClient.getKryo().register(AddPlayerEvent.class);
-//        myClient.getKryo().register(AttackEvent.class);
-//        myClient.getKryo().register(BattleState.class);
-//        myClient.getKryo().register(EndBattleEvent.class);
-//        myClient.getKryo().register(JoinRequestEvent.class);
-//        myClient.getKryo().register(JoinResponseEvent.class);
-//        myClient.getKryo().register(StartBattleEvent.class);
-//        myClient.getKryo().register(java.util.UUID.class);
-
+        myClient.getKryo().register(BattleState.class);
         myClient.getKryo().register(Player.class);
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
+        myClient.getKryo().register(CrocLesnar.class);
+        myClient.getKryo().register(Froggy.class);
+        myClient.getKryo().register(Dragon.class);
+        myClient.getKryo().register(Doge.class);
+        myClient.getKryo().register(MouseHunter.class);
         myClient.getKryo().register(Creature.class);
         myClient.getKryo().register(Creature[].class);
         myClient.getKryo().register(Skill.class);
         myClient.getKryo().register(Skill[].class);
         myClient.getKryo().register(BattleState.Turn.class);
-        myClient.getKryo().register(BattleState.class);
-        myClient.getKryo().register(PlayerJoinServerEvent.class);
+        myClient.getKryo().register(TextImageButton.class);
+
+        // Add all listeners of server
+        myClient.addListener(new UserEventListener());
 
         //start the client
         myClient.start();
@@ -55,7 +69,7 @@ public class MyClient {
 
     private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "10.0.2.2"; // Server's IP address if not running locally
+            String host = "***REMOVED***"; // Server's IP address if not running locally
             int tcpPort = 55555;       // Must match the server's TCP port
             int udpPort = 55577;       // Must match the server's UDP port
 
@@ -83,6 +97,12 @@ public class MyClient {
         //playerRequestBattleEvent.requesterUID = UserPlayerHandler.getUserId();
         playerRequestBattleEvent.opponentUID = userId;
         playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
-        myClient.sendTCP(playerRequestBattleEvent);
+
+        try {
+            myClient.sendTCP(playerRequestBattleEvent);
+            System.out.println("sent playerRequestBattleEvent");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
