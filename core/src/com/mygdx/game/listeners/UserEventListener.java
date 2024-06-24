@@ -15,7 +15,7 @@ import com.mygdx.global.BattleState;
 import com.mygdx.global.StartBattleEvent;
 
 public class UserEventListener extends Listener {
-    private static UserEventListener instance = new UserEventListener();
+    //private static UserEventListener instance = new UserEventListener();
 
     private BattleResponseListener responseListener; // To be used by Map Activity
     public void setResponseListener(BattleResponseListener listener) {
@@ -27,7 +27,7 @@ public class UserEventListener extends Listener {
     }
 
     public static UserEventListener getInstance() {
-        return instance;
+        return null;
     }
     @Override
     public void received(Connection connection, final Object object) {
@@ -38,23 +38,23 @@ public class UserEventListener extends Listener {
                 map.acceptOrReject();
             }
             //todo wait for response from Map Activity
-            setResponseListener(new BattleResponseListener() {
-                @Override
-                public void onBattleResponse(boolean accepted) {
-                    PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
-                    PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
-                    accept.opponentPlayer = UserPlayerHandler.getPlayer();
-                    accept.requesterPlayer = request.requesterPlayer;
-
-                    if (accepted) {
-                        // User accepted the battle request
-                        connection.sendTCP(accept);
-                    } else {
-                        // User rejected the battle request
-                        // Optionally handle rejection logic
-                    }
-                }
-            });
+//            setResponseListener(new BattleResponseListener() {
+//                @Override
+//                public void onBattleResponse(boolean accepted) {
+//                    PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
+//                    PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
+//                    accept.opponentPlayer = UserPlayerHandler.getPlayer();
+//                    accept.requesterPlayer = request.requesterPlayer;
+//
+//                    if (accepted) {
+//                        // User accepted the battle request
+//                        connection.sendTCP(accept);
+//                    } else {
+//                        // User rejected the battle request
+//                        // Optionally handle rejection logic
+//                    }
+//                }
+//            });
         }
 
         if (object instanceof StartBattleEvent) {

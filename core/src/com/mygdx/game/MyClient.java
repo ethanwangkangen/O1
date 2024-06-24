@@ -57,7 +57,7 @@ public class MyClient {
 
 
         // Add all listeners of server
-        myClient.addListener(UserEventListener.getInstance());
+        myClient.addListener(new UserEventListener());
 
         //start the client
         myClient.start();
