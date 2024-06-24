@@ -1,6 +1,7 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.mygdx.game.DarwinsDuel;
 
 import java.io.Serializable;
@@ -12,8 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Player extends Entity implements Serializable{
-
-    //private Texture texture;
 
     /**
      * Username to be displayed. Not unique. DO NOT use for identification!
@@ -27,8 +26,7 @@ public class Player extends Entity implements Serializable{
      * Use this for identification
      */
     public String userId;
-//    private transient Texture texturePath;
-    public String path = "player1(1).png";
+    public String path = "player1";
     public PetNum currentPetNum;
 
 
@@ -42,8 +40,8 @@ public class Player extends Entity implements Serializable{
     public Player() {
         currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
-        battlePets.add(new CrocLesnar());
-        battlePets.add(new Froggy());
+//        battlePets.add(new CrocLesnar());
+//        battlePets.add(new Froggy());
 
     } //no arg constructor for serialisation
 
@@ -86,7 +84,6 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setCurrentPet(PetNum p) {
-
     }
     public void setBattlePets(ArrayList<Creature> battlePets) {
         this.battlePets = battlePets;
@@ -106,16 +103,12 @@ public class Player extends Entity implements Serializable{
     }
 
     public Creature getCurrentPet() {
-        return battlePets.get(currentPetNum.ordinal());
+        //return battlePets.get(currentPetNum.ordinal());
+        //return battlePets.get(0);
+        return null;
     }
 
 
-//    public void loadTexture() {
-//        texturePath = new Texture(path);
-//    }
-    public Texture getTexture() {
-        return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
-    }
     public String getUsername() {
         return this.username;
     }
@@ -162,7 +155,7 @@ public class Player extends Entity implements Serializable{
 
     private boolean isValidPet(Player.PetNum petNum) {
         // checks if list has the petNum, or if its empty
-        int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        int index = 3; // Assuming PET1 is 0, PET2 is 1, PET3 is 2
         return index < battlePets.size();
     }
 

@@ -17,6 +17,7 @@ import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
 import org.w3c.dom.Text;
+import com.mygdx.game.handlers.TextureHandler;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,7 @@ public class PetChangeScreen implements Screen {
 
         stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        manager = DarwinsDuel.getInstance().getAssetManager();
+        manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         emptyBox = manager.get("crossedbox.png", Texture.class);
     }

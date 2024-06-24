@@ -20,6 +20,7 @@ import com.mygdx.global.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mygdx.game.handlers.TextureHandler;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -81,7 +82,7 @@ public class BattleScreen implements Screen {
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
 
-        manager = DarwinsDuel.getInstance().getAssetManager();
+        manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         crossedBox = manager.get("crossedbox.png", Texture.class);
 
@@ -163,8 +164,8 @@ public class BattleScreen implements Screen {
         pet2imageTable.clear();
 
         System.out.println("initialising PetImages table");
-        pet1Image = new FlippedImage(thisPet.getTexturePath());
-        pet2Image = new Image(opponentPet.getTexturePath());
+        pet1Image = new FlippedImage(TextureHandler.getInstance().getTexture(thisPet.getType()));
+        pet2Image = new Image(TextureHandler.getInstance().getTexture(opponentPet.getType()));
 
         pet1imageTable.add(pet1Image).padLeft(10).height(100).width(100);
         pet2imageTable.add(pet2Image).padRight(10).height(100).width(100);
@@ -313,7 +314,7 @@ public class BattleScreen implements Screen {
         if (index < thisPlayer.getBattlePets().size()) {
             // player has this pet (ie not out of bounds of arraylist)
             Creature pet = battlePets.get(index);
-            newButton = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
+            newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()));
             if (pet.isAlive()) {
                 newButton.setTouchable(Touchable.enabled);
                 // records if pet is available

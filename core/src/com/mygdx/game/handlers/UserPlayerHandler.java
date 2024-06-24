@@ -20,9 +20,9 @@ public class UserPlayerHandler {
         player = update;
     }
 
-    public static Texture getTexture() {
-        return player.getTexture();
-    }
+//    public static Texture getTexture() {
+//        return player.getTexture();
+//    }
 
 //    public static void loadTextures(Runnable callback) {
 //        try{

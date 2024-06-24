@@ -20,11 +20,8 @@ public abstract class Creature extends Entity implements Serializable{
     private int health;
     private int maxmana;
     private int mana;
-//    private transient Texture texturePath; //path to texture file
     private int level;
     private String name;
-    public String path;
-
     private String type;
 
     //private ArrayList<Skill> skillList = new ArrayList();
@@ -33,14 +30,11 @@ public abstract class Creature extends Entity implements Serializable{
     public Skill skill3 ;
     public ArrayList<Skill> skills = new ArrayList<>();
 
-
-    private transient SpriteBatch batch;
-
     public ArrayList<Skill> getSkills() {
         return skills;
     }
 
-    public Creature(int health, int mana, String name, String path) {
+    public Creature(int health, int mana, String name) {
         this.maxhealth = health;
         this.health = health;
         this.maxmana = mana;
@@ -48,8 +42,6 @@ public abstract class Creature extends Entity implements Serializable{
         //this.alive = true;
         this.level = 1;
         this.name = name;
-        this.path = path;
-        //this.texturePath = new Texture(path);
     }
 
     public String getType() {
@@ -86,11 +78,6 @@ public abstract class Creature extends Entity implements Serializable{
 //        skillList.add(newSkill);
 //    }
 
-    public void render(SpriteBatch batch) {
-        //batch.draw(texturePath, xpos, ypos, 100, 100);
-    }
-
-
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
         result.put("type", getType());
@@ -120,17 +107,6 @@ public abstract class Creature extends Entity implements Serializable{
 //            }
 //        });
 //    }
-    public Texture getTexturePath() {
-//        if (texturePath == null) {
-//            System.out.println("Cannot find texturePath: " + name);
-//        }
-//        return texturePath;
-        if (path != null) {
-            return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
-        }
-
-        return null;
-    }
 
     public int getMaxhealth() {
         return maxhealth;

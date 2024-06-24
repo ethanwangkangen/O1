@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.screens.*;
@@ -23,7 +24,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public static Client client;
 
 	public AuthService authService;
-	private AssetManager manager = new AssetManager();
+
 
 	float y = 0;
 
@@ -78,7 +79,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, 800, 600);
 		this.setScreen(new SplashScreen(this));
-
 	}
 
 	@Override
@@ -167,28 +167,10 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 	public void loadTextures()
 	{
-		// UI assets
-
-		manager.load("buttons/uiskin.json", Skin.class);
-
-		// background textures
-		manager.load("border.png", Texture.class);
-		manager.load("crossedbox.png", Texture.class);
-		manager.load("mainscreen.png", Texture.class);
-		manager.load("Pixel_art_grass_image.png", Texture.class);
-
-		// Creatures textures
-		manager.load("badlogic.jpg", Texture.class);
-		manager.load("croc lesnar.png", Texture.class);
-		manager.load("froggy.png", Texture.class);
-		manager.load("meowmad_ali.png", Texture.class);
-
-		manager.load("player1(1).png", Texture.class);
+		TextureHandler.getInstance().loadTextures();
 	}
 
-	public AssetManager getAssetManager() {
-		return manager;
-	}
+
 //   get manager
 //	 DarwinsDuel.getInstance().getAssetManager()
 //	 get Skin

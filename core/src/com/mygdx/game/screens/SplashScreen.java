@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.handlers.TextureHandler;
 
 public class SplashScreen implements Screen {
 
@@ -45,7 +46,7 @@ public class SplashScreen implements Screen {
 //        if (DarwinsDuel.getInstance().getAssetManager().update()) {
 //            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
 //        }
-        DarwinsDuel.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
+        TextureHandler.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
         DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
     }
 

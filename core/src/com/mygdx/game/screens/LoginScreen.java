@@ -21,6 +21,7 @@ import com.mygdx.game.handlers.UserPlayerHandler;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.MyClient;
+import com.mygdx.game.handlers.TextureHandler;
 
 
 public class LoginScreen implements Screen {
@@ -93,7 +94,7 @@ public class LoginScreen implements Screen {
          //for testing: end
 
         System.out.println("LoginScreen created");
-        manager = DarwinsDuel.getInstance().getAssetManager();
+        manager = TextureHandler.getInstance().getAssetManager();
         background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
         stage = new Stage(new FitViewport(width, height));
         skin = manager.get("buttons/uiskin.json", Skin.class);
@@ -155,7 +156,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("s33d34fsds32@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signIn("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -267,16 +268,15 @@ public class LoginScreen implements Screen {
                 email = usernameSField.getText();
                 password = passwordSField.getText();
 
-
                 // for testing only
                 if (true) {
                     //to sign up/register:
-                    authService1.signUp("s33d34fsds32@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signUp("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
                             //change login screen to game screen or wtv
                             Player newPlayer = new Player();
-                            newPlayer.setUsername(usernameSField.getText());
+                            newPlayer.setUsername("tester");
                             authService1.sendPlayerToFirebase(newPlayer);
 
                             System.out.println("Registered player successfully");
