@@ -50,9 +50,7 @@ public class MyClient {
         myClient.getKryo().register(Player.PetNum.class);
         myClient.getKryo().register(ArrayList.class);
         myClient.getKryo().register(Creature.class);
-        myClient.getKryo().register(Creature[].class);
         myClient.getKryo().register(Skill.class);
-        myClient.getKryo().register(Skill[].class);
         myClient.getKryo().register(BattleState.Turn.class);
         myClient.getKryo().register(TextImageButton.class);
         myClient.getKryo().register(String.class);
@@ -101,9 +99,9 @@ public class MyClient {
     public static void sendBattleRequest(String opponentId) {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
         playerRequestBattleEvent.opponentUID = opponentId;
-        playerRequestBattleEvent.requesterPlayer = null;
-//        System.out.println(opponentId);
-//        System.out.println(playerRequestBattleEvent.requesterPlayer.getUserId());
+        playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
+        System.out.println(opponentId);
+        System.out.println(playerRequestBattleEvent.requesterPlayer.getUserId());
         try {
             myClient.sendTCP(playerRequestBattleEvent);
             System.out.println("Sent playerRequestBattleEvent from client");
