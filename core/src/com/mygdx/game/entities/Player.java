@@ -18,6 +18,7 @@ public class Player extends Entity implements Serializable{
      * Username to be displayed. Not unique. DO NOT use for identification!
      */
     public String username;
+
     public ArrayList<Creature> battlePets = new ArrayList<>();
     public ArrayList<Creature> reservePets = new ArrayList<>();
 
@@ -40,14 +41,16 @@ public class Player extends Entity implements Serializable{
     public Player() {
         currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
-//        battlePets.add(new CrocLesnar());
-//        battlePets.add(new Froggy());
+        battlePets.add(new CrocLesnar());
+        battlePets.add(new Froggy());
+        battlePets.add(new Doge());
 
     } //no arg constructor for serialisation
 
     public ArrayList<Creature> getBattlePets() {
         return battlePets;
     }
+
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
     public Map<String, Object> toMap() {
@@ -85,7 +88,9 @@ public class Player extends Entity implements Serializable{
 
     public void setCurrentPet(PetNum p) {
     }
+
     public void setBattlePets(ArrayList<Creature> battlePets) {
+
         this.battlePets = battlePets;
     }
 
@@ -103,9 +108,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public Creature getCurrentPet() {
-        //return battlePets.get(currentPetNum.ordinal());
-        //return battlePets.get(0);
-        return null;
+        return battlePets.get(currentPetNum.ordinal());
     }
 
 

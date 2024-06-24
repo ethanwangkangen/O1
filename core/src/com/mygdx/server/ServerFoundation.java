@@ -13,6 +13,7 @@ import com.mygdx.server.handlers.ServerPlayerHandler;
 import com.mygdx.server.listeners.ServerEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ServerFoundation {
     private static Server server;
@@ -44,6 +45,7 @@ public class ServerFoundation {
         server.getKryo().register(Dragon.class);
         server.getKryo().register(Doge.class);
         server.getKryo().register(MouseHunter.class);
+        server.getKryo().register(ArrayList.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);
@@ -52,7 +54,7 @@ public class ServerFoundation {
         server.getKryo().register(TextImageButton.class);
 
         // Add all listeners of server
-        this.server.addListener(new ServerEventListener());
+        server.addListener(new ServerEventListener());
     }
 
     public void startServer() {

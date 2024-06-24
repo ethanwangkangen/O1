@@ -22,6 +22,7 @@ import com.mygdx.global.TextImageButton;
 import com.mygdx.server.listeners.ServerEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MyClient {
     private static com.esotericsoftware.kryonet.Client myClient;
@@ -45,6 +46,7 @@ public class MyClient {
         myClient.getKryo().register(Dragon.class);
         myClient.getKryo().register(Doge.class);
         myClient.getKryo().register(MouseHunter.class);
+        myClient.getKryo().register(ArrayList.class);
         myClient.getKryo().register(Creature.class);
         myClient.getKryo().register(Creature[].class);
         myClient.getKryo().register(Skill.class);
