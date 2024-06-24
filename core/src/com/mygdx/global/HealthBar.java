@@ -31,11 +31,7 @@ public class HealthBar extends ProgressBar {
         setAnimateDuration(0.0f);
         setValue(1f);
 
-        setAnimateDuration(0.25f);
-    }
-
-    public void setHealth(int health) {
-        super.setValue(health);
+        setAnimateDuration(1f);
     }
 
     public Drawable getColoredDrawable(int width, int height, Color color) {

@@ -38,8 +38,8 @@ public class BattleScreen implements Screen {
     private Label pet2Name;
     private Label health1;
     private Label health2;
-    private ProgressBar healthBar1;
-    private ProgressBar healthBar2;
+    private HealthBar healthBar1;
+    private HealthBar healthBar2;
 
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
@@ -112,16 +112,16 @@ public class BattleScreen implements Screen {
         bgTable.add(turnLabel).center().colspan(3).top().expandY();
         bgTable.row();
 
-        bgTable.add(pet1Info).left();
-        bgTable.add(pet2Info).right().expandX();
+        bgTable.add(pet1Info).left().padLeft(20);
+        bgTable.add(pet2Info).right().padRight(20).expandX();
         bgTable.row();
 
-        bgTable.add(pet1imageTable).left().expandY().padLeft(10);
-        bgTable.add(pet2imageTable).right().padRight(10);
+        bgTable.add(pet1imageTable).left().expandY().padLeft(20);
+        bgTable.add(pet2imageTable).right().padRight(20);
         bgTable.row();
 
         bgTable.add(changeTable).expandY().bottom();
-        bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
+        bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(30);
         stage.setDebugAll(true);
     }
     public void initialisePlayers() {
@@ -160,17 +160,17 @@ public class BattleScreen implements Screen {
         pet2Info.clear();
 
         System.out.println("initialising PetInfo table");
+
         pet1Name = new Label(thisPet.getName(), skin);
-        pet2Name = new Label(opponentPet.getName(), skin);
         pet1Level = new Label("(" + ((Integer)thisPet.getLevel()).toString() + ")", skin);
-        pet2Level = new Label("(" + ((Integer)opponentPet.getLevel()).toString() + ")", skin);
         //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
-        //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
-        healthBar1 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar1.setAnimateDuration(1f);
+        healthBar1 = new HealthBar(100, 20, thisPet);
         healthBar1.setValue(thisPet.getHealth());
-        healthBar2 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar2.setAnimateDuration(1f);
+
+        pet2Name = new Label(opponentPet.getName(), skin);
+        pet2Level = new Label("(" + ((Integer)opponentPet.getLevel()).toString() + ")", skin);
+        //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
+        healthBar2 = new HealthBar(100, 20, thisPet);
         healthBar2.setValue(opponentPet.getHealth());
 
         pet1Info.add(pet1Name);
@@ -185,9 +185,7 @@ public class BattleScreen implements Screen {
         pet2Info.row();
         //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
-        pet2Info.padRight(5);
-        healthBar1.setColor(1, 0, 0, 1);
-    }
+        pet2Info.padRight(5);}
 
     public void updatePetInfo() {
         //health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());
