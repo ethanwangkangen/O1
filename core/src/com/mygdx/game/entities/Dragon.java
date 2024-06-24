@@ -10,6 +10,6 @@ public class Dragon extends Creature {
         skill1 = new Skill("Firebreath", 20);
         skill2 = new Skill("Stomp", 50);
         skill3 = new Skill("Roast", 30);
-        setType("Doge");
+        setType("Dragon");
     }
 }
