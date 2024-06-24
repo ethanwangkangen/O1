@@ -26,10 +26,14 @@ public class NPC extends Player implements Serializable {
     private String path;
 
     public NPC() {
+        super(); // Call the parent class constructor
         this.id = UUID.randomUUID();
         this.idString = id.toString();
-        path = "player1(1).png";
-        battlePets.add(new CrocLesnar());
+        this.path = "player1(1).png";
+
+        // Clear the battlePets list and add only one pet
+        this.battlePets.clear();
+        this.battlePets.add(new CrocLesnar());
     } //no arg constructor for serialisation
 
     @Override
