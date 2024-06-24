@@ -48,6 +48,8 @@ public class TextureHandler {
                 return this.getAssetManager().get("mouse hunter.png", Texture.class);
             case "Dragon":
                 return this.getAssetManager().get("dragon.png", Texture.class);
+            case "Froggy":
+                return this.getAssetManager().get("froggy.png", Texture.class);
         }
         return null; //change this
     }
