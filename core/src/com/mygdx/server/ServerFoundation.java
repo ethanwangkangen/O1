@@ -2,8 +2,11 @@ package com.mygdx.server;
 
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerAttackEvent;
 import com.mygdx.game.events.PlayerChangePetEvent;
+import com.mygdx.game.events.PlayerJoinServerEvent;
+import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.*;
 import com.mygdx.server.handlers.ServerPlayerHandler;
@@ -24,24 +27,23 @@ public class ServerFoundation {
     public ServerFoundation() {
         this.server = new Server();
 
-//        server.getKryo().register(UUID.class,  new UUIDSerializer());
 
         // Add all global events
-//        server.getKryo().register(AddPlayerEvent.class);
+        server.getKryo().register(PlayerAcceptBattleEvent.class);
         server.getKryo().register(PlayerAttackEvent.class);
-        server.getKryo().register(BattleState.class);
-        server.getKryo().register(EndBattleEvent.class);
-//        server.getKryo().register(JoinRequestEvent.class);
-//        server.getKryo().register(JoinResponseEvent.class);
-        server.getKryo().register(StartBattleEvent.class);
         server.getKryo().register(PlayerChangePetEvent.class);
-//        server.getKryo().register(java.util.UUID.class);
+        server.getKryo().register(PlayerJoinServerEvent.class);
+        server.getKryo().register(PlayerRequestBattleEvent.class);
 
+        server.getKryo().register(BattleState.class);
         server.getKryo().register(Player.class);
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
         server.getKryo().register(Froggy.class);
+        server.getKryo().register(Dragon.class);
+        server.getKryo().register(Doge.class);
+        server.getKryo().register(MouseHunter.class);
         server.getKryo().register(Creature.class);
         server.getKryo().register(Creature[].class);
         server.getKryo().register(Skill.class);

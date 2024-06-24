@@ -34,7 +34,7 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		// Register the broadcast receiver
 		receiver = new MyBroadcastReceiver();
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("sending playerUserId");
+		intentFilter.addAction("sending battle req");
 		intentFilter.addAction("quit map activity");
 		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
