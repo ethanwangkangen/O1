@@ -1,6 +1,10 @@
 package com.mygdx.game;
 
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -28,6 +32,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.AdvancedMarker;
 import com.google.android.gms.maps.model.AdvancedMarkerOptions;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,9 +47,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mygdx.game.interfaces.AuthService;
 
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -52,18 +60,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double selfLongitude = 103.8198;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
-
     private long lastUpdateTime = 0;
     private static final long MIN_TIME_BETWEEN_UPDATES = 5000; // 5 seconds
-
-
-    FirebaseAuth auth = FirebaseAuth.getInstance();
-    FirebaseUser currentUser = auth.getCurrentUser();
-
+    Dialog dialog; // Fight failed popup
+    Dialog acceptOrReject;
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseUser currentUser = auth.getCurrentUser();
+    private String myUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String enemyUID;
     private DatabaseReference database;
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
-
     private GoogleMap googleMap;
+    private BroadcastReceiver receiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +83,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
 
-        //Exit button
+        // Choose pet button
         // Initialize the button and set click listener
         Button exitButton = findViewById(R.id.exit_button);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +95,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        // Fight button
+        Button fightButton = findViewById(R.id.fight_button);
+        fightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (enemyUID != null) {
+                    sendInfoToLibGDX(enemyUID);
+                } else {
+                    showDialog();
+                }
+            }
+
+        });
 
         // Initialise database
         database = FirebaseDatabase.getInstance().getReference().child("users");
@@ -101,6 +123,64 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             // If permission granted start updating location (send to firebase constantly)
             startLocationUpdates();
         }
+
+        // Register the broadcast receiver
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("accept or reject")) {
+                    showAcceptOrReject();
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter("accept or reject");
+    }
+
+    public void showAcceptOrReject(){
+        // Show the accept or reject popup.
+        acceptOrReject = new Dialog(this);
+        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
+        Button acceptButton = dialog.findViewById(R.id.accept_button);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acceptFight();
+            }
+        });
+
+        Button rejectButton = dialog.findViewById(R.id.reject_button);
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rejectFight();
+            }
+        });
+        acceptOrReject.show();
+    }
+
+    private void rejectFight() {
+    }
+
+    private void acceptFight() {
+        
+    }
+
+    public void showDialog() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_layout); // Create a custom layout for your dialog
+        Button dismissButton = dialog.findViewById(R.id.dismiss_button);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void dismissDialog() {
+        dialog.dismiss();
     }
 
     /**
@@ -132,10 +212,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
-
     private void startLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(5000)
@@ -149,17 +227,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-
                     sendLocationToFirebase(location);
                 }
             }
         };
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
@@ -174,11 +249,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        // send to firebase
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        //set location
-        DatabaseReference locationRef = database.child(userId).child("location");
+        // Send to firebase
+        // Set location
+        DatabaseReference locationRef = database.child(myUserId).child("location");
 
         // Update location data in database
         locationRef.child("latitude").setValue(latitude);
@@ -205,10 +278,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
-
-//                    if (userId == currentUser.getUid()) { // Skip self
-//                        continue;
-//                    }
+                    String username = userSnapshot.child("player").child("username").getValue(String.class);
 
                     currentUsers.add(userId);
 
@@ -228,11 +298,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                 System.out.println("updating key. location is " + latitude + " " + longitude);
                             } else {
                                 // Marker doesn't exist, so create a new marker
-                                Marker marker = googleMap.addMarker(new MarkerOptions()
-                                        .position(playerLocation)
-                                        .title(userId));
+                                BitmapDescriptor enemy = BitmapDescriptorFactory.fromResource(R.drawable.player1);
+                                BitmapDescriptor self = BitmapDescriptorFactory.fromResource(R.drawable.playerself);
+                                Marker marker;
+
+                                if (Objects.equals(userId, myUserId)) {
+                                    marker = googleMap.addMarker(new MarkerOptions()
+                                            .position(playerLocation)
+                                            .title("You")
+                                            .icon(self));
+                                } else {
+                                    marker = googleMap.addMarker(new MarkerOptions()
+                                            .position(playerLocation)
+                                            .title(username)
+                                            .icon(enemy));
+                                }
                                 playerMarkers.put(userId, marker);
                                 System.out.println("Player marker added");
+
                             }
 
                         } else {
@@ -249,7 +332,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 for (String userId : previousUsers) {
                     Marker marker = playerMarkers.remove(userId);
                     // Set marker to the one mapped to this userId and remove the mapping from the Map
-
                     if (marker != null) {
                         marker.remove();
                         System.out.println("Marker removed");
@@ -269,16 +351,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         String playerUserId = marker.getTitle();
-        sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
+        setTargetEnemy(playerUserId);
+        //sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
         return false;
     }
 
+    private void setTargetEnemy(String playerUserId) {
+        this.enemyUID = playerUserId;
+    }
     private void sendInfoToLibGDX(String playerUserId) {
         Intent intent = new Intent("sending playerUserId");
         intent.putExtra("playerUserId", playerUserId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
-
 
     private void sendQuitToLibGDX() {
         Intent intent = new Intent("quit map activity");

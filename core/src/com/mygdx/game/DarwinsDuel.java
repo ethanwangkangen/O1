@@ -2,11 +2,14 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.screens.*;
@@ -22,6 +25,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 	public AuthService authService;
 
+
 	float y = 0;
 
 	public enum GameState {
@@ -31,10 +35,10 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		LOGIN,
 		WIN,
 		LOSS,
-
+		SPLASH,
 	}
 
-	public static GameState gameState = GameState.LOGIN;
+	public static GameState gameState = GameState.SPLASH;
 
 	// should make variables above private
 	/*public void changeState(GameState gameState) {
@@ -72,12 +76,9 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public void create () {
 		//this.create();
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-
 		this.camera = new OrthographicCamera();
 		this.camera.setToOrtho(false, 800, 600);
-		this.setScreen(new LoginScreen(this));
-
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override
@@ -89,12 +90,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void render() {
 		ScreenUtils.clear(1, 0, 0, 1);
-
-		batch.begin();
-		batch.draw(img, 0, y);
-		batch.end();
-
-
 		switch (gameState) {
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
@@ -104,9 +99,10 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				break;
 			case PETCHANGE:
 				if (!(getScreen() instanceof PetChangeScreen)) {
-					this.setScreen(new MapScreen(this));
+					this.setScreen(new PetChangeScreen(this));
 					System.out.println("Changing to PetChangeScreen");
-			}
+				}
+				break;
 			case FREEROAM:
 				if (!(getScreen() instanceof MapScreen)) {
 					this.setScreen(new MapScreen(this));
@@ -119,12 +115,16 @@ public class DarwinsDuel extends Game implements GameCommunication {
 					this.setScreen(new BattleScreen(this));
 				}
 				break;
-
+			case SPLASH:
+				if (!(getScreen() instanceof SplashScreen)) {
+					System.out.println("Changing to SplashScreen");
+					this.setScreen(new SplashScreen(this));
+				}
+				break;
 			case WIN:
 				break;
 			case LOSS:
 				break;
-
 		}
 
 		super.render();
@@ -164,4 +164,20 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public static Client getClient() {
 		return client;
 	}
+
+	public void loadTextures()
+	{
+		TextureHandler.getInstance().loadTextures();
+	}
+
+
+//   get manager
+//	 DarwinsDuel.getInstance().getAssetManager()
+//	 get Skin
+//	 skin = manager.get("buttons/uiskin.json", Skin.class);
+//	 get Texture
+//	 manager.get("skin", Texture.class);
+//	 get Background
+//	 table.setBackground(new TextureRegionDrawable(background))
+
 }

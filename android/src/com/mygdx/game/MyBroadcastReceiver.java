@@ -8,8 +8,8 @@ import com.mygdx.game.interfaces.GameCommunication;
 import com.badlogic.gdx.Gdx;
 
 /**
- * Used to relay messages between components of Android.
- * eg. between the Map activity and the libgdx game itself
+ * Used to relay messages between components of Android;
+ * from Map activity to libgdx.
  */
 public class MyBroadcastReceiver extends BroadcastReceiver{
 
@@ -24,7 +24,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
         String action = intent.getAction();
         if ("sending playerUserId".equals(action)) {
             String playerUserId = intent.getStringExtra("playerUserId");
-            //Use static reference to communicate with the LibGDX game
+
+            // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
                 gameCommunication.onPlayerInfoReceived(playerUserId);

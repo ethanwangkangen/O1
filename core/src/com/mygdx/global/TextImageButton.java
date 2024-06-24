@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.entities.Creature;
+import com.mygdx.game.handlers.TextureHandler;
 
 public class TextImageButton extends ImageTextButton {
     Creature pet = null;
@@ -22,18 +23,11 @@ public class TextImageButton extends ImageTextButton {
     public TextImageButton(Creature pet, Skin skin) {
         super(pet.getName(), skin);
         clearChildren();
-        add(new Image(pet.getTexturePath()));
+        add(new Image(TextureHandler.getInstance().getTexture(pet.getType())));
         add(getLabel());
         this.pet = pet;
     }
     public Creature getPet() {
         return this.pet;
     }
-
-    public void dispose() {
-        if (pet.getTexturePath() != null) {
-            pet.getTexturePath().dispose();
-        }
     }
-
-}

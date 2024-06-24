@@ -1,6 +1,8 @@
 package com.mygdx.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.esotericsoftware.kryonet.FrameworkMessage;
+import com.mygdx.game.DarwinsDuel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +13,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Player extends Entity implements Serializable{
-
-    //private Texture texture;
 
     /**
      * Username to be displayed. Not unique. DO NOT use for identification!
@@ -26,8 +26,7 @@ public class Player extends Entity implements Serializable{
      * Use this for identification
      */
     public String userId;
-    private transient Texture texturePath;
-    public String path = "player1(1).png";
+    public String path = "player1";
     public PetNum currentPetNum;
 
 
@@ -41,9 +40,9 @@ public class Player extends Entity implements Serializable{
     public Player() {
         currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
-        battlePets.add(new CrocLesnar());
-        battlePets.add(new Froggy());
-        reservePets.add(new BadLogic());
+//        battlePets.add(new CrocLesnar());
+//        battlePets.add(new Froggy());
+
     } //no arg constructor for serialisation
 
     public ArrayList<Creature> getBattlePets() {
@@ -85,7 +84,6 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setCurrentPet(PetNum p) {
-
     }
     public void setBattlePets(ArrayList<Creature> battlePets) {
         this.battlePets = battlePets;
@@ -105,22 +103,12 @@ public class Player extends Entity implements Serializable{
     }
 
     public Creature getCurrentPet() {
-        if (currentPetNum == PetNum.PET1) {
-            return battlePets.get(0);
-        } else if (currentPetNum == PetNum.PET2) {
-            return battlePets.get(1);
-        } else {
-            return battlePets.get(2);
-        }
+        //return battlePets.get(currentPetNum.ordinal());
+        //return battlePets.get(0);
+        return null;
     }
 
 
-    public void loadTexture() {
-        texturePath = new Texture(path);
-    }
-    public Texture getTexture() {
-        return texturePath;
-    }
     public String getUsername() {
         return this.username;
     }
@@ -130,63 +118,57 @@ public class Player extends Entity implements Serializable{
     }
 
     public String getUserId() {return this.userId;}
+
     public void setUserId(String id) {
         this.userId = id;
     }
 
 
-    public void loadTextures(Runnable callback) {
-        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
+//    public void loadTextures(Runnable callback) {
+//        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
+//
+//        // Load textures for each pet
+//        int petNum = battlePets.size() + reservePets.size();
+//
+//        for (Creature pet : battlePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//        for (Creature pet : reservePets) {
+//            pet.loadTexture(() -> {
+//                if (loadedCreatureCount.incrementAndGet() == petNum) {
+//                    callback.run();
+//                }
+//            });
+//        }
+//    }
 
-        // Load textures for each pet
-        int petNum = battlePets.size() + reservePets.size();
-
-        for (Creature pet : battlePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-        for (Creature pet : reservePets) {
-            pet.loadTexture(() -> {
-                if (loadedCreatureCount.incrementAndGet() == petNum) {
-                    callback.run();
-                }
-            });
-        }
-    }
-
-    public void changeCurrentPet(int i) {
+    public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
-        if (isValidPet(i)) {
-            if (i == 1) {
-                currentPetNum = PetNum.PET1;
-            } if (i == 2) {
-                currentPetNum = PetNum.PET2;
-            } if (i == 3) {
-                currentPetNum = PetNum.PET3;
-            }
+        if (isValidPet(petNum)) {
+            currentPetNum = petNum;
         }
     }
 
-    private boolean isValidPet(int index) {
-        return index >= 0 && index < battlePets.size() && battlePets.get(index) != null;
+    private boolean isValidPet(Player.PetNum petNum) {
+        // checks if list has the petNum, or if its empty
+        int index = 3; // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        return index < battlePets.size();
     }
 
     public void changeNextPet() {
-        // Automatically when pet dies
+        // Change to next available pet when a pet dies
 
-
-
-        //don't know what the below is supposed to be lol
-//        for (int i = 0; i < battlePets.size(); i++) {
-//            Creature pet = battlePets.get(i);
-//            if (pet != null && pet.isAlive()) {
-//                changePet(Pet.values()[i]);
-//                break;
-//            }
-//        }
+        for (int i = 0; i < battlePets.size(); i++) {
+            Creature pet = battlePets.get(i);
+            if (pet != null && pet.isAlive()) {
+                changeCurrentPet(PetNum.values()[i]);
+                break;
+            }
+        }
     }
 
     public int getNumPets() {
@@ -194,20 +176,23 @@ public class Player extends Entity implements Serializable{
     }
 
     public void update(Player player) {
+        // to update pet info during battle
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
             Creature playerPet = player.getBattlePets().get(i);
             if (pet != null && playerPet != null) {
                 pet.update(playerPet);
-                if (i == 1) {
-                    System.out.println("Crocs health is:" + playerPet.getHealth());
-                }
             }
         }
-        //changePet(player.getPet());
+        changeCurrentPet(player.getCurrentPetNum());
+    }
+
+    public PetNum getCurrentPetNum() {
+        return currentPetNum;
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
+        // to update pet info after PetChangeScreen
         battlePets = pets1;
         reservePets = pets2;
     }

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
+import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.StartBattleEvent;
 
@@ -39,7 +40,7 @@ public class GameScreen implements Screen {
         this.table.setFillParent(true);
         //this.table.background("Pixel_art_grass_image.png");
 
-        final Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        final Skin skin = TextureHandler.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
 
         this.startBattle = new TextButton("Start Battle", skin);
         this.startBattle.addListener(new ClickListener() {

@@ -65,7 +65,7 @@ public class ServerEventListener extends Listener {
             System.out.println("ChangePetEvent received by server");
             PlayerChangePetEvent changePetEvent = (PlayerChangePetEvent) object;
             String battleId = changePetEvent.battleId;
-            ServerBattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.pet);
+            ServerBattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.petNum);
 
             ServerBattleHandler.sendBattleState(battleId);
         }
