@@ -31,13 +31,7 @@ public class EventListener extends Listener {
             if (BattleHandler.getBattleState(battleId).isAgainstNPC()) {
                 // fighting against NPC; NPC's turn
                 System.out.println("NPC attacking");
-                BattleHandler.getBattleState(battleId).NPCAttack();
-                BattleHandler.sendBattleState(battleId);
-
-                // if battle has ended
-                if (!BattleHandler.getBattleState(battleId).playersAlive()){
-                    BattleHandler.sendEndBattle(battleId);
-                }
+                BattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
             }
         }
 
@@ -45,9 +39,15 @@ public class EventListener extends Listener {
             System.out.println("ChangePetEvent received by server");
             ChangePetEvent changePetEvent = (ChangePetEvent) object;
             String battleId = changePetEvent.battleId;
-            BattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.petNum);
 
+            BattleHandler.getBattleState(battleId).changePet(changePetEvent.playerId, changePetEvent.petNum);
             BattleHandler.sendBattleState(battleId);
+
+            if (BattleHandler.getBattleState(battleId).isAgainstNPC()) {
+                // fighting against NPC; NPC's turn
+                System.out.println("NPC attacking");
+                BattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
+            }
         }
 
         if (object instanceof PlayerJoinServerEvent) {

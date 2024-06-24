@@ -3,8 +3,12 @@ package com.mygdx.global;
 import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
+import com.mygdx.server.handlers.BattleHandler;
 
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BattleState{
 
@@ -33,6 +37,27 @@ public class BattleState{
         petChanged = false;
         petAttacked = false;
         againstNPC = false;
+    }
+
+    private transient ScheduledExecutorService npcAttackScheduler = Executors.newScheduledThreadPool(1);
+
+    public void scheduleNPCAttack(String battleId) {
+        // Schedule NPCAttackRunnable to run after 4 seconds
+        npcAttackScheduler.schedule(new NPCAttackRunnable(battleId), 4, TimeUnit.SECONDS);
+    }
+
+    // Runnable implementation to execute NPCAttack with battleId
+    private class NPCAttackRunnable implements Runnable {
+        private String battleId;
+
+        public NPCAttackRunnable(String battleId) {
+            this.battleId = battleId;
+        }
+
+        @Override
+        public void run() {
+            NPCAttack(battleId); // Call NPCAttack with the provided battleId
+        }
     }
 
     public BattleState(Player player, NPC npc) {
@@ -112,7 +137,7 @@ public class BattleState{
         System.out.println("Changing turns");
     }
 
-    public void NPCAttack() {
+    public void NPCAttack(String battleId) {
         // Player vs NPC
         System.out.println("player2 name: " + player2.username);
         Skill skill = player2.npcAttack(numofTurns);
@@ -127,6 +152,13 @@ public class BattleState{
         changeTurn();
         petAttacked = true;
         System.out.println("Changing turns");
+
+        BattleHandler.sendBattleState(battleId);
+
+        // if battle has ended
+        if (!BattleHandler.getBattleState(battleId).playersAlive()){
+            BattleHandler.sendEndBattle(battleId);
+        }
     }
 
 
