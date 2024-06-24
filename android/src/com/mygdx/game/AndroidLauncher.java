@@ -18,11 +18,15 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 	private static GameCommunication gameCommunication; //will be the game instance
 	private MyBroadcastReceiver receiver;
 
+	private Boolean isMapOn;
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		DarwinsDuel game = new DarwinsDuel(new FirebaseAuthServiceAndroid());
+
+		isMapOn = false;
 
 		// Initialize the game
 		initialize(game, config);
@@ -64,6 +68,8 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 
 	@Override
 	public void showMap() {
+		System.out.println("Showing the map");
+		isMapOn = true;
 		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("latitude", 37.7749); // Example latitude
 		intent.putExtra("longitude", -122.4194); // Example longitude
@@ -72,14 +78,22 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 
 	@Override
 	public void stopMap() {
-		Intent intent = new Intent("finish map");
-		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+		if (isMapOn) {
+			Intent intent = new Intent("finish map");
+			LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+			isMapOn = false;
+		}
 	}
 
 	@Override
 	public void acceptOrReject() {
 		Intent intent = new Intent("accept or reject");
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	@Override
+	public Boolean mapOn() {
+		return isMapOn;
 	}
 
 

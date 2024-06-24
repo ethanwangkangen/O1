@@ -213,6 +213,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (intent.getAction().equals("accept or reject")) {
                     showAcceptOrReject();
                 } else if (intent.getAction().equals("finish map")) {
+                    System.out.println("Quitting the map");
                     finish();
                 }
             }

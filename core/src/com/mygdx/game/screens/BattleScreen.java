@@ -29,7 +29,7 @@ import java.util.Objects;
 public class BattleScreen implements Screen {
 
     private Stage stage;
-    private Skin skin;
+    private Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));;
     private AssetManager manager;
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
@@ -83,7 +83,7 @@ public class BattleScreen implements Screen {
         System.out.println("BattleScreen created");
 
         manager = TextureHandler.getInstance().getAssetManager();
-        skin = manager.get("buttons/uiskin.json", Skin.class);
+        //skin = manager.get("buttons/uiskin.json", Skin.class);
         crossedBox = manager.get("crossedbox.png", Texture.class);
 
         //set stage
