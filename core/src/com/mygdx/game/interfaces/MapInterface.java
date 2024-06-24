@@ -8,5 +8,5 @@ package com.mygdx.game.interfaces;
 public interface MapInterface {
     public void showMap();
 
-    public void acceptOrReject(String enemyUsername);
+    public void acceptOrReject();
 }

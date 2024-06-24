@@ -147,7 +147,8 @@ public class PetChangeScreen implements Screen {
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }
-        });        backButtonTable.add(backButton).right().pad(10).expandX();
+        });
+        backButtonTable.add(backButton).right().pad(10).expandX();
     }
 
     public void initialiseScrollPanes() {

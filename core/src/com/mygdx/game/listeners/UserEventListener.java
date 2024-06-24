@@ -1,24 +1,50 @@
 package com.mygdx.game.listeners;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
+import com.mygdx.game.interfaces.BattleResponseListener;
+import com.mygdx.game.interfaces.MapInterface;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.StartBattleEvent;
 
 public class UserEventListener extends Listener {
-
+    private BattleResponseListener responseListener;
+    public void setResponseListener(BattleResponseListener listener) {
+        this.responseListener = listener;
+    }
     @Override
     public void received(Connection connection, final Object object) {
         if (object instanceof PlayerRequestBattleEvent) {
-            //todo: accept vs reject screen.
+            if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                MapInterface map = (MapInterface) Gdx.app;
+                System.out.println("Showing accept reject screen");
+                map.acceptOrReject();
+            }
+            //todo wait for response from Map Activity
+            setResponseListener(new BattleResponseListener() {
+                @Override
+                public void onBattleResponse(boolean accepted) {
+                    PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
+                    PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
+                    accept.opponentPlayer = UserPlayerHandler.getPlayer();
+                    accept.requesterPlayer = request.requesterPlayer;
 
-
-            //For now: just accept
+                    if (accepted) {
+                        // User accepted the battle request
+                        connection.sendTCP(accept);
+                    } else {
+                        // User rejected the battle request
+                        // Optionally handle rejection logic
+                    }
+                }
+            });
 
             //note: here "I" am the "opponent"
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;

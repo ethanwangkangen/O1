@@ -62,7 +62,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	 * @param playerUserId id of enemy player
 	 */
 	@Override
-	public void onPlayerInfoReceived(String playerUserId) {
+	public void onEnemyInfoReceived(String playerUserId) {
 		MyClient.sendBattleRequest(playerUserId);
 	}
 

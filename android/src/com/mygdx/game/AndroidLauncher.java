@@ -72,9 +72,8 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 	}
 
 	@Override
-	public void acceptOrReject(String enemyUsername) {
+	public void acceptOrReject() {
 		Intent intent = new Intent("accept or reject");
-		intent.putExtra("enemyUsername", enemyUsername);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 

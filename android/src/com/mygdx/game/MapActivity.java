@@ -30,14 +30,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.AdvancedMarker;
-import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.interfaces.AuthService;
+import com.mygdx.game.interfaces.BattleResponseListener;
 
 
 import java.util.HashMap;
@@ -55,133 +52,23 @@ import java.util.Objects;
 import java.util.Set;
 
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BattleResponseListener {
     private double selfLatitude = 1.2431;
     private double selfLongitude = 103.8198;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private long lastUpdateTime = 0;
     private static final long MIN_TIME_BETWEEN_UPDATES = 5000; // 5 seconds
-    Dialog dialog; // Fight failed popup
-    Dialog acceptOrReject;
+    private Dialog dialog; // Fight failed popup
+    private Dialog acceptOrReject; // Accept or reject battle popup
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseUser currentUser = auth.getCurrentUser();
-    private String myUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String myUserId = currentUser.getUid();
     private String enemyUID;
     private DatabaseReference database;
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-
-        // Map fragment
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_fragment);
-        mapFragment.getMapAsync(this);
-
-        // Choose pet button
-        // Initialize the button and set click listener
-        Button exitButton = findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Exit the activity
-                sendQuitToLibGDX();
-                finish();
-            }
-        });
-
-        // Fight button
-        Button fightButton = findViewById(R.id.fight_button);
-        fightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (enemyUID != null) {
-                    sendInfoToLibGDX(enemyUID);
-                } else {
-                    showDialog();
-                }
-            }
-
-        });
-
-        // Initialise database
-        database = FirebaseDatabase.getInstance().getReference().child("users");
-
-        // If permission for location not granted, ask for it
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-            // Result of this is passed to onRequestPermissionsResult
-        } else {
-
-            // If permission granted start updating location (send to firebase constantly)
-            startLocationUpdates();
-        }
-
-        // Register the broadcast receiver
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("accept or reject")) {
-                    showAcceptOrReject();
-                }
-            }
-        };
-        IntentFilter intentFilter = new IntentFilter("accept or reject");
-    }
-
-    public void showAcceptOrReject(){
-        // Show the accept or reject popup.
-        acceptOrReject = new Dialog(this);
-        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
-        Button acceptButton = dialog.findViewById(R.id.accept_button);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                acceptFight();
-            }
-        });
-
-        Button rejectButton = dialog.findViewById(R.id.reject_button);
-        rejectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rejectFight();
-            }
-        });
-        acceptOrReject.show();
-    }
-
-    private void rejectFight() {
-    }
-
-    private void acceptFight() {
-        
-    }
-
-    public void showDialog() {
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_layout); // Create a custom layout for your dialog
-        Button dismissButton = dialog.findViewById(R.id.dismiss_button);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissDialog();
-            }
-        });
-
-        dialog.show();
-    }
-
-    public void dismissDialog() {
-        dialog.dismiss();
-    }
 
     /**
      * called automatically when AndroidLauncher starts its MapActivity.
@@ -263,6 +150,117 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         System.out.println("sending location" + latitude + " " + longitude);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+
+        // Map fragment
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_fragment);
+        mapFragment.getMapAsync(this);
+
+        // Choose pet button
+        Button exitButton = findViewById(R.id.exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Exit the activity
+                sendQuitToLibGDX();
+                finish();
+            }
+        });
+
+        // Fight button
+        Button fightButton = findViewById(R.id.fight_button);
+        fightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (enemyUID != null) {
+                    sendBattleReqToEnemy(enemyUID);
+                } else {
+                    showDialog();
+                    // Tell player to select an enemy first before requesting fight
+                }
+            }
+
+        });
+
+        // Initialise database
+        database = FirebaseDatabase.getInstance().getReference().child("users");
+
+        // If permission for location not granted, ask for it
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+            // Result of this is passed to onRequestPermissionsResult
+        } else {
+
+            // If permission granted start updating location (send to firebase constantly)
+            startLocationUpdates();
+        }
+
+        // Register the broadcast receiver (for accept or reject screen). Broadcasted from AndroidLauncher.
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("accept or reject")) {
+                    showAcceptOrReject();
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter("accept or reject");
+    }
+
+    public void showAcceptOrReject(){
+        // Show the accept or reject popup.
+        acceptOrReject = new Dialog(this);
+        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
+        Button acceptButton = dialog.findViewById(R.id.accept_button);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBattleResponse(true);
+            }
+        });
+
+        Button rejectButton = dialog.findViewById(R.id.reject_button);
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBattleResponse(false);
+            }
+        });
+        acceptOrReject.show();
+    }
+
+    @Override
+    public void onBattleResponse(boolean accepted) { // Nothing here. Listener in UserEventListener will handle.
+    }
+
+    /**
+     * Popup asking player to select an enemy before fighting
+     */
+    public void showDialog() { //
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_layout);
+        Button dismissButton = dialog.findViewById(R.id.dismiss_button);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void dismissDialog() {
+        dialog.dismiss();
+    }
+
 
     /**
      * Add all players (except self)
@@ -346,21 +344,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-
     //todo in future: change logic such that only nearby players can be fought
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String playerUserId = marker.getTitle();
-        setTargetEnemy(playerUserId);
+        String playerUsername = marker.getTitle();
+        for (Map.Entry entry : playerMarkers.entrySet()) {
+            if (entry.getValue().equals(marker)) {
+                String playerUserId = (String) entry.getKey();
+                setTargetEnemy(playerUserId);
+                return false;
+            }
+        }
         //sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
         return false;
     }
-
     private void setTargetEnemy(String playerUserId) {
         this.enemyUID = playerUserId;
     }
-    private void sendInfoToLibGDX(String playerUserId) {
-        Intent intent = new Intent("sending playerUserId");
+    private void sendBattleReqToEnemy(String playerUserId) {
+        Intent intent = new Intent("sending battle req");
         intent.putExtra("playerUserId", playerUserId);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
@@ -369,5 +371,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Intent intent = new Intent("quit map activity");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
 
 }

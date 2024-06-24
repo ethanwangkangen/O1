@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import com.mygdx.game.interfaces.GameCommunication;
 
-import com.badlogic.gdx.Gdx;
-
 /**
  * Used to relay messages between components of Android;
  * from Map activity to libgdx.
@@ -22,13 +20,13 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if ("sending playerUserId".equals(action)) {
+        if ("sending battle req".equals(action)) {
             String playerUserId = intent.getStringExtra("playerUserId");
 
             // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
-                gameCommunication.onPlayerInfoReceived(playerUserId);
+                gameCommunication.onEnemyInfoReceived(playerUserId);
             }
         } else if ("quit map activity".equals(action)) {
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
