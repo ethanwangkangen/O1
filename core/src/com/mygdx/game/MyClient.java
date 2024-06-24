@@ -37,8 +37,6 @@ public class MyClient {
         myClient.getKryo().register(PlayerJoinServerEvent.class);
         myClient.getKryo().register(PlayerRequestBattleEvent.class);
 
-        myClient.getKryo().register(BattleState.class);
-        myClient.getKryo().register(Player.class);
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
         myClient.getKryo().register(CrocLesnar.class);
@@ -46,6 +44,10 @@ public class MyClient {
         myClient.getKryo().register(Dragon.class);
         myClient.getKryo().register(Doge.class);
         myClient.getKryo().register(MouseHunter.class);
+
+        myClient.getKryo().register(BattleState.class);
+        myClient.getKryo().register(Player.class);
+        myClient.getKryo().register(Player.PetNum.class);
         myClient.getKryo().register(ArrayList.class);
         myClient.getKryo().register(Creature.class);
         myClient.getKryo().register(Creature[].class);
@@ -94,14 +96,13 @@ public class MyClient {
         return connectThread;
     }
 
-    public static void sendBattleRequest(String userId) {
+    public static void sendBattleRequest(String opponentId) {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
-        //playerRequestBattleEvent.requesterUID = UserPlayerHandler.getUserId();
-        playerRequestBattleEvent.opponentUID = userId;
+        playerRequestBattleEvent.opponentUID = opponentId;
         playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
 
         try {
-            myClient.sendTCP(playerRequestBattleEvent);
+            DarwinsDuel.client.sendTCP(playerRequestBattleEvent);
             System.out.println("sent playerRequestBattleEvent");
         } catch (Exception e) {
             System.out.println(e.getMessage());

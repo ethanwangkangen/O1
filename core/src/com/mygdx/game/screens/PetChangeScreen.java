@@ -63,7 +63,6 @@ public class PetChangeScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        System.out.println("test1");
 
         initialiseScrollPanes();
         createButtonList1();
