@@ -43,7 +43,7 @@ public class BattleState{
 
     public void scheduleNPCAttack(String battleId) {
         // Schedule NPCAttackRunnable to run after 4 seconds
-        npcAttackScheduler.schedule(new NPCAttackRunnable(battleId), 4, TimeUnit.SECONDS);
+        npcAttackScheduler.schedule(new NPCAttackRunnable(battleId), 3, TimeUnit.SECONDS);
     }
 
     // Runnable implementation to execute NPCAttack with battleId
