@@ -49,7 +49,10 @@ public class UserEventListener extends Listener {
 
                     if (accepted) {
                         // User accepted the battle request
-                        connection.sendTCP(accept);
+                        new Thread(() -> {
+                            connection.sendTCP(accept);
+                        }).start();
+
                     } else {
                         // User rejected the battle request
                         // Optionally handle rejection logic
