@@ -126,29 +126,6 @@ public class Player extends Entity implements Serializable{
         this.userId = id;
     }
 
-
-//    public void loadTextures(Runnable callback) {
-//        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
-//
-//        // Load textures for each pet
-//        int petNum = battlePets.size() + reservePets.size();
-//
-//        for (Creature pet : battlePets) {
-//            pet.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == petNum) {
-//                    callback.run();
-//                }
-//            });
-//        }
-//        for (Creature pet : reservePets) {
-//            pet.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == petNum) {
-//                    callback.run();
-//                }
-//            });
-//        }
-//    }
-
     public void changeCurrentPet(Player.PetNum petNum) {
         // Change the current pet being used in  battle
         if (isValidPet(petNum)) {
