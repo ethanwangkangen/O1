@@ -18,6 +18,7 @@ import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.BattleState;
+import com.mygdx.global.StartBattleEvent;
 import com.mygdx.global.TextImageButton;
 import com.mygdx.server.listeners.ServerEventListener;
 
@@ -36,6 +37,7 @@ public class MyClient {
         myClient.getKryo().register(PlayerAttackEvent.class);
         myClient.getKryo().register(PlayerChangePetEvent.class);
         myClient.getKryo().register(PlayerJoinServerEvent.class);
+        myClient.getKryo().register(StartBattleEvent.class);
 
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
