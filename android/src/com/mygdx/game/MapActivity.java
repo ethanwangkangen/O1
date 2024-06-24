@@ -43,6 +43,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mygdx.game.interfaces.BattleResponseListener;
+import com.mygdx.game.listeners.UserEventListener;
+
 
 
 import java.util.HashMap;
@@ -238,7 +240,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onBattleResponse(boolean accepted) { // Nothing here. Listener in UserEventListener will handle.
+    public void onBattleResponse(boolean accepted) {
+        if (UserEventListener.getInstance() != null) {
+            UserEventListener.getInstance().getResponseListener().onBattleResponse(accepted);
+        }
     }
 
     /**
