@@ -9,7 +9,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.FirebaseDatabase;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
 
@@ -69,6 +68,12 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		intent.putExtra("latitude", 37.7749); // Example latitude
 		intent.putExtra("longitude", -122.4194); // Example longitude
 		startActivity(intent);
+	}
+
+	@Override
+	public void stopMap() {
+		Intent intent = new Intent("finish map");
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	@Override

@@ -212,10 +212,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("accept or reject")) {
                     showAcceptOrReject();
+                } else if (intent.getAction().equals("finish map")) {
+                    finish();
                 }
             }
         };
-        IntentFilter intentFilter = new IntentFilter("accept or reject");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("finish map");
+        intentFilter.addAction("accept or reject");
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
     }
