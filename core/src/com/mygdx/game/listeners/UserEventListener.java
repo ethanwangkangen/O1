@@ -45,13 +45,6 @@ public class UserEventListener extends Listener {
                     }
                 }
             });
-
-            //note: here "I" am the "opponent"
-            PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
-            PlayerAcceptBattleEvent accept = new PlayerAcceptBattleEvent();
-            accept.opponentPlayer = UserPlayerHandler.getPlayer();
-            accept.requesterPlayer = request.requesterPlayer;
-            connection.sendTCP(accept);
         }
 
         if (object instanceof StartBattleEvent) {
