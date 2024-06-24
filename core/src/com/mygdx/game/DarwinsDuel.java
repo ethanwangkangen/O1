@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -12,6 +13,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.GameCommunication;
+import com.mygdx.game.interfaces.MapInterface;
 import com.mygdx.game.screens.*;
 
 
@@ -91,6 +93,13 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void render() {
 		ScreenUtils.clear(1, 0, 0, 1);
+		if (!(getScreen() instanceof MapScreen)) {
+			if (Gdx.app.getType() == Application.ApplicationType.Android) {
+				MapInterface map = (MapInterface) Gdx.app;
+				// Stop showing the map if its being shown
+				map.stopMap();
+			}
+		}
 		switch (gameState) {
 			case LOGIN:
 				if (!(getScreen() instanceof LoginScreen)) {
