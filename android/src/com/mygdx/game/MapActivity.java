@@ -72,6 +72,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
 
+
     /**
      * called automatically when AndroidLauncher starts its MapActivity.
      * @param map
@@ -215,13 +216,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         };
         IntentFilter intentFilter = new IntentFilter("accept or reject");
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+
     }
 
     public void showAcceptOrReject(){
         // Show the accept or reject popup.
         acceptOrReject = new Dialog(this);
         acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
-        Button acceptButton = dialog.findViewById(R.id.accept_button);
+        Button acceptButton = acceptOrReject.findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +232,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        Button rejectButton = dialog.findViewById(R.id.reject_button);
+        Button rejectButton = acceptOrReject.findViewById(R.id.reject_button);
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
