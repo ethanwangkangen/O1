@@ -35,19 +35,6 @@ public class BattleState{
         againstNPC = false;
     }
 
-    public BattleState(Player p1Player, Player p2Player) {
-        this.turn = Turn.PLAYERONETURN;
-        this.numofTurns = 1;
-
-        battleEnded = false;
-        petChanged = false;
-        petAttacked = false;
-        againstNPC = false;
-
-        this.player1 = p1Player;
-        this.player2 = p2Player;
-    }
-
     public BattleState(Player player, NPC npc) {
         this.turn = Turn.PLAYERONETURN;
         this.numofTurns = 1;
@@ -59,6 +46,22 @@ public class BattleState{
 
         this.player1 = player;
         this.player2 = npc;
+
+        System.out.println(player1.battlePets.get(0).getName());
+        System.out.println(player2.battlePets.get(0).getName());
+    }
+
+    public BattleState(Player p1Player, Player p2Player) {
+        this.turn = Turn.PLAYERONETURN;
+        this.numofTurns = 1;
+
+        battleEnded = false;
+        petChanged = false;
+        petAttacked = false;
+        againstNPC = false;
+
+        this.player1 = p1Player;
+        this.player2 = p2Player;
     }
 
     public Player getPlayer1() {
@@ -111,6 +114,7 @@ public class BattleState{
 
     public void NPCAttack() {
         // Player vs NPC
+        System.out.println("player2 name: " + player2.username);
         Skill skill = player2.npcAttack(numofTurns);
 
         if (skill == null) {

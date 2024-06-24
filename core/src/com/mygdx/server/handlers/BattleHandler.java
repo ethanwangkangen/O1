@@ -17,14 +17,6 @@ public class BattleHandler {
     //map p1UID to the BattleState.
 
 
-    public static String initialiseBattle(Player p1Player, Player p2Player) {
-        BattleState battleState = new BattleState(p1Player, p2Player);
-        String battleId = p1Player.getIdString();
-        battleStateList.put(battleId, battleState);
-        System.out.println("New battleState created");
-        return battleId;
-    }
-
     public static String initialiseBattle(Player player, NPC npc) {
         // for battling against NPC
 
@@ -32,6 +24,14 @@ public class BattleHandler {
         String battleId = player.getIdString();
         battleStateList.put(battleId, battleState);
         System.out.println("New NPC battleState created");
+        return battleId;
+    }
+
+    public static String initialiseBattle(Player p1Player, Player p2Player) {
+        BattleState battleState = new BattleState(p1Player, p2Player);
+        String battleId = p1Player.getIdString();
+        battleStateList.put(battleId, battleState);
+        System.out.println("New battleState created");
         return battleId;
     }
 

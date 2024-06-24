@@ -173,9 +173,7 @@ public class LoginScreen implements Screen {
                 String email, password;
                 email = usernameSField.getText();
                 password = passwordSField.getText();
-                if (isValidInput(email, password)) {
                     login = true;
-                }
                 return super.touchDown(event, x, y, pointer, button);
                 //create client, connect client to server. start battle
             }

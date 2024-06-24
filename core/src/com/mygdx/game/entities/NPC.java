@@ -10,12 +10,11 @@ import java.util.UUID;
 public class NPC extends Player implements Serializable {
 
     //private Texture texture;
-    public String username;
+    public String username = "npc";
 
     private int count = 0;
 
     /**/
-    public ArrayList<Creature> battlePets = new ArrayList<>();
 
     private transient UUID id;
 
