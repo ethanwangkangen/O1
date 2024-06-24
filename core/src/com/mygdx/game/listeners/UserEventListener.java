@@ -15,9 +15,19 @@ import com.mygdx.global.BattleState;
 import com.mygdx.global.StartBattleEvent;
 
 public class UserEventListener extends Listener {
-    private BattleResponseListener responseListener;
+    private static UserEventListener instance = new UserEventListener();
+
+    private BattleResponseListener responseListener; // To be used by Map Activity
     public void setResponseListener(BattleResponseListener listener) {
         this.responseListener = listener;
+    }
+
+    public BattleResponseListener getResponseListener() {
+        return responseListener;
+    }
+
+    public static UserEventListener getInstance() {
+        return instance;
     }
     @Override
     public void received(Connection connection, final Object object) {
@@ -68,5 +78,6 @@ public class UserEventListener extends Listener {
         }
     }
 
-    }
+
+}
 
