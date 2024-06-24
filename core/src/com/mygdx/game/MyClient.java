@@ -32,10 +32,10 @@ public class MyClient {
 
         // Add all global events
         myClient.getKryo().register(PlayerAcceptBattleEvent.class);
+        myClient.getKryo().register(PlayerRequestBattleEvent.class);
         myClient.getKryo().register(PlayerAttackEvent.class);
         myClient.getKryo().register(PlayerChangePetEvent.class);
         myClient.getKryo().register(PlayerJoinServerEvent.class);
-        myClient.getKryo().register(PlayerRequestBattleEvent.class);
 
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
@@ -55,6 +55,8 @@ public class MyClient {
         myClient.getKryo().register(Skill[].class);
         myClient.getKryo().register(BattleState.Turn.class);
         myClient.getKryo().register(TextImageButton.class);
+        myClient.getKryo().register(String.class);
+
 
         // Add all listeners of server
         myClient.addListener(new UserEventListener());
@@ -99,13 +101,14 @@ public class MyClient {
     public static void sendBattleRequest(String opponentId) {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
         playerRequestBattleEvent.opponentUID = opponentId;
-        playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
-
+        playerRequestBattleEvent.requesterPlayer = null;
+//        System.out.println(opponentId);
+//        System.out.println(playerRequestBattleEvent.requesterPlayer.getUserId());
         try {
-            DarwinsDuel.client.sendTCP(playerRequestBattleEvent);
-            System.out.println("sent playerRequestBattleEvent");
+            myClient.sendTCP(playerRequestBattleEvent);
+            System.out.println("Sent playerRequestBattleEvent from client");
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error sending playerRequestBattleEvent" + e.getMessage());
         }
     }
 }

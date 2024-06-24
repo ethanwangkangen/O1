@@ -28,7 +28,6 @@ public class ServerFoundation {
     public ServerFoundation() {
         this.server = new Server();
 
-
         // Add all global events
         server.getKryo().register(PlayerAcceptBattleEvent.class);
         server.getKryo().register(PlayerRequestBattleEvent.class);
@@ -54,6 +53,7 @@ public class ServerFoundation {
         server.getKryo().register(Skill[].class);
         server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(TextImageButton.class);
+        server.getKryo().register(String.class);
 
         // Add all listeners of server
         server.addListener(new ServerEventListener());
