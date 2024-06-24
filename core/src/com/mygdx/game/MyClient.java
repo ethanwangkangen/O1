@@ -27,8 +27,8 @@ import java.util.ArrayList;
 public class MyClient {
     private static com.esotericsoftware.kryonet.Client myClient;
     public static void connectToServer() {
-        DarwinsDuel.client = new com.esotericsoftware.kryonet.Client();
-        myClient = DarwinsDuel.getClient();
+        myClient = new com.esotericsoftware.kryonet.Client();
+
 
         // Add all global events
         myClient.getKryo().register(PlayerAcceptBattleEvent.class);
@@ -61,6 +61,7 @@ public class MyClient {
 
         //start the client
         myClient.start();
+        DarwinsDuel.client = myClient;
         // Connect to the server in a separate thread
         Thread connectThread = getThread(myClient);
         try {
@@ -100,11 +101,11 @@ public class MyClient {
         PlayerRequestBattleEvent playerRequestBattleEvent = new PlayerRequestBattleEvent();
         playerRequestBattleEvent.opponentUID = opponentId;
         playerRequestBattleEvent.requesterPlayer = UserPlayerHandler.getPlayer();
-        System.out.println(opponentId);
-        System.out.println(playerRequestBattleEvent.requesterPlayer.getUserId());
         try {
-            myClient.sendTCP(playerRequestBattleEvent);
-            System.out.println("Sent playerRequestBattleEvent from client");
+            new Thread(() -> {
+                DarwinsDuel.getClient().sendTCP(playerRequestBattleEvent);
+                System.out.println("Sent playerRequestBattleEvent from client");
+            }).start();
         } catch (Exception e) {
             System.out.println("Error sending playerRequestBattleEvent" + e.getMessage());
         }
