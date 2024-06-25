@@ -38,6 +38,9 @@ public class MyClient {
         myClient.getKryo().register(PlayerChangePetEvent.class);
         myClient.getKryo().register(PlayerJoinServerEvent.class);
         myClient.getKryo().register(StartBattleEvent.class);
+//        myClient.getKryo().register(NPCBattleEvent.class);
+
+        // Add all creatures
 
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
@@ -48,12 +51,14 @@ public class MyClient {
         myClient.getKryo().register(MouseHunter.class);
 
         myClient.getKryo().register(BattleState.class);
+        myClient.getKryo().register(BattleState.Turn.class);
         myClient.getKryo().register(Player.class);
         myClient.getKryo().register(Player.PetNum.class);
+//        myClient.getKryo().register(NPC.class); // added
         myClient.getKryo().register(ArrayList.class);
         myClient.getKryo().register(Creature.class);
+//        myClient.getKryo().register(Creature.Element.class); // added
         myClient.getKryo().register(Skill.class);
-        myClient.getKryo().register(BattleState.Turn.class);
         myClient.getKryo().register(TextImageButton.class);
         myClient.getKryo().register(String.class);
 
@@ -76,7 +81,9 @@ public class MyClient {
 
     private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "***REMOVED***"; // Server's IP address if not running locally
+            String host = "192.168.68.71"; // Server's IP address if not running locally
+            // sk: 192.168.68.71
+            // ethan: ***REMOVED***
             int tcpPort = 55555;       // Must match the server's TCP port
             int udpPort = 55577;       // Must match the server's UDP port
 

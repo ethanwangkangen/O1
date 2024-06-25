@@ -35,7 +35,9 @@ public class ServerFoundation {
         server.getKryo().register(PlayerChangePetEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
         server.getKryo().register(StartBattleEvent.class);
+        //        myClient.getKryo().register(NPCBattleEvent.class);
 
+        // Add all creatures
         server.getKryo().register(Entity.class);
         server.getKryo().register(MeowmadAli.class);
         server.getKryo().register(CrocLesnar.class);
@@ -45,12 +47,14 @@ public class ServerFoundation {
         server.getKryo().register(MouseHunter.class);
 
         server.getKryo().register(BattleState.class);
+        server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.PetNum.class);
+        //        myClient.getKryo().register(NPC.class); // added
         server.getKryo().register(ArrayList.class);
         server.getKryo().register(Creature.class);
+        //        myClient.getKryo().register(Creature.Element.class); // added
         server.getKryo().register(Skill.class);
-        server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(TextImageButton.class);
         server.getKryo().register(String.class);
 
