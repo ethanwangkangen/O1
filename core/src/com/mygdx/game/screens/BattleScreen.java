@@ -338,7 +338,7 @@ public class BattleScreen implements Screen {
         endBattleDialog.button("Return to game");
 
         endBattleTable.setFillParent(true);
-        endBattleTable.add(endBattleDialog);
+        endBattleTable.add(endBattleDialog).size(250, 250);
         endBattleDialog.setVisible(false);
     }
 
@@ -471,7 +471,9 @@ public class BattleScreen implements Screen {
                     // You have won !!
                     endBattleDialog.text("You have achieved victory");
                 } else {
-                    endBattleDialog.text("You have lost. Try harder next time");
+                    // You have lost
+                    endBattleDialog.text("You have lost ... noob");
+                    endBattleDialog.text("Try harder next time");
                 }
                 endBattleTextRendered = true;
             }
