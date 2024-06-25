@@ -36,8 +36,6 @@ public abstract class Creature extends Entity implements Serializable{
         FIRE,
         WATER,
         EARTH,
-        LIGHT,
-        DARK
     }
 
     public Skill[] getSkills() {
@@ -49,13 +47,11 @@ public abstract class Creature extends Entity implements Serializable{
         this.health = health;
         this.maxmana = mana;
         this.mana = mana;
-        //this.alive = true;
         this.level = 1;
         this.exp = 0;
         this.maxexp = 10;
         this.name = name;
         this.path = path;
-        //this.texturePath = new Texture(path);
     }
 
     public Creature(int health, int mana, String name, String path, Element element) {
@@ -63,24 +59,38 @@ public abstract class Creature extends Entity implements Serializable{
         this.health = health;
         this.maxmana = mana;
         this.mana = mana;
-        //this.alive = true;
         this.level = 1;
         this.exp = 0;
         this.maxexp = 10;
         this.name = name;
         this.path = path;
         this.element = element;
-        //this.texturePath = new Texture(path);
+    }
+
+    private int calculateModifiedDamage(Skill skill) {
+        Element skillElement = skill.element;
+        Element petElement = this.element;
+
+        if ((petElement == Element.FIRE && skillElement == Element.WATER) ||
+                (petElement == Element.WATER && skillElement == Element.EARTH) ||
+                (petElement == Element.EARTH && skillElement == Element.FIRE)) {
+            // Skill is not effective against pet
+            return (int) (1.35 * skill.getDamage());
+        } else if ((petElement == Element.FIRE && skillElement == Element.EARTH) ||
+                (petElement == Element.WATER && skillElement == Element.FIRE) ||
+                (petElement == Element.EARTH && skillElement == Element.WATER)) {
+            // Skill is effective against pet
+            return (int) (0.65 * skill.getDamage());
+        } else {
+            // Skill and pet's element are neutral
+            return skill.getDamage();
+        }
     }
 
     public void takeDamage(Skill skill) {
-        System.out.println("Skill damage: " + skill.damage);
-        int x = skill.getDamage();
+        int x = calculateModifiedDamage(skill);
+        System.out.println("Skill damage: " + x);
         this.health -= x;
-//        if (this.health <= 0) {
-//            this.health = 0;
-//            this.alive = false;
-//        }
     }
 
     public String getName() {
