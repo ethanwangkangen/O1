@@ -57,4 +57,12 @@ public class BattleHandler {
     public static Boolean petAttacked() {
         return battleState.petAttacked;
     }
+
+    public static void clearBattleHandler() {
+        battleId = null;
+        battleState = null;
+        updatePetInfo = false;
+        battleEnd = false;
+        changePet = false;
+    }
 }

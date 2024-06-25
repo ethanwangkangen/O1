@@ -40,6 +40,8 @@ public class BattleScreen implements Screen {
     private Label health2;
     private HealthBar healthBar1;
     private HealthBar healthBar2;
+    private Dialog endBattleDialog;
+    private Boolean endBattleTextRendered = false;
 
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
@@ -66,6 +68,7 @@ public class BattleScreen implements Screen {
     private Window skillsWindow = new Window("Skills", skin);
     private Window petsWindow = new Window("Pets", skin);
     private Table changeTable = new Table();
+    private Table endBattleTable = new Table();
     private Stack stack = new Stack();
 
     private ExtendViewport extendViewport;
@@ -95,6 +98,7 @@ public class BattleScreen implements Screen {
         initialiseSkillsWindow();
         initialiseChangeButtons();
         initialisePetsWindow();
+        initialiseEndBattle();
 
         //then add all the tables to the stage
         Table table = new Table();
@@ -105,6 +109,7 @@ public class BattleScreen implements Screen {
 
         stack.add(bgTable);
         stack.add(table);
+        stack.add(endBattleTable);
         stack.setFillParent(true);
         stage.addActor(stack);
 
@@ -321,6 +326,22 @@ public class BattleScreen implements Screen {
         addPetListener(newButton, index);
     }
 
+    public void initialiseEndBattle() {
+        endBattleDialog = new Dialog("Battle over", skin)
+        {
+            protected void result(Object obj) {
+                System.out.println("return to game button has been pressed");
+                DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
+                BattleHandler.clearBattleHandler();
+            }
+        };
+        endBattleDialog.button("Return to game");
+
+        endBattleTable.setFillParent(true);
+        endBattleTable.add(endBattleDialog);
+        endBattleDialog.setVisible(false);
+    }
+
     public void setAllSkillTouchable() {
         //todo: set all not touchable (ie both skillbuttons, petbuttons, and changebuttons)
 
@@ -338,7 +359,7 @@ public class BattleScreen implements Screen {
         }
     }
 
-    public void setAllsSkillNotTouchable() {
+    public void setAllNotTouchable() {
         for (TextButton button: skillButtons) {
             button.setTouchable(Touchable.disabled);
         }
@@ -444,10 +465,17 @@ public class BattleScreen implements Screen {
 
         // battle has ended
         if (BattleHandler.battleEnd) {
-            setAllsSkillNotTouchable();
-            // todo load end battle screen
-            DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
-            BattleHandler.battleEnd = false;
+            setAllNotTouchable();
+            if (!endBattleTextRendered) {
+                if (thisPlayer.isAlive()) {
+                    // You have won !!
+                    endBattleDialog.text("You have achieved victory");
+                } else {
+                    endBattleDialog.text("You have lost. Try harder next time");
+                }
+                endBattleTextRendered = true;
+            }
+            endBattleDialog.setVisible(true);
         }
 
         // enable/disable skillButtons
@@ -457,7 +485,7 @@ public class BattleScreen implements Screen {
             setAllSkillTouchable();
         } else {
             // opponent's turn
-            setAllsSkillNotTouchable();
+            setAllNotTouchable();
         }
 
 
