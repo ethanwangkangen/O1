@@ -175,7 +175,7 @@ public class BattleScreen implements Screen {
         pet2Name = new Label(opponentPet.getName(), skin);
         pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
         //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
-        healthBar2 = new HealthBar(100, 20, thisPet);
+        healthBar2 = new HealthBar(100, 20, opponentPet);
         healthBar2.setValue(opponentPet.getHealth());
 
         pet1Info.add(pet1Name);
@@ -469,11 +469,10 @@ public class BattleScreen implements Screen {
             if (!endBattleTextRendered) {
                 if (thisPlayer.isAlive()) {
                     // You have won !!
-                    endBattleDialog.text("You have achieved victory");
+                    endBattleDialog.text("You have achieved victory").pad(5);
                 } else {
                     // You have lost
-                    endBattleDialog.text("You have lost ... noob");
-                    endBattleDialog.text("Try harder next time");
+                    endBattleDialog.text("You have lost ... noob.\nTry harder next time").pad(5);
                 }
                 endBattleTextRendered = true;
             }

@@ -21,7 +21,7 @@ public class HealthBar extends ProgressBar {
 
     public HealthBar(int width, int height, Creature pet) {
 
-        super(0f, pet.getMaxhealth(), 0.01f, false, new ProgressBarStyle());
+        super(0f, pet.getMaxhealth(), 0.02f, false, new ProgressBarStyle());
         getStyle().background = getColoredDrawable(width, height, Color.RED);
         getStyle().knob = getColoredDrawable(0, height, Color.GREEN);
         getStyle().knobBefore = getColoredDrawable(width, height, Color.GREEN);
@@ -32,7 +32,7 @@ public class HealthBar extends ProgressBar {
         setAnimateDuration(0.0f);
         setValue(Math.max(pet.getHealth(), 0));
 
-        setAnimateDuration(1f);
+        setAnimateDuration(1f); // Set animate duration for future updates
     }
 
     public Drawable getColoredDrawable(int width, int height, Color color) {
