@@ -13,7 +13,6 @@ import java.io.IOException;
 public class ServerFoundation {
     private static Server server;
     public static ServerFoundation instance;
-    public static BattleState battleState = new BattleState();
     public static PlayerHandler playerHandler = new PlayerHandler();
 
 

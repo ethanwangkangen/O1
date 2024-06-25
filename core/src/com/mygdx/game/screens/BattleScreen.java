@@ -162,13 +162,13 @@ public class BattleScreen implements Screen {
         System.out.println("initialising PetInfo table");
 
         pet1Name = new Label(thisPet.getName(), skin);
-        pet1Level = new Label("(" + ((Integer)thisPet.getLevel()).toString() + ")", skin);
+        pet1Level = new Label("(" + (thisPet.getLevel()) + ")", skin);
         //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
         healthBar1 = new HealthBar(100, 20, thisPet);
         healthBar1.setValue(thisPet.getHealth());
 
         pet2Name = new Label(opponentPet.getName(), skin);
-        pet2Level = new Label("(" + ((Integer)opponentPet.getLevel()).toString() + ")", skin);
+        pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
         //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
         healthBar2 = new HealthBar(100, 20, thisPet);
         healthBar2.setValue(opponentPet.getHealth());
@@ -425,7 +425,6 @@ public class BattleScreen implements Screen {
             if (BattleHandler.petAttacked()) {
                 System.out.println("A petNum has attacked.");
                 updatePetInfo();
-//                initialisePetInfo();
                 initialisePetImages();
                 initialiseSkillsWindow();
                 initialisePetsWindow();

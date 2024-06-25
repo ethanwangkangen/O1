@@ -57,8 +57,8 @@ public class EventListener extends Listener {
         } else if (object instanceof PlayerRequestBattleEvent) {
             System.out.println("Player has requested to fight an opponent.");
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
-//            String requesterUID = request.requesterUID;
             String opponentUID = PlayerHandler.getOther(request.requesterPlayer.getIdString());
+
             Connection enemyConnection = PlayerHandler.connectionTable.get(opponentUID);
             enemyConnection.sendTCP(request);
         } else if (object instanceof PlayerAcceptBattleEvent) {

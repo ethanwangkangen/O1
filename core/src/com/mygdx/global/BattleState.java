@@ -71,9 +71,6 @@ public class BattleState{
 
         this.player1 = player;
         this.player2 = npc;
-
-        System.out.println(player1.battlePets.get(0).getName());
-        System.out.println(player2.battlePets.get(0).getName());
     }
 
     public BattleState(Player p1Player, Player p2Player) {
