@@ -470,9 +470,11 @@ public class BattleScreen implements Screen {
                 if (thisPlayer.isAlive()) {
                     // You have won !!
                     endBattleDialog.text("You have achieved victory").pad(5);
+                    PlayerHandler.wonBattle();
                 } else {
                     // You have lost
                     endBattleDialog.text("You have lost ... noob.\nTry harder next time").pad(5);
+                    PlayerHandler.lostBattle();
                 }
                 endBattleTextRendered = true;
             }
