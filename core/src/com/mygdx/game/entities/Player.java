@@ -51,6 +51,11 @@ public class Player extends Entity implements Serializable{
         return battlePets;
     }
 
+    public void addPet(Creature pet) {
+        // adds a new pet to reservePets
+        reservePets.add(pet);
+    }
+
     public ArrayList<Creature> getReservePets() {return reservePets;}
 
 //    public Map<String, Object> toMap() {
@@ -74,10 +79,9 @@ public class Player extends Entity implements Serializable{
 //        return result;
 //    }
 
-    //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
-        // Returns true if petchange (ie a pet has died)
 
+        // Returns true if petchange (ie a pet has died)
         getCurrentPet().takeDamage(skill);
         if (!getCurrentPet().isAlive()) {
             changeNextPet();
@@ -120,7 +124,9 @@ public class Player extends Entity implements Serializable{
         this.username = newUsername;
     }
 
-    public String getUserId() {return this.userId;}
+    public String getUserId() {
+        return this.userId;
+    }
 
     public void setUserId(String id) {
         this.userId = id;
