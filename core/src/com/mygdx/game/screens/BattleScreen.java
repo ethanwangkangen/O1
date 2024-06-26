@@ -61,6 +61,7 @@ public class BattleScreen implements Screen {
     private ArrayList<TextImageButton> petButtons= new ArrayList<>();
     private Boolean[] petAvailable = {false, false, false};
 
+
     private Label turnLabel;
     private Dialog endBattleDialog;
 

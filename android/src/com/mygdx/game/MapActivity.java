@@ -395,5 +395,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
 
 }
