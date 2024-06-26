@@ -111,6 +111,7 @@ public class BattleScreen implements Screen {
         initialiseSkillsWindow();
         initialiseChangeButtons();
         initialisePetsWindow();
+        initialiseEndBattle();
 
         //then add all the tables to the stage
         Table table = new Table();
