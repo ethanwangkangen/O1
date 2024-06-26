@@ -34,6 +34,7 @@ public class BattleScreen implements Screen {
     private ExtendViewport extendViewport;
     private int screenWidth = Gdx.graphics.getWidth();
     private int screenHeight = Gdx.graphics.getHeight();
+    private Texture crossedBox;
 
     private String myId = UserPlayerHandler.getUserId(); //id of current player
     private final String battleId = UserBattleHandler.getBattleId(); // id of current battle
@@ -54,21 +55,21 @@ public class BattleScreen implements Screen {
     private ProgressBar healthBar1;
     private ProgressBar healthBar2;
 
+    // for skill buttons and changePet buttons
     private ArrayList<TextButton> skillButtons = new ArrayList<>();
     private Boolean[] skillAvailable = {false, false, false};
-    private Texture crossedBox;
     private ArrayList<TextImageButton> petButtons= new ArrayList<>();
     private Boolean[] petAvailable = {false, false, false};
 
-    private Label winLabel;
-    private Label loseLabel;
     private Label turnLabel;
+    private Dialog endBattleDialog;
 
     private TextButton changeSkillButton;
     private TextButton changePetButton;
+    private Boolean endBattleTextRendered = false;
 
     // tables, windows and stacks
-    private Table winOrLoseTable = new Table(); // todo using addActor, overlay this when win/lose
+    private Table endBattleTable = new Table();
     private Table bgTable = new Table(); //background + battlePets + usernames
     private Table pet1Info = new Table();
     private Table pet2Info = new Table();
@@ -177,30 +178,31 @@ public class BattleScreen implements Screen {
 
         System.out.println("initialising PetInfo table");
 
+        // for thisPlayer's pet
         pet1Name = new Label(thisPet.getName(), skin);
-        pet2Name = new Label(opponentPet.getName(), skin);
         pet1Level = new Label("(" + (thisPet.getLevel()) + ")", skin);
-        pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
-//        health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
-//        health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
-        healthBar1 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar1.setAnimateDuration(1f);
+        //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
+        healthBar1 = new HealthBar(100, 20, thisPet);
         healthBar1.setValue(thisPet.getHealth());
-        healthBar2 = new ProgressBar(0, thisPet.getMaxhealth(), 1, false, skin);
-        healthBar2.setAnimateDuration(1f);
+
+        // for opponent's pet
+        pet2Name = new Label(opponentPet.getName(), skin);
+        pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
+        //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
+        healthBar2 = new HealthBar(100, 20, opponentPet);
         healthBar2.setValue(opponentPet.getHealth());
 
         pet1Info.add(pet1Name);
         pet1Info.add(pet1Level).padLeft(2.5f);
         pet1Info.row();
-//        pet1Info.add(health1).center().padLeft(10);
+        //pet1Info.add(health1).center().padLeft(10);
         pet1Info.add(healthBar1).colspan(2);
         pet1Info.padLeft(5);
 
         pet2Info.add(pet2Name);
         pet2Info.add(pet2Level).padLeft(2.5f);
         pet2Info.row();
-//        pet2Info.add(health2).center().padRight(10);
+        //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
         pet2Info.padRight(5);
     }
@@ -340,8 +342,23 @@ public class BattleScreen implements Screen {
         addPetListener(newButton, index);
     }
 
+    public void initialiseEndBattle() {
+        endBattleDialog = new Dialog("Battle over", skin)
+        {
+            protected void result(Object obj) {
+                System.out.println("return to game button has been pressed");
+                DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
+                UserBattleHandler.clearBattleHandler();
+            }
+        };
+        endBattleDialog.button("Return to game");
+
+        endBattleTable.setFillParent(true);
+        endBattleTable.add(endBattleDialog).size(250, 250);
+        endBattleDialog.setVisible(false);
+    }
+
     public void setAllSkillTouchable() {
-        //todo: set all not touchable (ie both skillbuttons, petbuttons, and changebuttons)
 
         // sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
@@ -357,7 +374,7 @@ public class BattleScreen implements Screen {
         }
     }
 
-    public void setAllsSkillNotTouchable() {
+    public void setAllNotTouchable() {
         for (TextButton button: skillButtons) {
             button.setTouchable(Touchable.disabled);
         }
@@ -465,10 +482,19 @@ public class BattleScreen implements Screen {
 
         // battle has ended
         if (UserBattleHandler.battleEnd) {
-            setAllsSkillNotTouchable();
-            // todo load end battle screen
-            DarwinsDuel.gameState =  DarwinsDuel.GameState.FREEROAM;
-            UserBattleHandler.battleEnd = false;
+            if (!endBattleTextRendered) {
+                if (thisPlayer.isAlive()) {
+                    // You have won !!
+                    endBattleDialog.text("You have achieved victory").pad(5);
+                    UserPlayerHandler.wonBattle();
+                } else {
+                    // You have lost
+                    endBattleDialog.text("You have lost ... noob.\nTry harder next time").pad(5);
+                    UserPlayerHandler.lostBattle();
+                }
+                endBattleTextRendered = true;
+            }
+            endBattleDialog.setVisible(true);
         }
 
         // enable/disable skillButtons
@@ -478,7 +504,7 @@ public class BattleScreen implements Screen {
             setAllSkillTouchable();
         } else {
             // opponent's turn
-            setAllsSkillNotTouchable();
+            setAllNotTouchable();
         }
 
 

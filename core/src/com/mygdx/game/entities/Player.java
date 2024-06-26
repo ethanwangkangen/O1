@@ -185,4 +185,24 @@ public class Player extends Entity implements Serializable{
         }
         System.out.println();
     }
+
+    public Skill npcAttack(int turns) {
+        // for NPC only
+        System.err.println("Bug: Player class is calling method exclusive for NPC (npcAttack).");
+        return null;
+    }
+
+    public void wonBattle() {
+        for (Creature pet : battlePets) {
+            pet.gainEXP(100);
+        }
+    }
+
+    public void lostBattle() {
+        for (Creature pet : battlePets) {
+            pet.gainEXP(30);
+        }
+
+    }
+
 }

@@ -8,12 +8,14 @@ import com.mygdx.game.entities.Entity;
 import com.mygdx.game.entities.Froggy;
 import com.mygdx.game.entities.MeowmadAli;
 import com.mygdx.game.entities.MouseHunter;
+import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerAttackEvent;
 import com.mygdx.game.events.PlayerChangePetEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
+import com.mygdx.game.events.PlayerNPCBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
@@ -38,10 +40,9 @@ public class MyClient {
         myClient.getKryo().register(PlayerChangePetEvent.class);
         myClient.getKryo().register(PlayerJoinServerEvent.class);
         myClient.getKryo().register(StartBattleEvent.class);
-//        myClient.getKryo().register(NPCBattleEvent.class);
+        myClient.getKryo().register(PlayerNPCBattleEvent.class); // added
 
         // Add all creatures
-
         myClient.getKryo().register(Entity.class);
         myClient.getKryo().register(MeowmadAli.class);
         myClient.getKryo().register(CrocLesnar.class);
@@ -54,10 +55,10 @@ public class MyClient {
         myClient.getKryo().register(BattleState.Turn.class);
         myClient.getKryo().register(Player.class);
         myClient.getKryo().register(Player.PetNum.class);
-//        myClient.getKryo().register(NPC.class); // added
+        myClient.getKryo().register(NPC.class); // added
         myClient.getKryo().register(ArrayList.class);
         myClient.getKryo().register(Creature.class);
-//        myClient.getKryo().register(Creature.Element.class); // added
+        myClient.getKryo().register(Creature.Element.class); // added
         myClient.getKryo().register(Skill.class);
         myClient.getKryo().register(TextImageButton.class);
         myClient.getKryo().register(String.class);
