@@ -20,6 +20,7 @@ import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.BattleState;
+import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.StartBattleEvent;
 import com.mygdx.global.TextImageButton;
 import com.mygdx.server.listeners.ServerEventListener;
@@ -41,6 +42,7 @@ public class MyClient {
         myClient.getKryo().register(PlayerJoinServerEvent.class);
         myClient.getKryo().register(StartBattleEvent.class);
         myClient.getKryo().register(PlayerNPCBattleEvent.class); // added
+        myClient.getKryo().register(EndBattleEvent.class);
 
         // Add all creatures
         myClient.getKryo().register(Entity.class);

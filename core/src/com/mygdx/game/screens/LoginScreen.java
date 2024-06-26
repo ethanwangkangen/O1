@@ -98,7 +98,6 @@ public class LoginScreen implements Screen {
         background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
         stage = new Stage(new FitViewport(width, height));
         skin = manager.get("buttons/uiskin.json", Skin.class);
-        skin.getFont("default-font").getData().setScale((int) (Gdx.graphics.getDensity()));
 
         // initialise tables
         initialiseErrorLabel();
@@ -156,7 +155,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("tester2@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signIn("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");

@@ -93,5 +93,8 @@ public class ServerBattleHandler {
             Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
             connection2.sendTCP(event);
         }
+
+        // delete battleState from ServerBattleHandler
+        battleStateList.remove(battleId);
     }
 }
