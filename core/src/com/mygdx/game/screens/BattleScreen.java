@@ -190,7 +190,8 @@ public class BattleScreen implements Screen {
         pet2Info.row();
         //pet2Info.add(health2).center().padRight(10);
         pet2Info.add(healthBar2).colspan(2);
-        pet2Info.padRight(5);}
+        pet2Info.padRight(5);
+    }
 
     public void updatePetInfo() {
         //health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());

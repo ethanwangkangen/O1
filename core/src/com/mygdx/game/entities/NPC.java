@@ -14,11 +14,7 @@ public class NPC extends Player implements Serializable {
 
     private int count = 0;
 
-    /**/
-
     private transient UUID id;
-
-    public String battleId;
 
     private String idString;
 
@@ -46,15 +42,8 @@ public class NPC extends Player implements Serializable {
         }
 
         // pet has not died
-
         return false;
 
-    }
-
-    public int getCount() {
-        // counter to rotate through skills of the pet
-        count += 1;
-        return count;
     }
 
     @Override
@@ -66,8 +55,6 @@ public class NPC extends Player implements Serializable {
     public Creature getCurrentPet() {
         return battlePets.get(0);
     }
-
-    public String getIdString() {return idString;}
 
     @Override
     public Skill npcAttack(int turns) {
