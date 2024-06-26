@@ -502,9 +502,11 @@ public class BattleScreen implements Screen {
                 || UserBattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(UserBattleHandler.getPlayer2().getUserId(), myId)) {
             // this player's turn
             setAllSkillTouchable();
+            turnLabel.setText("Your Turn");
         } else {
             // opponent's turn
             setAllNotTouchable();
+            turnLabel.setText("Opponent's Turn");
         }
 
 
