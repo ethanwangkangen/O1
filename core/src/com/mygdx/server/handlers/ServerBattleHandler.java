@@ -95,6 +95,6 @@ public class ServerBattleHandler {
         }
 
         // delete battleState from ServerBattleHandler
-        battleStateList.remove(battleId);
+        //battleStateList.remove(battleId);
     }
 }
