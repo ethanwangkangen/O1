@@ -52,6 +52,10 @@ public class UserBattleHandler {
         }
     }
 
+    public static void newBattleState(BattleState newState) {
+        battleState = newState;
+    }
+
     public static Boolean petChanged () {
         return battleState.petChanged;
     }

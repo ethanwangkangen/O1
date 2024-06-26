@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -163,8 +164,9 @@ public class Player extends Entity implements Serializable{
 
     public void update(Player player) {
         // to update pet info during battle
-        System.out.println("battlePets size: " + battlePets.size());
-        System.out.println("player battlePets size: " + player.getBattlePets().size());
+        if (!Objects.equals(player.getUserId(), userId)) {
+            System.err.println("id not the same");
+        }
 
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);

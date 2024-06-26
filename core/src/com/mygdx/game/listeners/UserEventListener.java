@@ -64,7 +64,7 @@ public class UserEventListener extends Listener {
         if (object instanceof StartBattleEvent) {
             StartBattleEvent event = (StartBattleEvent) object;
             UserBattleHandler.setBattleId(event.battleId);
-            UserBattleHandler.updateBattleState(event.battleState);
+            UserBattleHandler.newBattleState(event.battleState);
             DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
             if (Gdx.app.getType() == Application.ApplicationType.Android) {
                 MapInterface map = (MapInterface) Gdx.app;

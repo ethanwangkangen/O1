@@ -111,6 +111,7 @@ public class BattleScreen implements Screen {
         initialiseSkillsWindow();
         initialiseChangeButtons();
         initialisePetsWindow();
+        initialiseEndBattle();
 
         //then add all the tables to the stage
         Table table = new Table();
@@ -120,6 +121,7 @@ public class BattleScreen implements Screen {
 
         stack.add(bgTable);
         stack.add(table);
+        stack.add(endBattleTable);
         stack.setFillParent(true);
         stage.addActor(stack);
 
@@ -179,7 +181,8 @@ public class BattleScreen implements Screen {
         System.out.println("initialising PetInfo table");
 
         // for thisPlayer's pet
-        pet1Name = new Label(thisPet.getName(), skin);
+//        pet1Name = new Label(thisPet.getName(), skin);
+        pet1Name = new Label(UserPlayerHandler.getUserId(), skin);
         pet1Level = new Label("(" + (thisPet.getLevel()) + ")", skin);
         //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
         healthBar1 = new HealthBar(100, 20, thisPet);
@@ -482,6 +485,7 @@ public class BattleScreen implements Screen {
 
         // battle has ended
         if (UserBattleHandler.battleEnd) {
+            setAllNotTouchable();
             if (!endBattleTextRendered) {
                 if (thisPlayer.isAlive()) {
                     // You have won !!
