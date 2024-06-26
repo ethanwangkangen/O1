@@ -98,7 +98,6 @@ public class LoginScreen implements Screen {
         background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
         stage = new Stage(new FitViewport(width, height));
         skin = manager.get("buttons/uiskin.json", Skin.class);
-        skin.getFont("default-font").getData().setScale((int) (Gdx.graphics.getDensity()));
 
         // initialise tables
         initialiseErrorLabel();
