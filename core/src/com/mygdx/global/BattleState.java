@@ -159,6 +159,7 @@ public class BattleState{
     }
 
     public void update(BattleState newState) {
+
         p1Player.update(newState.p1Player);
         p2Player.update(newState.p2Player);
         turn = newState.turn;
