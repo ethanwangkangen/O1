@@ -32,8 +32,8 @@ public class BattleScreen implements Screen {
     private Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));;
     private AssetManager manager;
     private ExtendViewport extendViewport;
-    private int screenWidth = Gdx.graphics.getWidth();
-    private int screenHeight = Gdx.graphics.getHeight();
+    private int screenWidth;
+    private int screenHeight;
     private Texture crossedBox;
 
     private String myId = UserPlayerHandler.getUserId(); //id of current player
@@ -83,8 +83,10 @@ public class BattleScreen implements Screen {
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
 
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
+
         manager = TextureHandler.getInstance().getAssetManager();
-        //skin = manager.get("buttons/uiskin.json", Skin.class);
         crossedBox = manager.get("crossedbox.png", Texture.class);
 
         //set stage
@@ -121,23 +123,26 @@ public class BattleScreen implements Screen {
 
         stack.add(bgTable);
         stack.add(table);
+        stack.add(endBattleTable);
         stack.setFillParent(true);
         stage.addActor(stack);
 
         turnLabel = new Label("Testing", skin);
-        bgTable.add(turnLabel).center().colspan(3).top().expandY();
+        bgTable.add(turnLabel).center().colspan(3).padTop(50).top().expandY();
         bgTable.row();
 
-        bgTable.add(pet1Info).left().padLeft(20);
-        bgTable.add(pet2Info).right().padRight(20).expandX();
+        bgTable.add(pet1Info).left().padLeft(50).uniform();
+        bgTable.add().uniform().expandX();
+        bgTable.add(pet2Info).right().padRight(50).uniform();
         bgTable.row();
 
-        bgTable.add(pet1imageTable).left().expandY().padLeft(20);
-        bgTable.add(pet2imageTable).right().padRight(20);
+        bgTable.add(pet1imageTable).left().expandY().padLeft(50);
+        bgTable.add();
+        bgTable.add(pet2imageTable).right().padRight(50);
         bgTable.row();
 
-        bgTable.add(changeTable).expandY().bottom();
-        bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(50);
+        bgTable.add(changeTable).center();
+        bgTable.add(skillsWindow).bottom().padBottom(50).center();
 
         stage.setDebugAll(true);
     }
@@ -169,8 +174,8 @@ public class BattleScreen implements Screen {
         pet1Image = new FlippedImage(TextureHandler.getInstance().getTexture(thisPet.getType()));
         pet2Image = new Image(TextureHandler.getInstance().getTexture(opponentPet.getType()));
 
-        pet1imageTable.add(pet1Image).padLeft(10).height(100).width(100);
-        pet2imageTable.add(pet2Image).padRight(10).height(100).width(100);
+        pet1imageTable.add(pet1Image).height(screenWidth / 5).width(screenWidth / 5);
+        pet2imageTable.add(pet2Image).height(screenWidth / 5).width(screenWidth / 5);
     }
 
     public void initialisePetInfo() {
@@ -180,32 +185,48 @@ public class BattleScreen implements Screen {
         System.out.println("initialising PetInfo table");
 
         // for thisPlayer's pet
-        pet1Name = new Label(thisPet.getName(), skin);
+//        pet1Name = new Label(thisPet.getName(), skin);
+        pet1Name = new Label(UserPlayerHandler.getUserId(), skin);
         pet1Level = new Label("(" + (thisPet.getLevel()) + ")", skin);
+        Label pet1Element = createElementLabel(thisPet);
         //health1 = new Label(thisPet.getHealth() + " / " + thisPet.getMaxhealth(), skin);
-        healthBar1 = new HealthBar(100, 20, thisPet);
+        healthBar1 = new HealthBar(screenWidth / 8, screenHeight / 18, thisPet);
         healthBar1.setValue(thisPet.getHealth());
 
         // for opponent's pet
         pet2Name = new Label(opponentPet.getName(), skin);
         pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
+        Label pet2Element = createElementLabel(thisPet);
         //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
-        healthBar2 = new HealthBar(100, 20, opponentPet);
+        healthBar2 = new HealthBar(screenWidth / 5, screenHeight / 18, opponentPet);
         healthBar2.setValue(opponentPet.getHealth());
 
         pet1Info.add(pet1Name);
-        pet1Info.add(pet1Level).padLeft(2.5f);
+        pet1Info.add(pet1Level).padLeft(10);
+        pet1Info.row();
+        pet1Info.add(pet1Element).colspan(2);
         pet1Info.row();
         //pet1Info.add(health1).center().padLeft(10);
-        pet1Info.add(healthBar1).colspan(2);
-        pet1Info.padLeft(5);
+        pet1Info.add(healthBar1).colspan(2).width(screenWidth / 5).padTop(10);
+
 
         pet2Info.add(pet2Name);
-        pet2Info.add(pet2Level).padLeft(2.5f);
+        pet2Info.add(pet2Level).padLeft(10);
+        pet2Info.row();
+        pet2Info.add(pet2Element).colspan(2);
         pet2Info.row();
         //pet2Info.add(health2).center().padRight(10);
-        pet2Info.add(healthBar2).colspan(2);
-        pet2Info.padRight(5);
+        pet2Info.add(healthBar2).colspan(2).width(screenWidth / 5).padTop(10);
+    }
+
+    public Label createElementLabel(Creature pet) {
+        if (pet.element == Creature.Element.FIRE) {
+            return new Label("FIRE", skin);
+        } else if (pet.element == Creature.Element.EARTH) {
+            return new Label("EARTH", skin);
+        } else {
+            return new Label("WATER", skin);
+        }
     }
 
     public void updatePetInfo() {
@@ -219,9 +240,9 @@ public class BattleScreen implements Screen {
         changePetButton = new TextButton("Pets", skin);
         changeSkillButton = new TextButton("Attack", skin);
 
-        changeTable.add(changeSkillButton).left().width(100);
+        changeTable.add(changeSkillButton).left().width(screenWidth / 9).height(screenHeight / 10);
         changeTable.row();
-        changeTable.add(changePetButton).left().width(100);
+        changeTable.add(changePetButton).left().width(screenWidth / 9).height(screenHeight / 10);
 
         changePetButton.addListener(new ClickListener() {
             @Override
@@ -268,11 +289,11 @@ public class BattleScreen implements Screen {
         }
 
         for (TextButton button: skillButtons) {
-            skillsWindow.add(button).pad(1).width(245);
+            skillsWindow.add(button).pad(5).width(screenWidth / 4).height(screenHeight / 11);
             skillsWindow.row();
         }
 
-        //skillsWindow.setPosition(((float)screenWidth - skillsWindow.getWidth()) / 2, 0);
+        skillsWindow.padTop(skillButtons.get(0).getHeight());
         skillsWindow.setVisible(true);
 
     }
@@ -304,12 +325,13 @@ public class BattleScreen implements Screen {
 
         // add buttons to petsWindow
         for (TextImageButton button: petButtons) {
-            petsWindow.add(button).pad(1).width(245).height(80);
+            petsWindow.add(button).pad(1).width(screenWidth / 3).height(screenHeight / 4);
             petsWindow.row();
         }
 
-        petsWindow.setHeight(250);
-        petsWindow.setWidth(250);
+        petsWindow.padTop(skillButtons.get(0).getHeight());
+        petsWindow.setHeight((float)(screenHeight / 1.3));
+        petsWindow.setWidth(screenWidth / 5);
         petsWindow.setVisible(false);
     }
 
@@ -355,7 +377,7 @@ public class BattleScreen implements Screen {
         endBattleDialog.button("Return to game");
 
         endBattleTable.setFillParent(true);
-        endBattleTable.add(endBattleDialog).size(250, 250);
+        endBattleTable.add(endBattleDialog).width((float)(screenWidth / 2)).height((float)(screenHeight / 1.2));
         endBattleDialog.setVisible(false);
     }
 
@@ -483,6 +505,7 @@ public class BattleScreen implements Screen {
 
         // battle has ended
         if (UserBattleHandler.battleEnd) {
+            setAllNotTouchable();
             if (!endBattleTextRendered) {
                 if (thisPlayer.isAlive()) {
                     // You have won !!
