@@ -37,6 +37,7 @@ public class ServerFoundation {
         server.getKryo().register(PlayerJoinServerEvent.class);
         server.getKryo().register(StartBattleEvent.class);
         server.getKryo().register(PlayerNPCBattleEvent.class);
+        server.getKryo().register(EndBattleEvent.class); //added
 
         // Add all creatures
         server.getKryo().register(Entity.class);
