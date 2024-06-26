@@ -3,6 +3,8 @@ package com.mygdx.game.entities;
 public class Skill {
     public String name;
     public int damage;
+    public Creature.Element element;
+
 
     public int getDamage() {
         return damage;
@@ -16,5 +18,17 @@ public class Skill {
         this.name = name;
         this.damage = damage;
     }
+
+    public Skill(String name, int damage, Creature.Element element) {
+        this.name = name;
+        this.damage = damage;
+        this.element = element;
+    }
+
     public Skill() {}
+
+    public void levelUp() {
+        this.damage += 1;
+    }
+
 }

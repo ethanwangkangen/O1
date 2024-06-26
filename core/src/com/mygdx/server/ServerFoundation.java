@@ -6,6 +6,7 @@ import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerAttackEvent;
 import com.mygdx.game.events.PlayerChangePetEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
+import com.mygdx.game.events.PlayerNPCBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.*;
@@ -35,7 +36,7 @@ public class ServerFoundation {
         server.getKryo().register(PlayerChangePetEvent.class);
         server.getKryo().register(PlayerJoinServerEvent.class);
         server.getKryo().register(StartBattleEvent.class);
-        //        myClient.getKryo().register(NPCBattleEvent.class);
+        server.getKryo().register(PlayerNPCBattleEvent.class);
 
         // Add all creatures
         server.getKryo().register(Entity.class);
@@ -50,10 +51,10 @@ public class ServerFoundation {
         server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(Player.class);
         server.getKryo().register(Player.PetNum.class);
-        //        myClient.getKryo().register(NPC.class); // added
+        server.getKryo().register(NPC.class);
         server.getKryo().register(ArrayList.class);
         server.getKryo().register(Creature.class);
-        //        myClient.getKryo().register(Creature.Element.class); // added
+        server.getKryo().register(Creature.Element.class); // added
         server.getKryo().register(Skill.class);
         server.getKryo().register(TextImageButton.class);
         server.getKryo().register(String.class);

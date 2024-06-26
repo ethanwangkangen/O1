@@ -1,6 +1,7 @@
 package com.mygdx.server.handlers;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.EndBattleEvent;
@@ -24,6 +25,16 @@ public class ServerBattleHandler {
         return battleId;
     }
 
+    public static String initialiseBattle(Player player, NPC npc) {
+        // for battling against NPC
+
+        BattleState battleState = new BattleState(player, npc);
+        String battleId = player.getUserId();
+        battleStateList.put(battleId, battleState);
+        System.out.println("New NPC battleState created");
+        return battleId;
+    }
+
     public static BattleState getBattleState(String battleId) {
         return battleStateList.get(battleId);
     }
@@ -33,11 +44,15 @@ public class ServerBattleHandler {
         BattleState battleState = battleStateList.get(battleId);
         System.out.println("Sending battleState");
 
+        // sends battleState to player1
         Connection connection1 = ServerPlayerHandler.getConnectionById(battleState.getPlayer1().getUserId());
         connection1.sendTCP(battleState);
 
-        Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
-        connection2.sendTCP(battleState);
+        if (!battleState.isAgainstNPC()) {
+            // not against NPC; send battleState to player2
+            Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
+            connection2.sendTCP(battleState);
+        }
 
         // reset battleState attributes for next turn
         battleState.petAttacked = false;
@@ -52,11 +67,15 @@ public class ServerBattleHandler {
         event.battleState = battleState;
         System.out.println("Sending start battle event");
 
+        // send StartBattleEvent to player1
         Connection connection1 = ServerPlayerHandler.getConnectionById(battleState.getPlayer1().getUserId());
         connection1.sendTCP(event);
 
-        Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
-        connection2.sendTCP(event);
+        if (!battleState.isAgainstNPC()) {
+            // not against NPC; send StartBattleEvent to player2
+            Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
+            connection2.sendTCP(event);
+        }
     }
 
     public static void sendEndBattle(String battleId) {
@@ -65,10 +84,14 @@ public class ServerBattleHandler {
         EndBattleEvent event = new EndBattleEvent();
         System.out.println("Sending EndBattleEvent");
 
+        // send EndBattleEvent to player1
         Connection connection1 = ServerPlayerHandler.getConnectionById(battleState.getPlayer1().getUserId());
         connection1.sendTCP(event);
 
-        Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
-        connection2.sendTCP(event);
+        if (!battleState.isAgainstNPC()) {
+            // not against NPC; send EndBattleEvent to player2
+            Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
+            connection2.sendTCP(event);
+        }
     }
 }

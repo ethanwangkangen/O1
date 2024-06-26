@@ -53,4 +53,12 @@ public class UserPlayerHandler {
         player.updatePets(pets1, pets2);
     }
 
+    public static void wonBattle() {
+        player.wonBattle();
+    }
+
+    public static void lostBattle() {
+        player.lostBattle();
+    }
+
 }

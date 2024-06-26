@@ -30,6 +30,8 @@ public class PetChangeScreen implements Screen {
     private Table table;
     Stack stack = new Stack();
     private Texture emptyBox;
+    private int width = Gdx.graphics.getWidth();
+    private int height = Gdx.graphics.getHeight();
 
     // to be located on the left side of the screen
     // for pets that will be carried into battle by the player
@@ -53,7 +55,7 @@ public class PetChangeScreen implements Screen {
     public PetChangeScreen(DarwinsDuel gameObj) {
         System.out.println("PetChangeScreen created");
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new FillViewport(width, height));
 
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
@@ -154,38 +156,12 @@ public class PetChangeScreen implements Screen {
 
         table1 = new Table();
         pane1 = new ScrollPane(table1);
-        pane1.setWidth(250);
+        pane1.setWidth((float) width / 4);
 
         table2 = new Table();
         pane2 = new ScrollPane(table2);
-        pane2.setWidth(250);
+        pane2.setWidth((float) width / 4);
     }
-
-//    public void removeButton(int button) {
-//        buttonList2.remove(button);
-//        table2.clearChildren();
-//        for (TextImageButton btn : buttonList1) {
-//            table2.add(btn).pad(5).row();
-//        }
-//        table2.invalidateHierarchy(); // Refresh table layout
-//    }
-//
-//    private void addButton(Creature pet) {
-//        TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
-//
-//        // Add click listener to handle button removal
-//        button.addListener(new ClickListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                removeButton(button);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        buttonList1.add(button);
-//        table1.add(button).expandX().fillX().row();
-//        table1.invalidateHierarchy(); // Refresh table layout
-//    }
 
     private void createButtonList1() {
 
@@ -224,7 +200,7 @@ public class PetChangeScreen implements Screen {
         table1.clearChildren();
 //        table1.clear();
         for (TextImageButton button : buttonList1) {
-            table1.add(button).pad(5).width(245).height(80).row();
+            table1.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
 
         // Calculate how many empty buttons are needed
@@ -233,7 +209,7 @@ public class PetChangeScreen implements Screen {
         // for empty buttons to make 3 buttons
         for (int i = 0; i < emptyButtonCount; i ++) {
             TextImageButton emptyButton = createEmptyButton();
-            table1.add(emptyButton).pad(5).width(245).height(80).row();
+            table1.add(emptyButton).pad(5).size((float) width / 4, (float) height / 4).row();
             buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
@@ -242,7 +218,7 @@ public class PetChangeScreen implements Screen {
         table2.clearChildren();
 //        table2.clear();
         for (TextImageButton button : buttonList2) {
-            table2.add(button).pad(5).width(245).height(80).row();
+            table2.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
         table2.invalidateHierarchy();
     }
@@ -296,6 +272,7 @@ public class PetChangeScreen implements Screen {
             System.out.println("Button is empty: cannot be removed");
             return;
         }
+
         if (index != -1) { // Ensure the button exists in the list
             buttonList1.remove(button);
             buttonList2.add(button);

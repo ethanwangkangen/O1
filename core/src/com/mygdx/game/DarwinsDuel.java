@@ -134,7 +134,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 			if (Gdx.app.getType() == Application.ApplicationType.Android) {
 				MapInterface map = (MapInterface) Gdx.app;
 				// Stop showing the map if its being shown
-				System.out.println("Stop showing the map");
+//				System.out.println("Stop showing the map");
 				if (map.mapOn()) {
 					map.stopMap();
 				}
