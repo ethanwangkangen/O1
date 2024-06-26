@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.DarwinsDuel;
@@ -47,6 +49,15 @@ public class SplashScreen implements Screen {
 //            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
 //        }
         TextureHandler.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
+
+        // Increase UI window to look nicer
+        Skin skin = TextureHandler.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
+        NinePatch dialogBack = skin.getPatch("default-window");
+        dialogBack.scale(5,5);
+
+        // Increase font size for use
+        skin.getFont("default-font").getData().setScale(3,3);
+
         DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
     }
 
