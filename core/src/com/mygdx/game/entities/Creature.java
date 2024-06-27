@@ -41,7 +41,7 @@ public abstract class Creature extends Entity implements Serializable{
         this.name = name;
     }
 
-    public Creature(int health, int mana, String name, String path, Element element) {
+    public Creature(int health, int mana, String name, Element element) {
         this.maxhealth = health;
         this.health = health;
         this.maxmana = mana;
