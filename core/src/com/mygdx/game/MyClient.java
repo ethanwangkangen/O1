@@ -105,10 +105,7 @@ public class MyClient {
     }
 
     public static void sendJoinServerEvent() {
-        PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
-        playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
-        myClient.sendTCP(playerJoinServerEvent);
-        System.out.println("playerJoinServerEvent sent");
+
     }
 
     public static void sendBattleRequest(String opponentId) {
