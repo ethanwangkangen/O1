@@ -4,6 +4,7 @@ import static com.mygdx.game.EmailValidator.isValidEmail;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -124,9 +125,9 @@ public class LoginScreen implements Screen {
 
     public void initialiseErrorLabel() {
         loginErrorLabel = new Label("", skin);
-        loginErrorLabel.setFontScale(10);
+        loginErrorLabel.setColor(Color.RED);
         signUpErrorLabel = new Label("", skin);
-        signUpErrorLabel.setFontScale(10);
+        signUpErrorLabel.setColor(Color.RED);
     }
 
     public void initialiseLoginTable() {
@@ -153,7 +154,7 @@ public class LoginScreen implements Screen {
                 email = usernameLField.getText();
                 password = passwordLField.getText();
                 //for testing
-                if (true) {
+                if (isValidInput(email, password)) {
                     //to Login:
                     authService1.signIn("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override

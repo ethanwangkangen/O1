@@ -6,10 +6,10 @@ import java.util.Map;
 public class CrocLesnar extends Creature {
 
     public CrocLesnar() {
-        super(100, 100, "Croc Lesnar");
-        skill1 = new Skill("Claw Scratch", 20);
-        skill2 = new Skill("Croc bite", 50);
-        skill3 = new Skill("UFC punch", 30);
+        super(100, 100, "Croc Lesnar", Element.WATER);
+        skill1 = new Skill("Claw Scratch", 20, this.element);
+        skill2 = new Skill("Croc bite", 50, this.element);
+        skill3 = new Skill("UFC punch", 30, this.element);
         setType("CrocLesnar");
     }
 }
