@@ -105,6 +105,16 @@ public class MyClient {
     }
 
     public static void sendJoinServerEvent() {
+        PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
+        playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
+        try {
+            new Thread(() -> {
+                DarwinsDuel.client.sendTCP(playerJoinServerEvent);
+                System.out.println("Sent playerJoinServerEvent from client");
+            }).start();
+        } catch (Exception e) {
+            System.out.println("Error sending playerJoinServerEvent" + e.getMessage());
+        }
 
     }
 
