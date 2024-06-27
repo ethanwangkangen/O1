@@ -337,13 +337,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     String userId = userSnapshot.getKey();
                     String username = userSnapshot.child("player").child("username").getValue(String.class);
                     DataSnapshot statusSnapshot = userSnapshot.child("status");
+                    boolean online = false;
                     if (statusSnapshot.exists() && "online".equals(statusSnapshot.getValue(String.class))) {
                         currentUsers.add(userId); // If this user is online
                         System.out.println("online");
+                        online = true;
                     }
                     DataSnapshot locationSnapshot = userSnapshot.child("location");
 
-                    if (locationSnapshot.exists()) {
+                    if (locationSnapshot.exists() && online) {
                         System.out.println("Location found");
                         Double latitude = locationSnapshot.child("latitude").getValue(Double.class);
                         Double longitude = locationSnapshot.child("longitude").getValue(Double.class);
