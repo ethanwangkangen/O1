@@ -60,8 +60,10 @@ public class ServerEventListener extends Listener {
             // if players are all dead -> battle has ended
             if (!ServerBattleHandler.getBattleState(battleId).playersAlive()){
                 ServerBattleHandler.sendEndBattle(battleId);
+                return;
             }
 
+            // players still alive -> checking if against NPC
             if (ServerBattleHandler.getBattleState(battleId).isAgainstNPC()) {
                 // fighting against NPC; NPC's turn
                 System.out.println("NPC attacking");
