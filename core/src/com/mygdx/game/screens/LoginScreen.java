@@ -168,6 +168,7 @@ public class LoginScreen implements Screen {
                                     String userId = authService1.getUserId(); //get unique Id from firebase
                                     UserPlayerHandler.updateIdOfPlayer(userId);
 
+                                    MyClient.sendJoinServerEvent();
                                     System.out.println("playerJoinServerEvent sent");
 
                                     DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
