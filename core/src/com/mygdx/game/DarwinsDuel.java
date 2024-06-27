@@ -3,10 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
@@ -14,6 +12,7 @@ import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
+import com.mygdx.game.MyClient;
 import com.mygdx.game.screens.*;
 
 
@@ -73,6 +72,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public void onQuitMapActivity() {
 		System.out.println("changing screen to PetChangeScreen");
 		gameState = GameState.PETCHANGE;
+	}
+
+	@Override
+	public void onNPCReqReceived() {
+		MyClient.sendNPCReq();
 	}
 
 	@Override

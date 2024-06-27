@@ -7,6 +7,8 @@ public interface GameCommunication {
     void onEnemyInfoReceived(String playerUserId);
 
     void onQuitMapActivity();
+
+    void onNPCReqReceived();
 }
 
 /*
