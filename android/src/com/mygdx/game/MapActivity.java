@@ -249,9 +249,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onDataChange(DataSnapshot snapshot) {
                 boolean connected = snapshot.getValue(Boolean.class);
                 if (connected) {
-                    DatabaseReference userStatusRef = userStatusDatabaseReference;
-                    userStatusRef.onDisconnect().setValue("offline"); // Set to offline on disconnect
-                    userStatusRef.setValue("online"); // Set to online when connected
+                    userStatusDatabaseReference.onDisconnect().setValue("offline"); // Set to offline on disconnect
+                    userStatusDatabaseReference.setValue("online"); // Set to online when connected
                 }
             }
             @Override
@@ -331,8 +330,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
                     String username = userSnapshot.child("player").child("username").getValue(String.class);
-
-                    if (userSnapshot.child("status").getValue(String.class).equals("online")) {
+                    DataSnapshot statusSnapshot = userSnapshot.child("status");
+                    if (statusSnapshot.exists() && "online".equals(statusSnapshot.getValue(String.class))) {
                         currentUsers.add(userId); // If this user is online
                         System.out.println("online");
                     }
