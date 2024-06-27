@@ -63,16 +63,100 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final long MIN_TIME_BETWEEN_UPDATES = 5000; // 5 seconds
     private Dialog dialog; // Fight failed popup
     private Dialog acceptOrReject; // Accept or reject battle popup
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseUser currentUser = auth.getCurrentUser();
-    private String myUserId = currentUser.getUid();
+
+
+    // Firebase fields
+    private FirebaseDatabase database;
+    private DatabaseReference databaseUsers;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
+    private String myUserId;
+    private DatabaseReference userStatusDatabaseReference;
     private String enemyUID;
-    private DatabaseReference database;
+
+
+    // Google maps fields
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
     private GoogleMap googleMap;
+
+
     private BroadcastReceiver receiver;
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+
+        // Map fragment
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_fragment);
+        mapFragment.getMapAsync(this);
+
+        // Choose pet button
+        Button exitButton = findViewById(R.id.exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Exit the activity
+                sendQuitToLibGDX();
+                finish();
+            }
+        });
+
+        // Fight button
+        Button fightButton = findViewById(R.id.fight_button);
+        fightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (enemyUID != null) {
+                    sendBattleReqToEnemy(enemyUID);
+                } else {
+                    showDialog();
+                    // Tell player to select an enemy first before requesting fight
+                }
+            }
+
+        });
+
+        // Initialise firebase fields
+        database = FirebaseDatabase.getInstance();
+        databaseUsers = database.getReference().child("users");
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+        myUserId = currentUser.getUid();
+        userStatusDatabaseReference =
+                database.getReference("users").child(myUserId).child("status"); // Online or not
+
+        // If permission for location not granted, ask for it
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+            // Result of this is passed to onRequestPermissionsResult
+        } else {
+            // If permission granted start updating location (send to firebase constantly)
+            startLocationUpdates();
+        }
+
+        // Register the broadcast receiver (for accept or reject screen). Broadcasted from AndroidLauncher.
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("accept or reject")) {
+                    showAcceptOrReject();
+                } else if (intent.getAction().equals("finish map")) {
+                    System.out.println("Quitting the map");
+                    finish();
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("finish map");
+        intentFilter.addAction("accept or reject");
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+
+    }
     /**
      * called automatically when AndroidLauncher starts its MapActivity.
      * @param map
@@ -89,6 +173,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         //Add other players
         displayAll();
+
+        // Set the user's online status when they connect
+        setUserOnlineStatus();
     }
 
     @Override
@@ -132,17 +219,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void sendLocationToFirebase(Location location) {
 
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
-            System.out.println("LocationUpdate" + "Location update blocked - too fast");
-            return;
-        }
+//        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
+//            System.out.println("LocationUpdate" + "Location update blocked - too fast");
+//            return;
+//        }
         lastUpdateTime = currentTime;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
         // Send to firebase
         // Set location
-        DatabaseReference locationRef = database.child(myUserId).child("location");
+        DatabaseReference locationRef = databaseUsers.child(myUserId).child("location");
 
         // Update location data in database
         locationRef.child("latitude").setValue(latitude);
@@ -155,75 +242,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         System.out.println("sending location" + latitude + " " + longitude);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-
-        // Map fragment
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_fragment);
-        mapFragment.getMapAsync(this);
-
-        // Choose pet button
-        Button exitButton = findViewById(R.id.exit_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
+    private void setUserOnlineStatus() {
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                // Exit the activity
-                sendQuitToLibGDX();
-                finish();
-            }
-        });
-
-        // Fight button
-        Button fightButton = findViewById(R.id.fight_button);
-        fightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (enemyUID != null) {
-                    sendBattleReqToEnemy(enemyUID);
-                } else {
-                    showDialog();
-                    // Tell player to select an enemy first before requesting fight
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    DatabaseReference userStatusRef = userStatusDatabaseReference;
+                    userStatusRef.onDisconnect().setValue("offline"); // Set to offline on disconnect
+                    userStatusRef.setValue("online"); // Set to online when connected
                 }
             }
-
-        });
-
-        // Initialise database
-        database = FirebaseDatabase.getInstance().getReference().child("users");
-
-        // If permission for location not granted, ask for it
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-            // Result of this is passed to onRequestPermissionsResult
-        } else {
-
-            // If permission granted start updating location (send to firebase constantly)
-            startLocationUpdates();
-        }
-
-        // Register the broadcast receiver (for accept or reject screen). Broadcasted from AndroidLauncher.
-        receiver = new BroadcastReceiver() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("accept or reject")) {
-                    showAcceptOrReject();
-                } else if (intent.getAction().equals("finish map")) {
-                    System.out.println("Quitting the map");
-                    finish();
-                }
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
             }
-        };
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("finish map");
-        intentFilter.addAction("accept or reject");
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
-
+        });
     }
+
+
 
     public void showAcceptOrReject(){
         // Show the accept or reject popup.
@@ -282,7 +320,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
      * Add all players (except self)
      */
     public void displayAll() {
-        database.addValueEventListener(new ValueEventListener() {
+        databaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -294,8 +332,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     String userId = userSnapshot.getKey();
                     String username = userSnapshot.child("player").child("username").getValue(String.class);
 
-                    currentUsers.add(userId);
-
+                    if (userSnapshot.child("status").getValue(String.class).equals("online")) {
+                        currentUsers.add(userId); // If this user is online
+                        System.out.println("online");
+                    }
                     DataSnapshot locationSnapshot = userSnapshot.child("location");
 
                     if (locationSnapshot.exists()) {
