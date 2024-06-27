@@ -293,7 +293,7 @@ public class BattleScreen implements Screen {
             skillsWindow.add(button).pad(5).width(screenWidth / 4).height(screenHeight / 12);
             skillsWindow.row();
         }
-        skillsWindow.padTop(skillButtons.get(0).getHeight()+ skin.getFont("default-font").getXHeight());
+        skillsWindow.padTop(skillButtons.get(0).getHeight() + 15);
         skillsWindow.setVisible(true);
 
     }
@@ -329,7 +329,7 @@ public class BattleScreen implements Screen {
             petsWindow.row();
         }
 
-        petsWindow.padTop(skillButtons.get(0).getHeight() + skin.getFont("default-font").getXHeight());
+        petsWindow.padTop(skillButtons.get(0).getHeight() + 15);
         petsWindow.setHeight((float)(screenHeight / 1.3));
         petsWindow.setWidth(screenWidth / 5);
         petsWindow.setVisible(false);
