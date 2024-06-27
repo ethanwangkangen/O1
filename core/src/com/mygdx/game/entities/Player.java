@@ -44,7 +44,6 @@ public class Player extends Entity implements Serializable{
         battlePets.add(new MeowmadAli());
         battlePets.add(new CrocLesnar());
         battlePets.add(new Froggy());
-        battlePets.add(new Doge());
 
     } //no arg constructor for serialisation
 
