@@ -18,6 +18,7 @@ import com.mygdx.game.callbacks.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.callbacks.PlayerCallback;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.interfaces.AuthService;
@@ -167,7 +168,11 @@ public class LoginScreen implements Screen {
                                     String userId = authService1.getUserId(); //get unique Id from firebase
                                     UserPlayerHandler.updateIdOfPlayer(userId);
 
-                                    MyClient.sendJoinServerEvent();
+                                    PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
+                                    playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
+                                    DarwinsDuel.client.sendTCP(playerJoinServerEvent);
+                                    System.out.println("playerJoinServerEvent sent");
+
                                     DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                                 }
                                 @Override

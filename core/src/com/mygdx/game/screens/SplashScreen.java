@@ -64,6 +64,7 @@ public class SplashScreen implements Screen {
         MyClient.connectToServer();
         if (DarwinsDuel.client.isConnected()) {
             // client has successfully connected to the server
+            System.out.println("Player has connected to the server");
             DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
         }
     }
