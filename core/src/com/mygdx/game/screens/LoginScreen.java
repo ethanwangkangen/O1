@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.DarwinsDuel;
@@ -62,7 +63,8 @@ public class LoginScreen implements Screen {
     public LoginScreen(DarwinsDuel gameObj) {
 
         System.out.println("LoginScreen created");
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new ExtendViewport(2220, 1080));
+//        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         manager = DarwinsDuel.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json");
 

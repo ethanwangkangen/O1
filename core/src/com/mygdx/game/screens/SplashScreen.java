@@ -48,7 +48,8 @@ public class SplashScreen implements Screen {
             Skin skin = DarwinsDuel.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
             NinePatch dialogBack = skin.getPatch("default-window");
             dialogBack.scale(5,5);
-            DarwinsDuel.gameState = DarwinsDuel.GameState.BATTLE;
+            skin.getFont("default-font").getData().setScale(3,3);
+            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
         }
 
     }

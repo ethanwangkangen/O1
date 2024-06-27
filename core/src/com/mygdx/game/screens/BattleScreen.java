@@ -91,7 +91,7 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
-        skin.getFont("default-font").getData().setScale(3,3);
+
         skillsWindow = new Window("Skills", skin);
         crossedBox = manager.get("crossedbox.png", Texture.class);
         //set Players, Creatures, etc.
