@@ -79,8 +79,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
     private GoogleMap googleMap;
 
-
     private BroadcastReceiver receiver;
+
+    private NPCLocations locations = new NPCLocations();
 
 
     @Override
@@ -109,8 +110,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (enemyUID != null) {
+                if (enemyUID != null && enemyUID != "NPC") {
                     sendBattleReqToEnemy(enemyUID);
+                }else if (enemyUID != null && enemyUID == "NPC"){
+                    sendBattleReqToNPC();
                 } else {
                     showDialog();
                     // Tell player to select an enemy first before requesting fight
@@ -171,11 +174,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Todo refactor into new function. set custom marker for own player
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
 
-        //Add other players
+        // Add other players
         displayAll();
 
         // Set the user's online status when they connect
         setUserOnlineStatus();
+
+        // Display NPCs
+        displayNPCs();
     }
 
     @Override
@@ -399,12 +405,40 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+
+    public void displayNPCs() {
+        LatLng location1 = locations.getRandomLocation();
+        LatLng location2 = locations.getRandomLocation();
+        while (location1 == location2) {
+            location2 = locations.getRandomLocation(); // In case get the same one
+        }
+        BitmapDescriptor enemy = BitmapDescriptorFactory.fromResource(R.drawable.player1);
+        Marker marker1;
+        Marker marker2;
+
+        marker1 = googleMap.addMarker(new MarkerOptions()
+                .position(location1)
+                .title("NPC")
+                .icon(enemy));
+
+        marker2 = googleMap.addMarker(new MarkerOptions()
+                .position(location2)
+                .title("NPC")
+                .icon(enemy));
+
+    }
+
     //todo in future: change logic such that only nearby players can be fought
     @Override
     public boolean onMarkerClick(Marker marker) {
         System.out.println("Registered click");
         String playerUsername = marker.getTitle();
         System.out.println("Enemy username is " + playerUsername);
+        if (playerUsername.equals("NPC")) {
+            setTargetEnemyNPC();
+            return false;
+        }
+
         for (Map.Entry entry : playerMarkers.entrySet()) {
             if (entry.getValue().equals(marker)) {
                 String playerUserId = (String) entry.getKey();
@@ -416,15 +450,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
         return false;
     }
+
+    private void setTargetEnemyNPC() {
+        this.enemyUID = "NPC";
+    }
+
     private void setTargetEnemy(String playerUserId) {
         //todo prevent self from being targeted
-        this.enemyUID = playerUserId;
+        if (playerUserId != myUserId) {
+            this.enemyUID = playerUserId;
+        }
         System.out.println("setting target enemy to " + playerUserId);
     }
     private void sendBattleReqToEnemy(String playerUserId) {
         System.out.println("Sending battle req to enemy (in map)");
         Intent intent = new Intent("sending battle req");
         intent.putExtra("playerUserId", playerUserId);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public void sendBattleReqToNPC() {
+        System.out.println("Sending battle req to NPC (in map)");
+        Intent intent = new Intent("sending NPC req");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

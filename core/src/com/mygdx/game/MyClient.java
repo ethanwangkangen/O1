@@ -131,4 +131,18 @@ public class MyClient {
             System.out.println("Error sending playerRequestBattleEvent" + e.getMessage());
         }
     }
+
+
+    public static void sendNPCReq() {
+        try {
+            new Thread(() -> {
+                PlayerNPCBattleEvent event = new PlayerNPCBattleEvent();
+                event.player = UserPlayerHandler.getPlayer();
+                DarwinsDuel.getClient().sendTCP(event);
+                System.out.println("Sent PlayerNPCBattleEvent from client");
+            }).start();
+        } catch (Exception e) {
+            System.out.println("Error sending PlayerNPCBattleEvent" + e.getMessage());
+        }
+    }
 }
