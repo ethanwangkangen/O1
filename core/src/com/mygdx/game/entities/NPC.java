@@ -9,19 +9,11 @@ import java.util.UUID;
 
 public class NPC extends Player implements Serializable {
 
-    //private Texture texture;
     public String username = "npc";
-
-    private int count = 0;
-
-    // random id to identify NPC
-    private transient UUID id;
-
     public String path = "player1";
 
     public NPC() {
         super(); // Call the parent class constructor
-        this.id = UUID.randomUUID();
 
         // Clear the battlePets list and add only one pet
         this.battlePets.clear();
