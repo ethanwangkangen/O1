@@ -14,11 +14,6 @@ public class Skill {
         return name;
     }
 
-    public Skill(String name, int damage) {
-        this.name = name;
-        this.damage = damage;
-    }
-
     public Skill(String name, int damage, Creature.Element element) {
         this.name = name;
         this.damage = damage;
