@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.MyClient;
 import com.mygdx.game.handlers.TextureHandler;
 
 public class SplashScreen implements Screen {
@@ -45,9 +46,10 @@ public class SplashScreen implements Screen {
         stage.draw();
         stage.act(delta);
 
-//        if (DarwinsDuel.getInstance().getAssetManager().update()) {
+//        if (TextureHandler.getInstance().getAssetManager().update()) {
 //            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
 //        }
+
         TextureHandler.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
 
         // Increase UI window to look nicer
@@ -58,7 +60,12 @@ public class SplashScreen implements Screen {
         // Increase font size for use
         skin.getFont("default-font").getData().setScale(3,3);
 
-        DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
+        // connect to server
+        MyClient.connectToServer();
+        if (DarwinsDuel.client.isConnected()) {
+            // client has successfully connected to the server
+            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
+        }
     }
 
     @Override

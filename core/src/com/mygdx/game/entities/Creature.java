@@ -66,6 +66,8 @@ public abstract class Creature extends Entity implements Serializable{
         Element skillElement = skill.element;
         Element petElement = this.element;
 
+        System.out.println("Skill Element: " + skillElement + ", Pet Element: " + petElement);
+
         if ((petElement == Element.FIRE && skillElement == Element.WATER) ||
                 (petElement == Element.WATER && skillElement == Element.EARTH) ||
                 (petElement == Element.EARTH && skillElement == Element.FIRE)) {

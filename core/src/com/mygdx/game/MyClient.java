@@ -93,12 +93,6 @@ public class MyClient {
             try {
                 myClient.connect(5000, host, tcpPort, udpPort);
                 System.out.println("Connected to the server.");
-
-                PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
-                playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
-                myClient.sendTCP(playerJoinServerEvent);
-                System.out.println("playerJoinServerEvent sent");
-
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());
                 e.printStackTrace();
@@ -107,6 +101,14 @@ public class MyClient {
         });
         connectThread.start(); // Start the thread
         return connectThread;
+
+    }
+
+    public static void sendJoinServerEvent() {
+        PlayerJoinServerEvent playerJoinServerEvent = new PlayerJoinServerEvent();
+        playerJoinServerEvent.userId = UserPlayerHandler.getUserId();
+        myClient.sendTCP(playerJoinServerEvent);
+        System.out.println("playerJoinServerEvent sent");
     }
 
     public static void sendBattleRequest(String opponentId) {
