@@ -83,7 +83,9 @@ public class Player extends Entity implements Serializable{
 
         // Returns true if petchange (ie a pet has died)
         getCurrentPet().takeDamage(skill);
+        System.out.println(getCurrentPet().getHealth());
         if (!getCurrentPet().isAlive()) {
+            System.out.println("changing to next pet");
             changeNextPet();
             return true;
         }
@@ -133,20 +135,24 @@ public class Player extends Entity implements Serializable{
     }
 
     public void changeCurrentPet(Player.PetNum petNum) {
-        // Change the current pet being used in  battle
+        System.out.println("ChangeCurrentPet function");
+        // Change the current pet being used in battle
         if (isValidPet(petNum)) {
+            System.out.println("Changing current pet from " + currentPetNum + " to " + petNum);
             currentPetNum = petNum;
         }
     }
 
     private boolean isValidPet(Player.PetNum petNum) {
+        System.out.println("isValidPet function");
         // checks if list has the petNum, or if its empty
-        int index = 3; // Assuming PET1 is 0, PET2 is 1, PET3 is 2
+        int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
         return index < battlePets.size();
     }
 
     public void changeNextPet() {
         // Change to next available pet when a pet dies
+        System.out.println("ChangeNextPet function");
 
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);
