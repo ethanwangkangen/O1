@@ -294,7 +294,7 @@ public class LoginScreen implements Screen {
                         @Override
                         public void onFailure(Exception exception) {
                             String errorMessage = exception.getLocalizedMessage();
-                            loginErrorLabel.setText("Sign up failed: " + errorMessage);
+                            signUpErrorLabel.setText("Sign up failed: " + errorMessage);
                             Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                         }
                     });
