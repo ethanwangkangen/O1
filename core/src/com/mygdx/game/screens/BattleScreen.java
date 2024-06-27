@@ -199,7 +199,7 @@ public class BattleScreen implements Screen {
         // for opponent's pet
         pet2Name = new Label(opponentPet.getName(), skin);
         pet2Level = new Label("(" + (opponentPet.getLevel()) + ")", skin);
-        Label pet2Element = createElementLabel(thisPet);
+        Label pet2Element = createElementLabel(opponentPet);
         //health2 = new Label(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth(), skin);
         healthBar2 = new HealthBar(screenWidth / 5, screenHeight / 18, opponentPet);
         healthBar2.setValue(opponentPet.getHealth());
