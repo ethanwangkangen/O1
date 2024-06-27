@@ -169,9 +169,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         LatLng position = new LatLng(selfLatitude, selfLongitude);
         this.googleMap = map;
         googleMap.setOnMarkerClickListener(this);
-
-        // Add current player?
-        // Todo refactor into new function. set custom marker for own player
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
 
         // Add other players
@@ -414,19 +411,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         while (location1 == location2) {
             location2 = locations.getRandomLocation(); // In case get the same one
         }
-        BitmapDescriptor enemy = BitmapDescriptorFactory.fromResource(R.drawable.player1);
+        BitmapDescriptor npc = BitmapDescriptorFactory.fromResource(R.drawable.npc);
         Marker marker1;
         Marker marker2;
 
         marker1 = googleMap.addMarker(new MarkerOptions()
                 .position(location1)
                 .title("NPC")
-                .icon(enemy));
+                .icon(npc));
 
         marker2 = googleMap.addMarker(new MarkerOptions()
                 .position(location2)
                 .title("NPC")
-                .icon(enemy));
+                .icon(npc));
 
     }
 
