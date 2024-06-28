@@ -7,6 +7,7 @@ import com.mygdx.global.BattleState;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.StartBattleEvent;
 
+import javax.xml.parsers.SAXParser;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -94,12 +95,16 @@ public class ServerBattleHandler {
             connection2.sendTCP(event);
         } else if (battleState.getPlayer1().isAlive()) {
             // player has won against NPC -> player gains new pet
+            System.out.println("Player has won against NPC");
             Creature NPCPet = battleState.getPlayer2().getCurrentPet();
             Creature newPet = createNewPet(NPCPet.getType());
+            System.out.println(NPCPet.getType());
+            System.out.println(newPet.getType());
             if (!battleState.getPlayer1().hasPet(newPet)) {
                 // player does not own set pet -> send AddPetEvent
                 AddPetEvent petEvent = new AddPetEvent();
                 petEvent.pet = newPet;
+                System.out.println("Sending AddPetEvent");
                 connection1.sendTCP(petEvent);
             }
         }
