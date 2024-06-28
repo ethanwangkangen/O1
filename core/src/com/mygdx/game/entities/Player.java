@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.mygdx.game.handlers.UserPlayerHandler;
+import com.mygdx.game.interfaces.AuthService;
 
 
 public class Player extends Entity implements Serializable{
@@ -233,13 +234,14 @@ public class Player extends Entity implements Serializable{
         for (Creature pet : battlePets) {
             pet.gainEXP(100);
         }
+        UserPlayerHandler.sendToFirebase();
     }
 
     public void lostBattle() {
         for (Creature pet : battlePets) {
             pet.gainEXP(30);
         }
-
+        UserPlayerHandler.sendToFirebase();
     }
 
 }

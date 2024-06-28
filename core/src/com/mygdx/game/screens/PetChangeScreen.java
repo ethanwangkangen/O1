@@ -175,6 +175,7 @@ public class PetChangeScreen implements Screen {
                 }
             });
             buttonList1.add(button);
+            System.out.println(pet.getName());
         }
     }
 
@@ -190,6 +191,7 @@ public class PetChangeScreen implements Screen {
                 }
             });
             buttonList2.add(button);
+            System.out.println(pet.getName());
         }
     }
 

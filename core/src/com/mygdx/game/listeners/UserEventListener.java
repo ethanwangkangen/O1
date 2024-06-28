@@ -94,10 +94,6 @@ public class UserEventListener extends Listener {
             AddPetEvent joinObj = (AddPetEvent) object;
             Player player = UserPlayerHandler.getPlayer();
             player.addPet(joinObj.pet);
-            DarwinsDuel gameObj = DarwinsDuel.getInstance();
-            AuthService authService1;
-            authService1 = gameObj.authService;
-            authService1.sendPlayerToFirebase(player);
         }
     }
 
