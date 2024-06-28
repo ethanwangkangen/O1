@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import com.mygdx.game.handlers.UserPlayerHandler;
 
 
 public class Player extends Entity implements Serializable{
@@ -218,6 +219,8 @@ public class Player extends Entity implements Serializable{
             System.out.println(pet.getName() + ", ");
         }
         System.out.println();
+
+        UserPlayerHandler.sendToFirebase();
     }
 
     public Skill npcAttack(int turns) {
