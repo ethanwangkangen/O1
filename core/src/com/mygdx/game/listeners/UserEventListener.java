@@ -9,6 +9,7 @@ import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
 import com.mygdx.game.interfaces.BattleResponseListener;
+import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
 import com.mygdx.global.AddPetEvent;
 import com.mygdx.global.EndBattleEvent;
