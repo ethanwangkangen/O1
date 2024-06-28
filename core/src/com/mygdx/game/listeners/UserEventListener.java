@@ -10,6 +10,7 @@ import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
 import com.mygdx.game.interfaces.BattleResponseListener;
 import com.mygdx.game.interfaces.MapInterface;
+import com.mygdx.global.AddPetEvent;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.StartBattleEvent;
@@ -83,6 +84,13 @@ public class UserEventListener extends Listener {
         if (object instanceof EndBattleEvent) {
             UserBattleHandler.battleEnd = true;
             System.out.println("Client has received EndBattleEvent");
+        }
+
+        if (object instanceof AddPetEvent) {
+            AddPetEvent joinObj = (AddPetEvent) object;
+            UserPlayerHandler.getPlayer().addPet(joinObj.pet);
+            System.out.println("Client has received AddPetEvent");
+
         }
     }
 

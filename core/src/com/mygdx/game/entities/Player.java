@@ -51,9 +51,28 @@ public class Player extends Entity implements Serializable{
         return battlePets;
     }
 
+    public Boolean hasPet(Creature newPet) {
+        // return true if player already has pet
+        for (Creature pet : battlePets) {
+            if (pet.getType() == newPet.getType()) {
+                return true;
+            }
+        }
+        for (Creature pet : reservePets) {
+            if (pet.getType() == newPet.getType()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void addPet(Creature pet) {
         // adds a new pet to reservePets
-        reservePets.add(pet);
+        if (!hasPet(pet)) { // checks if player already has the pet
+            System.out.println("Adding pet to player: " + pet.getName());
+            reservePets.add(pet);
+        }
     }
 
     public ArrayList<Creature> getReservePets() {return reservePets;}

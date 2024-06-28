@@ -19,10 +19,7 @@ import com.mygdx.game.events.PlayerNPCBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
-import com.mygdx.global.BattleState;
-import com.mygdx.global.EndBattleEvent;
-import com.mygdx.global.StartBattleEvent;
-import com.mygdx.global.TextImageButton;
+import com.mygdx.global.*;
 import com.mygdx.server.listeners.ServerEventListener;
 
 import java.io.IOException;
@@ -43,6 +40,7 @@ public class MyClient {
         myClient.getKryo().register(StartBattleEvent.class);
         myClient.getKryo().register(PlayerNPCBattleEvent.class); // added
         myClient.getKryo().register(EndBattleEvent.class);
+        myClient.getKryo().register(AddPetEvent.class); // added
 
         // Add all creatures
         myClient.getKryo().register(Entity.class);
