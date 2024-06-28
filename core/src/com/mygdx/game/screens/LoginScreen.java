@@ -165,6 +165,15 @@ public class LoginScreen implements Screen {
                                 @Override
                                 public void onCallback(Player player) { //on success of getPlayerFromFirebase
                                     UserPlayerHandler.updatePlayer(player);
+
+                                    for (Creature pet : player.battlePets) {
+                                        System.out.println(pet.getName());
+                                    }
+                                    for (Creature pet : player.reservePets) {
+                                        System.out.println(pet.getName());
+                                    }
+                                    System.out.println(authService1.getUserId());
+
                                     String userId = authService1.getUserId(); //get unique Id from firebase
                                     UserPlayerHandler.updateIdOfPlayer(userId);
 
