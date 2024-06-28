@@ -11,7 +11,7 @@ import com.mygdx.game.entities.MouseHunter;
 import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.NPCDoge;
 import com.mygdx.game.entities.NPCDragon;
-import com.mygdx.game.entities.NPCMouseHunter;
+import com.mygdx.game.entities.NPCCrocLesnar;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
@@ -23,7 +23,6 @@ import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.*;
-import com.mygdx.server.listeners.ServerEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class MyClient {
         myClient.getKryo().register(MouseHunter.class);
         myClient.getKryo().register(NPCDoge.class);
         myClient.getKryo().register(NPCDragon.class);
-        myClient.getKryo().register(NPCMouseHunter.class);
+        myClient.getKryo().register(NPCCrocLesnar.class);
 
         myClient.getKryo().register(BattleState.class);
         myClient.getKryo().register(BattleState.Turn.class);

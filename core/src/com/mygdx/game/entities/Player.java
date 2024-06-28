@@ -42,7 +42,7 @@ public class Player extends Entity implements Serializable{
     public Player() {
         currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
-        battlePets.add(new CrocLesnar());
+        battlePets.add(new MouseHunter());
         battlePets.add(new Froggy());
 
     } //no arg constructor for serialisation
