@@ -123,7 +123,7 @@ public class BattleState{
         if (skill == null) {
             System.out.println("NPC skill is null");
         }
-        if (p2Player.takeDamage(skill)) {
+        if (p1Player.takeDamage(skill)) {
             petChanged = true;
         }
 
@@ -138,7 +138,6 @@ public class BattleState{
             ServerBattleHandler.sendEndBattle(battleId);
         }
     }
-
 
 //    public void loadTextures(Runnable callback) {
 //        p1Player.loadTextures(() -> {
