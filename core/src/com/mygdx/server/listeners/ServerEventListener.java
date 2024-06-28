@@ -3,6 +3,7 @@ package com.mygdx.server.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.entities.CrocLesnar;
 import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
@@ -100,7 +101,7 @@ public class ServerEventListener extends Listener {
             // start battle against NPC
             System.out.println("Battle starting between player and NPC");
             PlayerNPCBattleEvent event = (PlayerNPCBattleEvent) object;
-            String battleId = ServerBattleHandler.initialiseBattle(event.player, new NPC());
+            String battleId = ServerBattleHandler.initialiseBattle(event.player, new NPC(new CrocLesnar()));
             ServerBattleHandler.sendStartBattle(battleId);
         }
     }
