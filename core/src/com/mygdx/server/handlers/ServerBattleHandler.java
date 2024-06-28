@@ -1,8 +1,8 @@
 package com.mygdx.server.handlers;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.mygdx.game.entities.NPC;
-import com.mygdx.game.entities.Player;
+import com.mygdx.game.entities.*;
+import com.mygdx.global.AddPetEvent;
 import com.mygdx.global.BattleState;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.StartBattleEvent;
@@ -92,9 +92,39 @@ public class ServerBattleHandler {
             // not against NPC; send EndBattleEvent to player2
             Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
             connection2.sendTCP(event);
+        } else {
+            // is fighting against NPC
+            // player gains new pet
+            Creature NPCPet = battleState.getPlayer2().getCurrentPet();
+            Creature newPet = createNewPet(NPCPet.getType());
+            if (!battleState.getPlayer1().hasPet(newPet)) {
+                // player does not own set pet -> send AddPetEvent
+                AddPetEvent petEvent = new AddPetEvent();
+                petEvent.pet = newPet;
+                connection1.sendTCP(petEvent);
+            }
         }
 
-        // delete battleState from ServerBattleHandler
+        // todo delete battleState from ServerBattleHandler
         //battleStateList.remove(battleId);
+    }
+
+    private static Creature createNewPet(String type) {
+        switch (type) {
+            case "MouseHunter":
+                return new MouseHunter();
+            case "CrocLesnar":
+                return new CrocLesnar();
+            case "Doge":
+                return new Doge();
+            case "Dragon":
+                return new Dragon();
+            case "MeowmadAli":
+                return new MeowmadAli();
+            case "Froggy":
+                return new Froggy();
+            default:
+                return null;
+        }
     }
 }
