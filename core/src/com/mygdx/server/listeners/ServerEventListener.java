@@ -107,6 +107,10 @@ public class ServerEventListener extends Listener {
         }
     }
 
+    private void createRandomPet() {
+
+    }
+
 //        super.received(connection, object);
 
 }

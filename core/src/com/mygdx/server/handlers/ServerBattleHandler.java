@@ -8,15 +8,18 @@ import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.StartBattleEvent;
 
 import javax.xml.parsers.SAXParser;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class ServerBattleHandler {
 
     public static Map<String, BattleState> battleStateList = new HashMap<>();
     //map p1UID to the BattleState.
-
 
     public static String initialiseBattle(Player p1Player, Player p2Player) {
         BattleState battleState = new BattleState(p1Player, p2Player);
@@ -98,8 +101,10 @@ public class ServerBattleHandler {
             System.out.println("Player has won against NPC");
             Creature NPCPet = battleState.getPlayer2().getCurrentPet();
             Creature newPet = createNewPet(NPCPet.getType());
+
             System.out.println(NPCPet.getType());
             System.out.println(newPet.getType());
+
             if (!battleState.getPlayer1().hasPet(newPet)) {
                 // player does not own set pet -> send AddPetEvent
                 AddPetEvent petEvent = new AddPetEvent();
@@ -110,7 +115,7 @@ public class ServerBattleHandler {
         }
 
         // todo delete battleState from ServerBattleHandler
-        //battleStateList.remove(battleId);
+        battleStateList.remove(battleId);
     }
 
     private static Creature createNewPet(String type) {
