@@ -12,13 +12,21 @@ public class NPC extends Player implements Serializable {
     public String username = "npc";
     public String path = "player1";
 
+    public NPC() {
+        super(); // Call the parent class constructor
+
+        // Clear the battlePets list and add only one pet
+        this.battlePets.clear();
+        this.battlePets.add(new NPCDragon());
+    }
+
     public NPC(Creature pet) {
         super(); // Call the parent class constructor
 
         // Clear the battlePets list and add only one pet
         this.battlePets.clear();
         this.battlePets.add(pet);
-    } //no arg constructor for serialisation
+    }
 
     @Override
     public Boolean takeDamage(Skill skill) {
