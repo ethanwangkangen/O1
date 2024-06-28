@@ -9,6 +9,9 @@ import com.mygdx.game.entities.Froggy;
 import com.mygdx.game.entities.MeowmadAli;
 import com.mygdx.game.entities.MouseHunter;
 import com.mygdx.game.entities.NPC;
+import com.mygdx.game.entities.NPCDoge;
+import com.mygdx.game.entities.NPCDragon;
+import com.mygdx.game.entities.NPCMouseHunter;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
@@ -50,6 +53,9 @@ public class MyClient {
         myClient.getKryo().register(Dragon.class);
         myClient.getKryo().register(Doge.class);
         myClient.getKryo().register(MouseHunter.class);
+        myClient.getKryo().register(NPCDoge.class);
+        myClient.getKryo().register(NPCDragon.class);
+        myClient.getKryo().register(NPCMouseHunter.class);
 
         myClient.getKryo().register(BattleState.class);
         myClient.getKryo().register(BattleState.Turn.class);
