@@ -13,4 +13,6 @@ public interface MapInterface {
     public void acceptOrReject();
 
     public Boolean mapOn();
+
+
 }
