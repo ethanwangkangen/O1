@@ -92,9 +92,8 @@ public class ServerBattleHandler {
             // not against NPC; send EndBattleEvent to player2
             Connection connection2 = ServerPlayerHandler.getConnectionById(battleState.getPlayer2().getUserId());
             connection2.sendTCP(event);
-        } else {
-            // is fighting against NPC
-            // player gains new pet
+        } else if (battleState.getPlayer1().isAlive()) {
+            // player has won against NPC -> player gains new pet
             Creature NPCPet = battleState.getPlayer2().getCurrentPet();
             Creature newPet = createNewPet(NPCPet.getType());
             if (!battleState.getPlayer1().hasPet(newPet)) {
