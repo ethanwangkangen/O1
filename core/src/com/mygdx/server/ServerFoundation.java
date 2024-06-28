@@ -50,7 +50,7 @@ public class ServerFoundation {
         server.getKryo().register(MouseHunter.class);
         server.getKryo().register(NPCDoge.class);
         server.getKryo().register(NPCDragon.class);
-        server.getKryo().register(NPCMouseHunter.class);
+        server.getKryo().register(NPCCrocLesnar.class);
 
         server.getKryo().register(BattleState.class);
         server.getKryo().register(BattleState.Turn.class);

@@ -18,10 +18,10 @@ public class NPC extends Player implements Serializable {
     public String path = "player1";
 
     private static final Map<String, Class<? extends Creature>> creatureMap = new HashMap<>();
-    private static final List<String> creatureTypes = Arrays.asList("MouseHunter", "Dragon", "Doge");
+    private static final List<String> creatureTypes = Arrays.asList("CrocLesnar", "Dragon", "Doge");
     static {
         // Register all Creature subclasses here
-        creatureMap.put("MouseHunter", NPCMouseHunter.class);
+        creatureMap.put("CrocLesnar", NPCCrocLesnar.class);
         creatureMap.put("Dragon", NPCDragon.class);
         creatureMap.put("Doge", NPCDoge.class);
     }
