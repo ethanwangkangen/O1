@@ -5,6 +5,11 @@ import com.mygdx.game.DarwinsDuel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class NPC extends Player implements Serializable {
@@ -12,12 +17,22 @@ public class NPC extends Player implements Serializable {
     public String username = "npc";
     public String path = "player1";
 
+    private static final Map<String, Class<? extends Creature>> creatureMap = new HashMap<>();
+    private static final List<String> creatureTypes = Arrays.asList("MouseHunter", "Dragon", "Doge");
+    static {
+        // Register all Creature subclasses here
+        creatureMap.put("MouseHunter", NPCMouseHunter.class);
+        creatureMap.put("Dragon", NPCDragon.class);
+        creatureMap.put("Doge", NPCDoge.class);
+    }
+
     public NPC() {
         super(); // Call the parent class constructor
 
         // Clear the battlePets list and add only one pet
         this.battlePets.clear();
-        this.battlePets.add(new NPCDragon());
+        this.battlePets.add(pickRandomPet());
+        System.out.println("NPC pet has been created: " + battlePets.get(0).getName());
     }
 
     public NPC(Creature pet) {
@@ -26,6 +41,24 @@ public class NPC extends Player implements Serializable {
         // Clear the battlePets list and add only one pet
         this.battlePets.clear();
         this.battlePets.add(pet);
+    }
+
+    private static Creature pickRandomPet() {
+        Random random = new Random();
+        String randomType = creatureTypes.get(random.nextInt(creatureTypes.size()));
+        return createNewPet(randomType);
+    }
+
+    private static Creature createNewPet(String type) {
+        Class<? extends Creature> creatureClass = creatureMap.get(type);
+        if (creatureClass != null) {
+            try {
+                return creatureClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override
