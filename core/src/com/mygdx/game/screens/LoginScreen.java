@@ -274,7 +274,7 @@ public class LoginScreen implements Screen {
                 // for testing only
                 if (true) {
                     //to sign up/register:
-                    authService1.signUp("tester3@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signUp("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
                             //change login screen to game screen or wtv
