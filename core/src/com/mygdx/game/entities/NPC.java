@@ -28,10 +28,13 @@ public class NPC extends Player implements Serializable {
 
     public NPC() {
         super(); // Call the parent class constructor
+    }
 
+    public void initialise() {
         // Clear the battlePets list and add only one pet
         this.battlePets.clear();
         this.battlePets.add(pickRandomPet());
+
         System.out.println("NPC pet has been created: " + battlePets.get(0).getName());
     }
 

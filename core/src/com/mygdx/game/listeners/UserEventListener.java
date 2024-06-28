@@ -66,6 +66,7 @@ public class UserEventListener extends Listener {
         }
 
         if (object instanceof StartBattleEvent) {
+            System.out.println("Client has received the StartBattleEvent");
             StartBattleEvent event = (StartBattleEvent) object;
             UserBattleHandler.setBattleId(event.battleId);
             UserBattleHandler.newBattleState(event.battleState);
@@ -74,26 +75,25 @@ public class UserEventListener extends Listener {
                 MapInterface map = (MapInterface) Gdx.app;
                 map.stopMap();
             }
-            System.out.println("Client has received the StartBattleEvent");
         }
 
         if (object instanceof BattleState) {
+            System.out.println("Client has received the battleState");
             BattleState joinObj = (BattleState) object;
             UserBattleHandler.updateBattleState(joinObj);
             UserBattleHandler.updatePetInfo = true;
-            System.out.println("Client has received the battleState");
         }
 
         if (object instanceof EndBattleEvent) {
-            UserBattleHandler.battleEnd = true;
             System.out.println("Client has received EndBattleEvent");
+            UserBattleHandler.battleEnd = true;
         }
 
         if (object instanceof AddPetEvent) {
+            System.out.println("Client has received AddPetEvent");
             AddPetEvent joinObj = (AddPetEvent) object;
             Player player = UserPlayerHandler.getPlayer();
             player.addPet(joinObj.pet);
-            System.out.println("Client has received AddPetEvent");
             DarwinsDuel gameObj = DarwinsDuel.getInstance();
             AuthService authService1;
             authService1 = gameObj.authService;
