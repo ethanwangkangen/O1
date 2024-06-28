@@ -191,4 +191,9 @@ public abstract class Creature extends Entity implements Serializable{
 
     }
 
+    public void setLevel(int i) {
+        // for NPC use only
+        level = i;
+    }
+
 }
