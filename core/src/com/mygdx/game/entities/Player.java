@@ -211,6 +211,8 @@ public class Player extends Entity implements Serializable{
         battlePets = pets1;
         reservePets = pets2;
 
+//        DarwinsDuel.authService.sendPlayerToFirebase(newPlayer);
+
         System.out.print("Updating pets: ");
         for (Creature pet : pets1) {
             System.out.println(pet.getName() + ", ");
