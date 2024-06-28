@@ -5,9 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.DarwinsDuel;
+import com.mygdx.game.entities.Player;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.handlers.*;
+import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.BattleResponseListener;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
@@ -89,9 +91,13 @@ public class UserEventListener extends Listener {
 
         if (object instanceof AddPetEvent) {
             AddPetEvent joinObj = (AddPetEvent) object;
-            UserPlayerHandler.getPlayer().addPet(joinObj.pet);
+            Player player = UserPlayerHandler.getPlayer();
+            player.addPet(joinObj.pet);
             System.out.println("Client has received AddPetEvent");
-
+            DarwinsDuel gameObj = DarwinsDuel.getInstance();
+            AuthService authService1;
+            authService1 = gameObj.authService;
+            authService1.sendPlayerToFirebase(player);
         }
     }
 
