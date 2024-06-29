@@ -87,15 +87,13 @@ public class MyClient {
 
     private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "192.168.0.159"; // Server's IP address if not running locally
-            // sk: 192.168.68.72
-            // ethan: 192.168.0.159
+            String host = "42.60.220.147"; // Server's IP address if not running locally
+
             int tcpPort = 55555;       // Must match the server's TCP port
-            int udpPort = 55577;       // Must match the server's UDP port
+            int udpPort = 55555;       // Must match the server's UDP port
 
             try {
-//                myClient.connect(5000, host, tcpPort, udpPort);
-                myClient.connect(5000, "42.60.220.147", 55555, 55555);
+                myClient.connect(5000, host, tcpPort, udpPort);
                 System.out.println("Connected to the server.");
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());
