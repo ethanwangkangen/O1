@@ -26,10 +26,16 @@ import static com.badlogic.gdx.utils.Align.center;
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private AssetManager manager;
-    private Skin skin;
     private Table table;
-    Stack stack = new Stack();
+    private Stack stack = new Stack();
+
+    private Skin skin;
     private Texture emptyBox;
+    private TextureRegionDrawable background;
+    private TextureRegionDrawable backgroundBox;
+
+    private int width = Gdx.graphics.getWidth();
+    private int height = Gdx.graphics.getHeight();
 
     // to be located on the left side of the screen
     // for pets that will be carried into battle by the player
@@ -53,17 +59,18 @@ public class PetChangeScreen implements Screen {
     public PetChangeScreen(DarwinsDuel gameObj) {
         System.out.println("PetChangeScreen created");
 
-        stage = new Stage(new FillViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new Stage(new FillViewport(width, height));
 
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         emptyBox = manager.get("crossedbox.png", Texture.class);
+        background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
+        backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        System.out.println("test1");
 
         initialiseScrollPanes();
         createButtonList1();
@@ -73,6 +80,7 @@ public class PetChangeScreen implements Screen {
 
         table = new Table();
         table.setFillParent(true);
+        table.setBackground(background);
 
         table.add(stack).colspan(2).fillX().center().row();
         table.add(new Label("Battle Pets", skin)).padTop(10);
@@ -81,7 +89,7 @@ public class PetChangeScreen implements Screen {
         table.add(pane2).expand().row();
 
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
     }
@@ -147,45 +155,22 @@ public class PetChangeScreen implements Screen {
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }
-        });        backButtonTable.add(backButton).right().pad(10).expandX();
+        });
+        backButtonTable.add(backButton).right().pad(10).expandX();
     }
 
     public void initialiseScrollPanes() {
 
         table1 = new Table();
+//        table1.setBackground(backgroundBox);
         pane1 = new ScrollPane(table1);
-        pane1.setWidth(250);
+        pane1.setWidth((float) width / 4);
 
         table2 = new Table();
+//        table2.setBackground(backgroundBox);
         pane2 = new ScrollPane(table2);
-        pane2.setWidth(250);
+        pane2.setWidth((float) width / 4);
     }
-
-//    public void removeButton(int button) {
-//        buttonList2.remove(button);
-//        table2.clearChildren();
-//        for (TextImageButton btn : buttonList1) {
-//            table2.add(btn).pad(5).row();
-//        }
-//        table2.invalidateHierarchy(); // Refresh table layout
-//    }
-//
-//    private void addButton(Creature pet) {
-//        TextImageButton button = new TextImageButton(pet.getName(), skin, pet.getTexturePath());
-//
-//        // Add click listener to handle button removal
-//        button.addListener(new ClickListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                removeButton(button);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        buttonList1.add(button);
-//        table1.add(button).expandX().fillX().row();
-//        table1.invalidateHierarchy(); // Refresh table layout
-//    }
 
     private void createButtonList1() {
 
@@ -199,6 +184,7 @@ public class PetChangeScreen implements Screen {
                 }
             });
             buttonList1.add(button);
+            System.out.println(pet.getName());
         }
     }
 
@@ -214,6 +200,7 @@ public class PetChangeScreen implements Screen {
                 }
             });
             buttonList2.add(button);
+            System.out.println(pet.getName());
         }
     }
 
@@ -224,7 +211,7 @@ public class PetChangeScreen implements Screen {
         table1.clearChildren();
 //        table1.clear();
         for (TextImageButton button : buttonList1) {
-            table1.add(button).pad(5).width(245).height(80).row();
+            table1.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
 
         // Calculate how many empty buttons are needed
@@ -233,7 +220,7 @@ public class PetChangeScreen implements Screen {
         // for empty buttons to make 3 buttons
         for (int i = 0; i < emptyButtonCount; i ++) {
             TextImageButton emptyButton = createEmptyButton();
-            table1.add(emptyButton).pad(5).width(245).height(80).row();
+            table1.add(emptyButton).pad(5).size((float) width / 4, (float) height / 4).row();
             buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
@@ -242,7 +229,7 @@ public class PetChangeScreen implements Screen {
         table2.clearChildren();
 //        table2.clear();
         for (TextImageButton button : buttonList2) {
-            table2.add(button).pad(5).width(245).height(80).row();
+            table2.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
         table2.invalidateHierarchy();
     }
@@ -296,6 +283,7 @@ public class PetChangeScreen implements Screen {
             System.out.println("Button is empty: cannot be removed");
             return;
         }
+
         if (index != -1) { // Ensure the button exists in the list
             buttonList1.remove(button);
             buttonList2.add(button);

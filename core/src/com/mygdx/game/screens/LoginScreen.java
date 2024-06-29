@@ -4,6 +4,7 @@ import static com.mygdx.game.EmailValidator.isValidEmail;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -17,6 +18,7 @@ import com.mygdx.game.callbacks.AuthResultCallback;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.callbacks.PlayerCallback;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.interfaces.AuthService;
@@ -98,7 +100,6 @@ public class LoginScreen implements Screen {
         background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
         stage = new Stage(new FitViewport(width, height));
         skin = manager.get("buttons/uiskin.json", Skin.class);
-        skin.getFont("default-font").getData().setScale((int) (Gdx.graphics.getDensity()));
 
         // initialise tables
         initialiseErrorLabel();
@@ -125,9 +126,9 @@ public class LoginScreen implements Screen {
 
     public void initialiseErrorLabel() {
         loginErrorLabel = new Label("", skin);
-        loginErrorLabel.setFontScale(10);
+        loginErrorLabel.setColor(Color.RED);
         signUpErrorLabel = new Label("", skin);
-        signUpErrorLabel.setFontScale(10);
+        signUpErrorLabel.setColor(Color.RED);
     }
 
     public void initialiseLoginTable() {
@@ -154,9 +155,9 @@ public class LoginScreen implements Screen {
                 email = usernameLField.getText();
                 password = passwordLField.getText();
                 //for testing
-                if (true) {
+                if (isValidInput(email, password)) {
                     //to Login:
-                    authService1.signIn("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signIn(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -164,10 +165,21 @@ public class LoginScreen implements Screen {
                                 @Override
                                 public void onCallback(Player player) { //on success of getPlayerFromFirebase
                                     UserPlayerHandler.updatePlayer(player);
+
+                                    for (Creature pet : player.battlePets) {
+                                        System.out.println(pet.getName());
+                                    }
+                                    for (Creature pet : player.reservePets) {
+                                        System.out.println(pet.getName());
+                                    }
+                                    System.out.println(authService1.getUserId());
+
                                     String userId = authService1.getUserId(); //get unique Id from firebase
                                     UserPlayerHandler.updateIdOfPlayer(userId);
 
-                                    MyClient.connectToServer();
+                                    MyClient.sendJoinServerEvent();
+                                    System.out.println("playerJoinServerEvent sent");
+
                                     DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                                 }
                                 @Override
@@ -269,14 +281,16 @@ public class LoginScreen implements Screen {
                 password = passwordSField.getText();
 
                 // for testing only
-                if (true) {
+                if (isValidInput(email, password)) {
                     //to sign up/register:
-                    authService1.signUp("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signUp(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
                             //change login screen to game screen or wtv
                             Player newPlayer = new Player();
-                            newPlayer.setUsername("tester");
+                            String username = generateUsername(email);
+                            newPlayer.setUsername(username);
+                            System.out.println("Username: " + username);
                             authService1.sendPlayerToFirebase(newPlayer);
 
                             System.out.println("Registered player successfully");
@@ -285,13 +299,13 @@ public class LoginScreen implements Screen {
                             String userId = authService1.getUserId(); //get unique Id from firebase
                             UserPlayerHandler.updateIdOfPlayer(userId);
 
-                            MyClient.connectToServer();
+                            MyClient.sendJoinServerEvent();
                             DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                         }
                         @Override
                         public void onFailure(Exception exception) {
                             String errorMessage = exception.getLocalizedMessage();
-                            loginErrorLabel.setText("Sign up failed: " + errorMessage);
+                            signUpErrorLabel.setText("Sign up failed: " + errorMessage);
                             Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                         }
                     });
@@ -414,5 +428,15 @@ public class LoginScreen implements Screen {
             signUpErrorLabel.setText("");
             return true;
         }
+    }
+
+    public String generateUsername(String email) {
+        // generate username with string in email before @ character
+        if (email == null) {
+            return "UsernameError";
+        } else if (!email.contains("@")) {
+            return email;
+        }
+        return email.split("@")[0];
     }
 }

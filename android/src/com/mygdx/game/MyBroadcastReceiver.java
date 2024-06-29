@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import com.mygdx.game.interfaces.GameCommunication;
 
-import com.badlogic.gdx.Gdx;
-
 /**
  * Used to relay messages between components of Android;
  * from Map activity to libgdx.
  */
 public class MyBroadcastReceiver extends BroadcastReceiver{
 
+    private static MyBroadcastReceiver instance = new MyBroadcastReceiver();
     /**
      * gameCommunication is the game instance.
      * when MapActivity wants to send info to the game, i will send out a broadcast which is caught here.
@@ -22,18 +21,26 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if ("sending playerUserId".equals(action)) {
+        System.out.println("Action is " + action);
+        if ("sending battle req".equals(action)) {
+            System.out.println("Sending battle req (in broadcast receiver)");
             String playerUserId = intent.getStringExtra("playerUserId");
-
             // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
-                gameCommunication.onPlayerInfoReceived(playerUserId);
+
+                gameCommunication.onEnemyInfoReceived(playerUserId);
             }
         } else if ("quit map activity".equals(action)) {
+            System.out.println("Quitting map");
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
                 gameCommunication.onQuitMapActivity();
+            }
+        } else if ("sending NPC req".equals(action)) {
+            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
+            if (gameCommunication != null) {
+                gameCommunication.onNPCReqReceived();
             }
         }
     }

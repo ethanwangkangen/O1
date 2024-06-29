@@ -15,15 +15,24 @@ android {
         }
 
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+
+    }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
+        exclude 'META-INF/LICENSE-notice.md'
+        exclude 'META-INF/LICENSE.md'
+
     }
     defaultConfig {
         applicationId "com.mygdx.game"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner" // Use androidx test runner for Android instrumentation tests
     }
     buildTypes {
         release {
@@ -110,8 +119,7 @@ dependencies {
 
     //Location services?
     implementation 'com.google.android.gms:play-services-location:21.0.1'
-
-
+    implementation 'junit:junit:4.12'
 
 }
 

@@ -31,12 +31,32 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         auth = FirebaseAuth.getInstance();
     }
 
+    @Override
     public void sendPlayerToFirebase(Player player) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference playerRef = database.child("users").child(userId).child("player");
         playerRef.setValue(player);
     }
 
+    @Override
+    public void removeData(final AuthResultCallback callback) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userRef = database.child("users").child(userId);
+
+        // Remove the entire user node from Firebase
+        userRef.removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Account data successfully removed
+                        callback.onSuccess();
+                    } else {
+                        // Handle failure
+                        callback.onFailure(task.getException());
+                    }
+                });
+    }
+
+    @Override
     public void getPlayerFromFirebase(PlayerCallback playerCallback) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference playerRef = database.child("users").child(userId).child("player");
@@ -81,6 +101,7 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         });
     }
 
+
     private Creature deserializeCreature(DataSnapshot dataSnapshot) {
         String type = dataSnapshot.child("type").getValue(String.class);
 
@@ -91,7 +112,7 @@ public class FirebaseAuthServiceAndroid implements AuthService {
                 return dataSnapshot.getValue(CrocLesnar.class);
             case "Froggy":
                 return dataSnapshot.getValue(Froggy.class);
-            case "Mousehunter":
+            case "MouseHunter":
                 return dataSnapshot.getValue(MouseHunter.class);
             case "Doge":
                 return dataSnapshot.getValue(Doge.class);

@@ -109,6 +109,7 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     }
 }
 
