@@ -82,7 +82,7 @@ public class PetChangeScreen implements Screen {
         table.add(pane2).expand().row();
 
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
     }
