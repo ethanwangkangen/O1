@@ -157,7 +157,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signIn("tester2@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -281,14 +281,16 @@ public class LoginScreen implements Screen {
                 password = passwordSField.getText();
 
                 // for testing only
-                if (true) {
+                if (isValidInput(email, password)) {
                     //to sign up/register:
-                    authService1.signUp("tester@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signUp(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
                             //change login screen to game screen or wtv
                             Player newPlayer = new Player();
-                            newPlayer.setUsername("tester");
+                            String username = generateUsername(email);
+                            newPlayer.setUsername(username);
+                            System.out.println("Username: " + username);
                             authService1.sendPlayerToFirebase(newPlayer);
 
                             System.out.println("Registered player successfully");
@@ -426,5 +428,15 @@ public class LoginScreen implements Screen {
             signUpErrorLabel.setText("");
             return true;
         }
+    }
+
+    public String generateUsername(String email) {
+        // generate username with string in email before @ character
+        if (email == null) {
+            return "UsernameError";
+        } else if (!email.contains("@")) {
+            return email;
+        }
+        return email.split("@")[0];
     }
 }
