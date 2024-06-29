@@ -140,13 +140,21 @@ public abstract class Creature extends Entity implements Serializable{
     public int getMaxHealth() {
         return maxhealth;
     }
+    public void setMaxHealth(int maxhealth) {
+        this.maxhealth = maxhealth;
+    }
+
 
     public int getHealth() {
         return health;
     }
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
     public void update(Creature pet) {
-        health = pet.getHealth();
+        this.health = pet.getHealth();
+        this.maxhealth = pet.getMaxHealth();
 //        alive = pet.isAlive();
 //      update mana, level, skills in the future
     }
