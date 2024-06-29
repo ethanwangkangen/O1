@@ -32,7 +32,7 @@ public class ServerEventListener extends Listener {
             ServerPlayerHandler.addPlayer(playerJoinServerEvent.userId, connection);
         }
 
-        else if (object instanceof PlayerRequestBattleEvent) {
+        if (object instanceof PlayerRequestBattleEvent) {
             System.out.println("Player has requested to fight an opponent.");
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
             String opponentUID = request.opponentUID;
@@ -41,7 +41,7 @@ public class ServerEventListener extends Listener {
             enemyConnection.sendTCP(request);
         }
 
-        else if (object instanceof PlayerAcceptBattleEvent) {
+        if (object instanceof PlayerAcceptBattleEvent) {
             System.out.println("Battle starting between 2 players");
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
             Player p1Player = event.opponentPlayer;
@@ -53,7 +53,7 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.sendStartBattle(battleId);
         }
 
-        else if (object instanceof PlayerAttackEvent) {
+        if (object instanceof PlayerAttackEvent) {
             System.out.println("AttackEvent received by server");
             PlayerAttackEvent attackEvent = (PlayerAttackEvent) object;
             String battleId = attackEvent.battleId;
@@ -75,7 +75,7 @@ public class ServerEventListener extends Listener {
             }
         }
 
-        else if (object instanceof PlayerChangePetEvent) {
+        if (object instanceof PlayerChangePetEvent) {
             System.out.println("ChangePetEvent received by server");
             PlayerChangePetEvent changePetEvent = (PlayerChangePetEvent) object;
             String battleId = changePetEvent.battleId;
@@ -90,7 +90,7 @@ public class ServerEventListener extends Listener {
             }
         }
 
-        else if (object instanceof PlayerAcceptBattleEvent) {
+        if (object instanceof PlayerAcceptBattleEvent) {
             System.out.println("Battle starting between 2 players");
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
 
@@ -100,7 +100,7 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.sendStartBattle(battleId);
         }
 
-        else if (object instanceof PlayerNPCBattleEvent) {
+        if (object instanceof PlayerNPCBattleEvent) {
             // start battle against NPC
             System.out.println("Battle starting between player and NPC");
             PlayerNPCBattleEvent event = (PlayerNPCBattleEvent) object;
