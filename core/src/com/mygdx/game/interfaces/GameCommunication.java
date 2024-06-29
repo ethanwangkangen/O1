@@ -4,9 +4,11 @@ package com.mygdx.game.interfaces;
  * Used to facilitate communication between Map.activity and libgdx game instance
  */
 public interface GameCommunication {
-    void onPlayerInfoReceived(String playerUserId);
+    void onEnemyInfoReceived(String playerUserId);
 
     void onQuitMapActivity();
+
+    void onNPCReqReceived();
 }
 
 /*

@@ -1,8 +1,10 @@
 package com.mygdx.game.handlers;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Player;
+import com.mygdx.game.interfaces.AuthService;
 
 import java.util.ArrayList;
 
@@ -51,6 +53,21 @@ public class UserPlayerHandler {
     public static void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
         // update player info from PetChangeScreen
         player.updatePets(pets1, pets2);
+    }
+
+    public static void wonBattle() {
+        player.wonBattle();
+    }
+
+    public static void lostBattle() {
+        player.lostBattle();
+    }
+
+    public static void sendToFirebase() {
+        DarwinsDuel gameObj = DarwinsDuel.getInstance();
+        AuthService authService1;
+        authService1 = gameObj.authService;
+        authService1.sendPlayerToFirebase(player);
     }
 
 }

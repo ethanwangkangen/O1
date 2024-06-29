@@ -9,7 +9,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.FirebaseDatabase;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
 
@@ -19,11 +18,15 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 	private static GameCommunication gameCommunication; //will be the game instance
 	private MyBroadcastReceiver receiver;
 
+	private Boolean isMapOn;
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		DarwinsDuel game = new DarwinsDuel(new FirebaseAuthServiceAndroid());
+
+		isMapOn = false;
 
 		// Initialize the game
 		initialize(game, config);
@@ -34,8 +37,9 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		// Register the broadcast receiver
 		receiver = new MyBroadcastReceiver();
 		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("sending playerUserId");
+		intentFilter.addAction("sending battle req");
 		intentFilter.addAction("quit map activity");
+		intentFilter.addAction("sending NPC req");
 		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
 		// Initialize Firebase
@@ -65,6 +69,8 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 
 	@Override
 	public void showMap() {
+		System.out.println("Showing the map");
+		isMapOn = true;
 		Intent intent = new Intent(this, MapActivity.class);
 		intent.putExtra("latitude", 37.7749); // Example latitude
 		intent.putExtra("longitude", -122.4194); // Example longitude
@@ -72,10 +78,23 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 	}
 
 	@Override
-	public void acceptOrReject(String enemyUsername) {
+	public void stopMap() {
+		if (isMapOn) {
+			Intent intent = new Intent("finish map");
+			LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+			isMapOn = false;
+		}
+	}
+
+	@Override
+	public void acceptOrReject() {
 		Intent intent = new Intent("accept or reject");
-		intent.putExtra("enemyUsername", enemyUsername);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	@Override
+	public Boolean mapOn() {
+		return isMapOn;
 	}
 
 

@@ -30,14 +30,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.AdvancedMarker;
-import com.google.android.gms.maps.model.AdvancedMarkerOptions;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +42,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mygdx.game.interfaces.AuthService;
+import com.mygdx.game.interfaces.BattleResponseListener;
+import com.mygdx.game.listeners.UserEventListener;
+
 
 
 import java.util.HashMap;
@@ -55,23 +54,35 @@ import java.util.Objects;
 import java.util.Set;
 
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BattleResponseListener {
     private double selfLatitude = 1.2431;
     private double selfLongitude = 103.8198;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private long lastUpdateTime = 0;
     private static final long MIN_TIME_BETWEEN_UPDATES = 5000; // 5 seconds
-    Dialog dialog; // Fight failed popup
-    Dialog acceptOrReject;
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseUser currentUser = auth.getCurrentUser();
-    private String myUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private Dialog dialog; // Fight failed popup
+    private Dialog acceptOrReject; // Accept or reject battle popup
+
+
+    // Firebase fields
+    private FirebaseDatabase database;
+    private DatabaseReference databaseUsers;
+    private FirebaseAuth auth;
+    private FirebaseUser currentUser;
+    private String myUserId;
+    private DatabaseReference userStatusDatabaseReference;
     private String enemyUID;
-    private DatabaseReference database;
+
+
+    // Google maps fields
     private Map<String, Marker> playerMarkers = new HashMap<>(); //map userId to marker
     private GoogleMap googleMap;
+
     private BroadcastReceiver receiver;
+
+    private NPCLocations locations = new NPCLocations();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +95,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         // Choose pet button
-        // Initialize the button and set click listener
         Button exitButton = findViewById(R.id.exit_button);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,17 +110,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (enemyUID != null) {
-                    sendInfoToLibGDX(enemyUID);
+                if (enemyUID != null && enemyUID != "NPC") {
+                    sendBattleReqToEnemy(enemyUID);
+                }else if (enemyUID != null && enemyUID == "NPC"){
+                    sendBattleReqToNPC();
                 } else {
                     showDialog();
+                    // Tell player to select an enemy first before requesting fight
                 }
             }
 
         });
 
-        // Initialise database
-        database = FirebaseDatabase.getInstance().getReference().child("users");
+        // Initialise firebase fields
+        database = FirebaseDatabase.getInstance();
+        databaseUsers = database.getReference().child("users");
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+        myUserId = currentUser.getUid();
+        userStatusDatabaseReference =
+                database.getReference("users").child(myUserId).child("status"); // Online or not
 
         // If permission for location not granted, ask for it
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -119,70 +138,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     REQUEST_LOCATION_PERMISSION);
             // Result of this is passed to onRequestPermissionsResult
         } else {
-
             // If permission granted start updating location (send to firebase constantly)
             startLocationUpdates();
         }
 
-        // Register the broadcast receiver
+        // Register the broadcast receiver (for accept or reject screen). Broadcasted from AndroidLauncher.
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals("accept or reject")) {
                     showAcceptOrReject();
+                } else if (intent.getAction().equals("finish map")) {
+                    System.out.println("Quitting the map");
+                    finish();
                 }
             }
         };
-        IntentFilter intentFilter = new IntentFilter("accept or reject");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("finish map");
+        intentFilter.addAction("accept or reject");
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
+
     }
-
-    public void showAcceptOrReject(){
-        // Show the accept or reject popup.
-        acceptOrReject = new Dialog(this);
-        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
-        Button acceptButton = dialog.findViewById(R.id.accept_button);
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                acceptFight();
-            }
-        });
-
-        Button rejectButton = dialog.findViewById(R.id.reject_button);
-        rejectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rejectFight();
-            }
-        });
-        acceptOrReject.show();
-    }
-
-    private void rejectFight() {
-    }
-
-    private void acceptFight() {
-        
-    }
-
-    public void showDialog() {
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_layout); // Create a custom layout for your dialog
-        Button dismissButton = dialog.findViewById(R.id.dismiss_button);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismissDialog();
-            }
-        });
-
-        dialog.show();
-    }
-
-    public void dismissDialog() {
-        dialog.dismiss();
-    }
-
     /**
      * called automatically when AndroidLauncher starts its MapActivity.
      * @param map
@@ -191,13 +168,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap map) {
         LatLng position = new LatLng(selfLatitude, selfLongitude);
         this.googleMap = map;
-
-        // Add current player?
-        // Todo refactor into new function. set custom marker for own player
+        googleMap.setOnMarkerClickListener(this);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10));
 
-        //Add other players
+        // Add other players
         displayAll();
+
+        // Set the user's online status when they connect
+        setUserOnlineStatus();
+
+        // Display NPCs
+        displayNPCs();
     }
 
     @Override
@@ -241,17 +222,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void sendLocationToFirebase(Location location) {
 
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
-            System.out.println("LocationUpdate" + "Location update blocked - too fast");
-            return;
-        }
+//        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
+//            System.out.println("LocationUpdate" + "Location update blocked - too fast");
+//            return;
+//        }
         lastUpdateTime = currentTime;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
         // Send to firebase
         // Set location
-        DatabaseReference locationRef = database.child(myUserId).child("location");
+        DatabaseReference locationRef = databaseUsers.child(myUserId).child("location");
 
         // Update location data in database
         locationRef.child("latitude").setValue(latitude);
@@ -264,11 +245,84 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         System.out.println("sending location" + latitude + " " + longitude);
     }
 
+    private void setUserOnlineStatus() {
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                boolean connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    userStatusDatabaseReference.onDisconnect().setValue("offline"); // Set to offline on disconnect
+                    userStatusDatabaseReference.setValue("online"); // Set to online when connected
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                System.err.println("Listener was cancelled");
+            }
+        });
+    }
+
+
+
+    public void showAcceptOrReject(){
+        // Show the accept or reject popup.
+        acceptOrReject = new Dialog(this);
+        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
+        Button acceptButton = acceptOrReject.findViewById(R.id.accept_button);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBattleResponse(true);
+                acceptOrReject.dismiss();
+            }
+        });
+
+        Button rejectButton = acceptOrReject.findViewById(R.id.reject_button);
+        rejectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBattleResponse(false);
+                acceptOrReject.dismiss();
+            }
+        });
+        acceptOrReject.show();
+    }
+
+    @Override
+    public void onBattleResponse(boolean accepted) {
+        if (UserEventListener.getInstance() != null) {
+            UserEventListener.getInstance().getResponseListener().onBattleResponse(accepted);
+        }
+    }
+
+    /**
+     * Popup asking player to select an enemy before fighting
+     */
+    public void showDialog() { //
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_layout);
+        Button dismissButton = dialog.findViewById(R.id.dismiss_button);
+        dismissButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismissDialog();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void dismissDialog() {
+        dialog.dismiss();
+    }
+
+
     /**
      * Add all players (except self)
      */
     public void displayAll() {
-        database.addValueEventListener(new ValueEventListener() {
+        databaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -279,12 +333,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.getKey();
                     String username = userSnapshot.child("player").child("username").getValue(String.class);
-
-                    currentUsers.add(userId);
-
+                    DataSnapshot statusSnapshot = userSnapshot.child("status");
+                    boolean online = false;
+                    if (statusSnapshot.exists() && "online".equals(statusSnapshot.getValue(String.class))) {
+                        currentUsers.add(userId); // If this user is online
+                        System.out.println("online");
+                        online = true;
+                    }
                     DataSnapshot locationSnapshot = userSnapshot.child("location");
 
-                    if (locationSnapshot.exists()) {
+                    if (locationSnapshot.exists() && online) {
                         System.out.println("Location found");
                         Double latitude = locationSnapshot.child("latitude").getValue(Double.class);
                         Double longitude = locationSnapshot.child("longitude").getValue(Double.class);
@@ -347,27 +405,86 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    public void displayNPCs() {
+        LatLng location1 = locations.getRandomLocation();
+        LatLng location2 = locations.getRandomLocation();
+        while (location1 == location2) {
+            location2 = locations.getRandomLocation(); // In case get the same one
+        }
+        BitmapDescriptor npc = BitmapDescriptorFactory.fromResource(R.drawable.npc);
+        Marker marker1;
+        Marker marker2;
+
+        marker1 = googleMap.addMarker(new MarkerOptions()
+                .position(location1)
+                .title("NPC")
+                .icon(npc));
+
+        marker2 = googleMap.addMarker(new MarkerOptions()
+                .position(location2)
+                .title("NPC")
+                .icon(npc));
+
+    }
+
     //todo in future: change logic such that only nearby players can be fought
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String playerUserId = marker.getTitle();
-        setTargetEnemy(playerUserId);
+        System.out.println("Registered click");
+        String playerUsername = marker.getTitle();
+        System.out.println("Enemy username is " + playerUsername);
+        if (playerUsername.equals("NPC")) {
+            setTargetEnemyNPC();
+            return false;
+        }
+
+        for (Map.Entry entry : playerMarkers.entrySet()) {
+            if (entry.getValue().equals(marker)) {
+                String playerUserId = (String) entry.getKey();
+                System.out.println("Found enemyUserId");
+                setTargetEnemy(playerUserId);
+                return false;
+            }
+        }
         //sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
         return false;
     }
 
-    private void setTargetEnemy(String playerUserId) {
-        this.enemyUID = playerUserId;
+    private void setTargetEnemyNPC() {
+        this.enemyUID = "NPC";
     }
-    private void sendInfoToLibGDX(String playerUserId) {
-        Intent intent = new Intent("sending playerUserId");
+
+    private void setTargetEnemy(String playerUserId) {
+        //todo prevent self from being targeted
+        if (playerUserId != myUserId) {
+            this.enemyUID = playerUserId;
+        }
+        System.out.println("setting target enemy to " + playerUserId);
+    }
+    private void sendBattleReqToEnemy(String playerUserId) {
+        System.out.println("Sending battle req to enemy (in map)");
+        Intent intent = new Intent("sending battle req");
         intent.putExtra("playerUserId", playerUserId);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public void sendBattleReqToNPC() {
+        System.out.println("Sending battle req to NPC (in map)");
+        Intent intent = new Intent("sending NPC req");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     private void sendQuitToLibGDX() {
         Intent intent = new Intent("quit map activity");
+        System.out.println("Going to Pet change screen");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+    }
+
 
 }

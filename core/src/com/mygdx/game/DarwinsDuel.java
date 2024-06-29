@@ -1,17 +1,18 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.interfaces.AuthService;
 import com.mygdx.game.interfaces.GameCommunication;
+import com.mygdx.game.interfaces.MapInterface;
+import com.mygdx.game.MyClient;
 import com.mygdx.game.screens.*;
 
 
@@ -62,7 +63,8 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	 * @param playerUserId id of enemy player
 	 */
 	@Override
-	public void onPlayerInfoReceived(String playerUserId) {
+	public void onEnemyInfoReceived(String playerUserId) {
+		System.out.println("Sending battle req (in Darwins duel)");
 		MyClient.sendBattleRequest(playerUserId);
 	}
 
@@ -70,6 +72,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	public void onQuitMapActivity() {
 		System.out.println("changing screen to PetChangeScreen");
 		gameState = GameState.PETCHANGE;
+	}
+
+	@Override
+	public void onNPCReqReceived() {
+		MyClient.sendNPCReq();
 	}
 
 	@Override
@@ -125,6 +132,17 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				break;
 			case LOSS:
 				break;
+		}
+
+		if (gameState != GameState.FREEROAM) {
+			if (Gdx.app.getType() == Application.ApplicationType.Android) {
+				MapInterface map = (MapInterface) Gdx.app;
+				// Stop showing the map if its being shown
+//				System.out.println("Stop showing the map");
+				if (map.mapOn()) {
+					map.stopMap();
+				}
+			}
 		}
 
 		super.render();
