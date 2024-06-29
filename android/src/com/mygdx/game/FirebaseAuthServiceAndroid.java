@@ -112,7 +112,7 @@ public class FirebaseAuthServiceAndroid implements AuthService {
                 return dataSnapshot.getValue(CrocLesnar.class);
             case "Froggy":
                 return dataSnapshot.getValue(Froggy.class);
-            case "Mousehunter":
+            case "MouseHunter":
                 return dataSnapshot.getValue(MouseHunter.class);
             case "Doge":
                 return dataSnapshot.getValue(Doge.class);
