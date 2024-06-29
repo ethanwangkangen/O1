@@ -21,6 +21,8 @@ import com.mygdx.server.handlers.ServerPlayerHandler;
 public class ServerEventListener extends Listener {
 
     Server server = ServerFoundation.getServer();
+
+
     @Override
     public void received(Connection connection, final Object object) {
         if (object instanceof PlayerJoinServerEvent) {
@@ -30,7 +32,7 @@ public class ServerEventListener extends Listener {
             ServerPlayerHandler.addPlayer(playerJoinServerEvent.userId, connection);
         }
 
-        if (object instanceof PlayerRequestBattleEvent) {
+        else if (object instanceof PlayerRequestBattleEvent) {
             System.out.println("Player has requested to fight an opponent.");
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
             String opponentUID = request.opponentUID;
@@ -39,7 +41,7 @@ public class ServerEventListener extends Listener {
             enemyConnection.sendTCP(request);
         }
 
-        if (object instanceof PlayerAcceptBattleEvent) {
+        else if (object instanceof PlayerAcceptBattleEvent) {
             System.out.println("Battle starting between 2 players");
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
             Player p1Player = event.opponentPlayer;
@@ -51,7 +53,7 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.sendStartBattle(battleId);
         }
 
-        if (object instanceof PlayerAttackEvent) {
+        else if (object instanceof PlayerAttackEvent) {
             System.out.println("AttackEvent received by server");
             PlayerAttackEvent attackEvent = (PlayerAttackEvent) object;
             String battleId = attackEvent.battleId;
@@ -73,7 +75,7 @@ public class ServerEventListener extends Listener {
             }
         }
 
-        if (object instanceof PlayerChangePetEvent) {
+        else if (object instanceof PlayerChangePetEvent) {
             System.out.println("ChangePetEvent received by server");
             PlayerChangePetEvent changePetEvent = (PlayerChangePetEvent) object;
             String battleId = changePetEvent.battleId;
@@ -88,7 +90,7 @@ public class ServerEventListener extends Listener {
             }
         }
 
-        if (object instanceof PlayerAcceptBattleEvent) {
+        else if (object instanceof PlayerAcceptBattleEvent) {
             System.out.println("Battle starting between 2 players");
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
 
@@ -98,7 +100,7 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.sendStartBattle(battleId);
         }
 
-        if (object instanceof PlayerNPCBattleEvent) {
+        else if (object instanceof PlayerNPCBattleEvent) {
             // start battle against NPC
             System.out.println("Battle starting between player and NPC");
             PlayerNPCBattleEvent event = (PlayerNPCBattleEvent) object;
@@ -107,10 +109,6 @@ public class ServerEventListener extends Listener {
             String battleId = ServerBattleHandler.initialiseBattle(event.player, npc);
             ServerBattleHandler.sendStartBattle(battleId);
         }
-    }
-
-    private void createRandomPet() {
-
     }
 
 //        super.received(connection, object);
