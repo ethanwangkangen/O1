@@ -155,9 +155,9 @@ public class LoginScreen implements Screen {
                 email = usernameLField.getText();
                 password = passwordLField.getText();
                 //for testing
-                if (true) {
+                if (isValidInput(email, password)) {
                     //to Login:
-                    authService1.signIn("tester2@gmail.com", "saas234dafdu123she", new AuthResultCallback() {
+                    authService1.signIn(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
