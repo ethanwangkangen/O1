@@ -26,10 +26,14 @@ import static com.badlogic.gdx.utils.Align.center;
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private AssetManager manager;
-    private Skin skin;
     private Table table;
-    Stack stack = new Stack();
+    private Stack stack = new Stack();
+
+    private Skin skin;
     private Texture emptyBox;
+    private TextureRegionDrawable background;
+    private TextureRegionDrawable backgroundBox;
+
     private int width = Gdx.graphics.getWidth();
     private int height = Gdx.graphics.getHeight();
 
@@ -60,6 +64,8 @@ public class PetChangeScreen implements Screen {
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         emptyBox = manager.get("crossedbox.png", Texture.class);
+        background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
+        backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
     }
 
     @Override
@@ -74,6 +80,7 @@ public class PetChangeScreen implements Screen {
 
         table = new Table();
         table.setFillParent(true);
+        table.setBackground(background);
 
         table.add(stack).colspan(2).fillX().center().row();
         table.add(new Label("Battle Pets", skin)).padTop(10);
@@ -155,10 +162,12 @@ public class PetChangeScreen implements Screen {
     public void initialiseScrollPanes() {
 
         table1 = new Table();
+//        table1.setBackground(backgroundBox);
         pane1 = new ScrollPane(table1);
         pane1.setWidth((float) width / 4);
 
         table2 = new Table();
+//        table2.setBackground(backgroundBox);
         pane2 = new ScrollPane(table2);
         pane2.setWidth((float) width / 4);
     }
