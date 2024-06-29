@@ -1,5 +1,6 @@
 package com.mygdx.server;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.entities.*;
 import com.mygdx.game.events.PlayerAcceptBattleEvent;
@@ -12,6 +13,8 @@ import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.*;
 import com.mygdx.server.handlers.ServerPlayerHandler;
 import com.mygdx.server.listeners.ServerEventListener;
+import com.esotericsoftware.kryonet.Listener;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,7 +75,7 @@ public class ServerFoundation {
         // Start the server in a separate thread
         Thread serverThread = new Thread(() -> {
             try {
-                this.server.bind(55555, 55577); // Arbitrary TCP and UDP ports
+                this.server.bind(55555, 55555); // Arbitrary TCP and UDP ports
                 this.server.start();
                 System.out.println("Server started.");
 
@@ -85,6 +88,13 @@ public class ServerFoundation {
             }
         });
         serverThread.start();
+
+        server.addListener(new Listener() {
+            public void connected(Connection connection) {
+                System.out.println("A client has connected: " + connection.getRemoteAddressTCP());
+            }
+        });
+
     }
 
     //todo change such that errors dont stop the server
