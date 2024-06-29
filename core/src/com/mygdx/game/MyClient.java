@@ -94,7 +94,8 @@ public class MyClient {
             int udpPort = 55577;       // Must match the server's UDP port
 
             try {
-                myClient.connect(5000, host, tcpPort, udpPort);
+//                myClient.connect(5000, host, tcpPort, udpPort);
+                myClient.connect(5000, "42.60.220.147", 55555);
                 System.out.println("Connected to the server.");
             } catch (IOException e) {
                 System.err.println("Error connecting to the server: " + e.getMessage());
