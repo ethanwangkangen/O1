@@ -30,7 +30,8 @@
 
         <activity
             android:name=".MapActivity"
-            android:theme="@style/MapTheme" />
+            android:theme="@style/MapTheme"
+            android:screenOrientation="landscape"/>
 
         <!-- MyBroadcastReceiver declaration -->
         <receiver android:name=".MyBroadcastReceiver"
