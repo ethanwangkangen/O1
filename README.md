@@ -1,3 +1,5 @@
+Updated readme: https://docs.google.com/document/d/1DwfnI6AzMFVhtee-DWFDQCVM1g0Ek8ns7yIK4_hRM4g/edit?usp=sharing
+
 Download link:
 https://github.com/ethanwangkangen/O1/archive/refs/heads/master.zip
 
