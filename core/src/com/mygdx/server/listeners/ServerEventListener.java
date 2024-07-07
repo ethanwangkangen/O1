@@ -37,8 +37,13 @@ public class ServerEventListener extends Listener {
             PlayerRequestBattleEvent request = (PlayerRequestBattleEvent) object;
             String opponentUID = request.opponentUID;
 
-            Connection enemyConnection = ServerPlayerHandler.connectionTable.get(opponentUID);
-            enemyConnection.sendTCP(request);
+            try {
+
+                Connection enemyConnection = ServerPlayerHandler.connectionTable.get(opponentUID);
+                enemyConnection.sendTCP(request);
+            } catch (Exception e) {
+                System.err.println("Enemy connection is null/has error. Unable to send PlayerRequestBattleEvent");
+            }
         }
 
         if (object instanceof PlayerAcceptBattleEvent) {
