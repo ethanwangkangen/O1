@@ -180,28 +180,33 @@ public class BattleState{
 
     public void NPCAttack(String battleId) {
         // Player vs NPC
+
 //        System.out.println("player2 name: " + player2.username);
-        Skill skill = player2.npcAttack(numofTurns);
+        if (!player2.getCurrentPet().isStunned()) {
+            // NPC pet is not stunned
+
+            Skill skill = player2.npcAttack(numofTurns);
 
 //        if (skill == null) {
 //            System.out.println("NPC skill is null");
 //        }
 
-        if (skill.status == Skill.Status.ABSORB) {
-            // absorbs 0.3 * damage dealt to enemy pet
-            int dmg = (int)(skill.damage * 0.3);
-            player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
-        }
-        if (skill.status == Skill.Status.STUN) {
-            player1.getCurrentPet().stunTurn = 3;
-        }
-        if (skill.status == Skill.Status.POISON) {
-            player1.getCurrentPet().poisonTurn = 3;
-            player1.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
-        }
+            if (skill.status == Skill.Status.ABSORB) {
+                // absorbs 0.3 * damage dealt to enemy pet
+                int dmg = (int)(skill.damage * 0.3);
+                player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
+            }
+            if (skill.status == Skill.Status.STUN) {
+                player1.getCurrentPet().stunTurn = 3;
+            }
+            if (skill.status == Skill.Status.POISON) {
+                player1.getCurrentPet().poisonTurn = 3;
+                player1.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
+            }
 
-        if (player1.takeDamage(skill)) {
-            petChanged = true;
+            if (player1.takeDamage(skill)) {
+                petChanged = true;
+            }
         }
 
         changeTurn();

@@ -115,6 +115,11 @@ public abstract class Creature extends Entity implements Serializable{
         return false;
     }
 
+    public Boolean isStunned() {
+        // returns true if pet is stunned
+        return stunTurn > 0;
+    }
+
     public String getName() {
         return name;
     }
@@ -148,6 +153,10 @@ public abstract class Creature extends Entity implements Serializable{
         health = pet.getHealth();
 //        alive = petNum.isAlive();
 //      update mana, level, skills in the future
+
+        this.poisonTurn = pet.poisonTurn;
+        this.stunTurn = pet.stunTurn;
+
     }
 
     public void gainEXP(int i) {

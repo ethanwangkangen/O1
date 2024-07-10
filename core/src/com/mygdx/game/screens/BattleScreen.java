@@ -360,6 +360,12 @@ public class BattleScreen implements Screen {
         }
     }
 
+    public void setSkillNotTouchable() {
+        for (TextButton button: skillButtons) {
+            button.setTouchable(Touchable.disabled);
+        }
+    }
+
     public void setAllNotTouchable() {
         for (TextButton button: skillButtons) {
             button.setTouchable(Touchable.disabled);
@@ -487,6 +493,11 @@ public class BattleScreen implements Screen {
                 || BattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(BattleHandler.getPlayer2().getIdString(), myId)) {
             // this player's turn
             setAllSkillTouchable();
+
+            if (thisPlayer.getCurrentPet().isStunned()) {
+                // current pet is stunned
+                setSkillNotTouchable();
+            }
         } else {
             // opponent's turn
             setAllNotTouchable();
