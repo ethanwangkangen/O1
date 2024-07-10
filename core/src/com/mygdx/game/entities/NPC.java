@@ -65,21 +65,6 @@ public class NPC extends Player implements Serializable {
     }
 
     @Override
-    public Boolean takeDamage(Skill skill) {
-        // returns true if petchange (ie a petNum has died)
-        getCurrentPet().takeDamage(skill);
-
-        if (!getCurrentPet().isAlive()) {
-            // pet has died
-            return true;
-        }
-
-        // pet has not died
-        return false;
-
-    }
-
-    @Override
     public boolean isAlive() {
         return battlePets.get(0).isAlive();
     }

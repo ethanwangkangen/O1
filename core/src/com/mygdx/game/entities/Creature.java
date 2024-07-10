@@ -28,6 +28,9 @@ public abstract class Creature extends Entity implements Serializable{
         EARTH,
     }
 
+    public int poisonTurn = 0;
+    public int poisonDamage = 0;
+    public int stunTurn = 0;
 
     public Creature(){}
 
@@ -88,6 +91,34 @@ public abstract class Creature extends Entity implements Serializable{
         int x = calculateModifiedDamage(skill);
         System.out.println("Skill damage: " + x);
         this.health -= x;
+    }
+
+    public void absorb(int dmg) {
+        this.health += dmg;
+
+        if (this.health > this.maxhealth) {
+            this.health = this.maxhealth;
+        }
+    }
+
+    public Boolean updateStatus() {
+        if (stunTurn > 0) {
+            stunTurn -= 1;
+        }
+
+        if (poisonTurn > 0 && isAlive()) {
+            // pet is poisoned
+            poisonTurn -= 1;
+            this.health -= poisonDamage;
+            System.out.println("Poison damage dealt: " + poisonDamage + " to " + getName());
+            return !isAlive(); // returns true if pet has died
+        }
+        return false;
+    }
+
+    public Boolean isStunned() {
+        // returns true if pet is stunned
+        return stunTurn > 0;
     }
 
     public String getName() {
@@ -157,6 +188,9 @@ public abstract class Creature extends Entity implements Serializable{
         this.maxhealth = pet.getMaxHealth();
 //        alive = pet.isAlive();
 //      update mana, level, skills in the future
+
+        this.poisonTurn = pet.poisonTurn;
+        this.stunTurn = pet.stunTurn;
     }
 
     public void gainEXP(int i) {
