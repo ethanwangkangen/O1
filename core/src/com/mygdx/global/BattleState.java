@@ -1,5 +1,6 @@
 package com.mygdx.global;
 
+import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.NPC;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.entities.Skill;
@@ -115,6 +116,18 @@ public class BattleState{
             this.turn = Turn.PLAYERONETURN;
             this.numofTurns += 1;
         }
+        System.out.println("Checking status");
+        checkStatus();
+    }
+
+    public void checkStatus() {
+        // applies status effects on pets
+        if (player1.updateStatus()) {
+            petChanged = true;
+        }
+        if (player2.updateStatus()) {
+            petChanged = true;
+        }
     }
 
     public void playerAttack(String id, Skill skill) {
@@ -128,10 +141,11 @@ public class BattleState{
                 player1.absorb(Math.min(dmg, (int)(player2.getCurrentPet().getHealth() * 0.3)));
             }
             if (skill.status == Skill.Status.STUN) {
-
+                player2.getCurrentPet().stunTurn = 3;
             }
             if (skill.status == Skill.Status.POISON) {
-
+                player2.getCurrentPet().poisonTurn = 3;
+                player2.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
             }
 
             if (player2.takeDamage(skill)) {
@@ -147,10 +161,11 @@ public class BattleState{
                 player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
             }
             if (skill.status == Skill.Status.STUN) {
-
+                player1.getCurrentPet().stunTurn = 3;
             }
             if (skill.status == Skill.Status.POISON) {
-
+                player1.getCurrentPet().poisonTurn = 3;
+                player1.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
             }
 
             if (player1.takeDamage(skill)) {
@@ -178,10 +193,11 @@ public class BattleState{
             player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
         }
         if (skill.status == Skill.Status.STUN) {
-
+            player1.getCurrentPet().stunTurn = 3;
         }
         if (skill.status == Skill.Status.POISON) {
-
+            player1.getCurrentPet().poisonTurn = 3;
+            player1.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
         }
 
         if (player1.takeDamage(skill)) {

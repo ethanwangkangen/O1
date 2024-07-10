@@ -45,7 +45,7 @@ public class Player extends Entity implements Serializable{
 
     //int skill (0, 1, or 2): corresponds to the skill used
     public Boolean takeDamage(Skill skill) {
-        // returns true if petchange (ie a petNum has died)
+        // returns true if petchange (ie a pet has died)
 
         getCurrentPet().takeDamage(skill);
         if (!getCurrentPet().isAlive()) {
@@ -53,6 +53,23 @@ public class Player extends Entity implements Serializable{
             return true;
         }
         return false;
+    }
+
+    public Boolean updateStatus() {
+        // returns true if a pet has died
+
+        boolean petDied = false;
+        System.out.println("Updating status");
+
+        for (Creature pet : getBattlePets()) {
+            if (pet.updateStatus()) {
+                // a pet has died
+                petDied = true;
+                changeNextPet();
+            }
+        }
+
+        return petDied;
     }
 
     public void absorb(int dmg) {

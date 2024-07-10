@@ -29,7 +29,6 @@ public abstract class Creature extends Entity implements Serializable{
     public Skill skill1;
     public Skill skill2;
     public Skill skill3 ;
-    public Skill[] skills = {skill1, skill2, skill3};
 
     private transient SpriteBatch batch;
     public enum Element {
@@ -38,9 +37,9 @@ public abstract class Creature extends Entity implements Serializable{
         EARTH,
     }
 
-    public Skill[] getSkills() {
-        return skills;
-    }
+    public int poisonTurn = 0;
+    public int poisonDamage = 0;
+    public int stunTurn = 0;
 
     public Creature(int health, int mana, String name, String path) {
         this.maxhealth = health;
@@ -99,6 +98,21 @@ public abstract class Creature extends Entity implements Serializable{
         if (this.health > this.maxhealth) {
             this.health = this.maxhealth;
         }
+    }
+
+    public Boolean updateStatus() {
+        if (stunTurn > 0) {
+            stunTurn -= 1;
+        }
+
+        if (poisonTurn > 0 && isAlive()) {
+            // pet is poisoned
+            poisonTurn -= 1;
+            this.health -= poisonDamage;
+            System.out.println("Poison damage dealt: " + poisonDamage + " to " + getName());
+            return !isAlive(); // returns true if pet has died
+        }
+        return false;
     }
 
     public String getName() {
