@@ -260,6 +260,7 @@ public class LoginScreen implements Screen {
             myClient.getKryo().register(Skill[].class);
             myClient.getKryo().register(BattleState.Turn.class);
             myClient.getKryo().register(TextImageButton.class);
+            myClient.getKryo().register(Skill.Status.class);
 
             //start the client
             myClient.start();

@@ -93,6 +93,14 @@ public abstract class Creature extends Entity implements Serializable{
         this.health -= x;
     }
 
+    public void absorb(int dmg) {
+        this.health += dmg;
+
+        if (this.health > this.maxhealth) {
+            this.health = this.maxhealth;
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -105,39 +113,6 @@ public abstract class Creature extends Entity implements Serializable{
         return this.health > 0;
     }
 
-//    public void addSkill(int damage) {
-//        Skill newSkill = new Skill(damage);
-//        skillList.add(newSkill);
-//    }
-
-    public void render(SpriteBatch batch) {
-        //batch.draw(texturePath, xpos, ypos, 100, 100);
-    }
-
-
-
-//    public void loadTexture(Runnable callback) {
-//        Gdx.app.postRunnable(() -> {
-//            try {
-//                System.out.println("loading texture of creature");
-//                System.out.println("path is: " + path);
-//                this.texturePath = new Texture(path);
-//                if (this.texturePath == null) {
-//                    System.out.println("texturePath is null????");
-//                } else {
-//                    System.out.println("texturePath ok");
-//                }
-//                if (callback != null) {
-//                    callback.run();
-//                }
-//                System.out.println("finished loading creature texture");
-//
-//            } catch (Exception e) { // Catching general Exception for simplicity
-//                System.out.println(e.getMessage());
-//                System.out.println("Creature texture not loaded");
-//            }
-//        });
-//    }
     public Texture getTexturePath() {
         try {
             return DarwinsDuel.getInstance().manager.get(path, Texture.class);

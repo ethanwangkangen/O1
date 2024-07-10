@@ -121,11 +121,38 @@ public class BattleState{
         // online multiplayer pvp
         if (Objects.equals(player1.getIdString(), id)) {
             // player1 has launched the attack
+
+            if (skill.status == Skill.Status.ABSORB) {
+                // absorbs 0.3 * damage dealt to enemy pet
+                int dmg = (int)(skill.damage * 0.3);
+                player1.absorb(Math.min(dmg, (int)(player2.getCurrentPet().getHealth() * 0.3)));
+            }
+            if (skill.status == Skill.Status.STUN) {
+
+            }
+            if (skill.status == Skill.Status.POISON) {
+
+            }
+
             if (player2.takeDamage(skill)) {
                 // takeDamage is true if petNum had died from attack
                 petChanged = true;
             }
         } else {
+            // player2 has launched the attack
+
+            if (skill.status == Skill.Status.ABSORB) {
+                // absorbs 0.3 * damage dealt to enemy pet
+                int dmg = (int)(skill.damage * 0.3);
+                player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
+            }
+            if (skill.status == Skill.Status.STUN) {
+
+            }
+            if (skill.status == Skill.Status.POISON) {
+
+            }
+
             if (player1.takeDamage(skill)) {
                 petChanged = true;
             }
@@ -138,12 +165,25 @@ public class BattleState{
 
     public void NPCAttack(String battleId) {
         // Player vs NPC
-        System.out.println("player2 name: " + player2.username);
+//        System.out.println("player2 name: " + player2.username);
         Skill skill = player2.npcAttack(numofTurns);
 
-        if (skill == null) {
-            System.out.println("NPC skill is null");
+//        if (skill == null) {
+//            System.out.println("NPC skill is null");
+//        }
+
+        if (skill.status == Skill.Status.ABSORB) {
+            // absorbs 0.3 * damage dealt to enemy pet
+            int dmg = (int)(skill.damage * 0.3);
+            player2.absorb(Math.min(dmg, (int)(player1.getCurrentPet().getHealth() * 0.3)));
         }
+        if (skill.status == Skill.Status.STUN) {
+
+        }
+        if (skill.status == Skill.Status.POISON) {
+
+        }
+
         if (player1.takeDamage(skill)) {
             petChanged = true;
         }

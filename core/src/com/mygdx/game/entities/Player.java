@@ -53,7 +53,10 @@ public class Player extends Entity implements Serializable{
             return true;
         }
         return false;
+    }
 
+    public void absorb(int dmg) {
+        getCurrentPet().absorb(dmg);
     }
 
     public boolean isAlive() {
@@ -79,52 +82,13 @@ public class Player extends Entity implements Serializable{
         return currentPetNum;
     }
 
-    // consider replacing battlePets array to reservePets array in future
-    // to better display petNum screen
-//    public void switchpet(int target) {
-//        CurrentPet = battlePets[target];
-//    }
-
-//    public void loadTexture() {
-//        texturePath = new Texture(path);
-//    }
     public Texture getTexture() {
         return DarwinsDuel.getInstance().getAssetManager().get(path, Texture.class);
     }
 
-    public void Move() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) xpos -= 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) xpos += 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) ypos += 200 * Gdx.graphics.getDeltaTime();
-//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) ypos -= 200 * Gdx.graphics.getDeltaTime();
-    }
-
-
     public String username() {
         return this.username;
     }
-
-//    public void loadTextures(Runnable callback) {
-//        AtomicInteger loadedCreatureCount = new AtomicInteger(0);
-//
-//        // Load textures for each petNum
-//        int petNum = battlePets.size() + reservePets.size();
-//
-//        for (Creature petNum : battlePets) {
-//            petNum.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == petNum) {
-//                    callback.run();
-//                }
-//            });
-//        }
-//        for (Creature petNum : reservePets) {
-//            petNum.loadTexture(() -> {
-//                if (loadedCreatureCount.incrementAndGet() == petNum) {
-//                    callback.run();
-//                }
-//            });
-//        }
-//    }
 
     public void changeCurrentPet(PetNum petNum) {
         if (isValidPet(petNum)) {
@@ -148,14 +112,10 @@ public class Player extends Entity implements Serializable{
         }
     }
 
-    public int getNumPets() {
-        return battlePets.size();
-    }
-
     public void update(Player player) {
-        // to update petNum info during battle
-        System.out.println("battlePets size: " + battlePets.size());
-        System.out.println("player battlePets size: " + player.getBattlePets().size());
+        // to update pet info during battle
+//        System.out.println("battlePets size: " + battlePets.size());
+//        System.out.println("player battlePets size: " + player.getBattlePets().size());
 
         for (int i = 0; i < battlePets.size(); i++) {
             Creature pet = battlePets.get(i);

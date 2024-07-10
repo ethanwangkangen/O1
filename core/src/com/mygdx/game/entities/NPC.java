@@ -31,20 +31,20 @@ public class NPC extends Player implements Serializable {
         this.battlePets.add(new CrocLesnar());
     } //no arg constructor for serialisation
 
-    @Override
-    public Boolean takeDamage(Skill skill) {
-        // returns true if petchange (ie a petNum has died)
-        getCurrentPet().takeDamage(skill);
-
-        if (!getCurrentPet().isAlive()) {
-            // pet has died
-            return true;
-        }
-
-        // pet has not died
-        return false;
-
-    }
+//    @Override
+//    public Boolean takeDamage(Skill skill) {
+//        // returns true if petchange (ie a petNum has died)
+//        getCurrentPet().takeDamage(skill);
+//
+//        if (!getCurrentPet().isAlive()) {
+//            // pet has died
+//            return true;
+//        }
+//
+//        // pet has not died
+//        return false;
+//
+//    }
 
     @Override
     public boolean isAlive() {

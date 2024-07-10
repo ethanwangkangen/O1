@@ -57,6 +57,7 @@ public class ServerFoundation {
         server.getKryo().register(Skill[].class);
         server.getKryo().register(BattleState.Turn.class);
         server.getKryo().register(TextImageButton.class);
+        server.getKryo().register(Skill.Status.class);
 
         // Add all listeners of server
         this.server.addListener(new EventListener());
