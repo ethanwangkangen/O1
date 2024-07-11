@@ -12,8 +12,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class BattleState{
-
-    //public static final BattleState INSTANCE = new BattleState();
     private Player p1Player, p2Player;
 
     public enum Turn {
@@ -139,13 +137,6 @@ public class BattleState{
         }
     }
 
-//    public void loadTextures(Runnable callback) {
-//        p1Player.loadTextures(() -> {
-//            p2Player.loadTextures(callback);
-//        });
-//        System.out.println("battlestate textures loading");
-//
-//    }
 
     public void changePet(String id, Player.PetNum pet) {
         if (Objects.equals(p1Player.getUserId(), id)) {

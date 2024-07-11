@@ -51,7 +51,7 @@ public class TextureHandler {
         return null; //change this
     }
 
-    public String getAnimationTexture(String type) {
+    public String getAnimationTextureIdle(String type) {
         switch (type) {
             case "MeowmadAli":
                 return "MeowmadAli2Idle.png";
@@ -60,7 +60,7 @@ public class TextureHandler {
             case "Doge":
                 return "DogeIdle.png";
             case "MouseHunter":
-                return "mouseHunterIdle.png";
+                return "mousehunterIdle.png";
             case "Dragon":
                 return "DragonIdle.png";
             case "Froggy":
@@ -69,7 +69,7 @@ public class TextureHandler {
         return null; //change this
     }
 
-    public String getAnimationJson(String type) {
+    public String getAnimationJsonIdle(String type) {
         switch (type) {
             case "MeowmadAli":
                 return "MeowmadAli2Idle.json";
@@ -78,11 +78,47 @@ public class TextureHandler {
             case "Doge":
                 return "DogeIdle.json";
             case "MouseHunter":
-                return "mouseHunterIdle.json";
+                return "mousehunterIdle.json";
             case "Dragon":
                 return "DragonIdle.json";
             case "Froggy":
                 return "froggyIdle.json";
+        }
+        return null; //change this
+    }
+
+    public String getAnimationTextureAttack(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Attack.png";
+            case "CrocLesnar":
+                return "CrocLesnarAttack.png";
+            case "Doge":
+                return "DogeAttack.png";
+            case "MouseHunter":
+                return "MouseHunterAttack.png";
+            case "Dragon":
+                return "DragonAttack.png";
+            case "Froggy":
+                return "froggyAttack.png";
+        }
+        return null; //change this
+    }
+
+    public String getAnimationJsonAttack(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Attack.json";
+            case "CrocLesnar":
+                return "CrocLesnarAttack.json";
+            case "Doge":
+                return "DogeAttack.json";
+            case "MouseHunter":
+                return "MouseHunterAttack.json";
+            case "Dragon":
+                return "DragonAttack.json";
+            case "Froggy":
+                return "froggyAttack.json";
         }
         return null; //change this
     }

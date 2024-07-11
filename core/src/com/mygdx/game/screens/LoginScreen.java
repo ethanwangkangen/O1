@@ -152,10 +152,8 @@ public class LoginScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // connect to Firebase and get player info
                 String email, password;
-//                email = usernameLField.getText();
-//                password = passwordLField.getText();
-                email = "ethanwangkangen@gmail.com";
-                password = "ethan20nov";
+                email = usernameLField.getText();
+                password = passwordLField.getText();
                 //for testing
                 if (isValidInput(email, password)) {
                     //to Login:
