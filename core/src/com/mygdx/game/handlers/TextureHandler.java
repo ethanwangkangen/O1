@@ -23,14 +23,12 @@ public class TextureHandler {
         manager.load("Pixel_art_grass_image.png", Texture.class);
 
         // Creatures textures
-        manager.load("badlogic.jpg", Texture.class);
-        manager.load("croc lesnar.png", Texture.class);
+        manager.load("CrocLesnar.png", Texture.class);
         manager.load("froggy.png", Texture.class);
-        manager.load("meowmad_ali.png", Texture.class);
-        manager.load("doge.png", Texture.class);
-        manager.load("dragon.png", Texture.class);
-        manager.load("mouse hunter.png", Texture.class);
-        manager.load("meowmad_ali.png", Texture.class);
+        manager.load("MeowmadAli2.png", Texture.class);
+        manager.load("Doge.png", Texture.class);
+        manager.load("Dragon.png", Texture.class);
+        manager.load("MouseHunter.png", Texture.class);
 
         manager.load("player1.png", Texture.class);
     }
@@ -38,17 +36,89 @@ public class TextureHandler {
     public Texture getTexture(String type) {
         switch (type) {
             case "MeowmadAli":
-                return this.getAssetManager().get("meowmad_ali.png", Texture.class);
+                return this.getAssetManager().get("MeowmadAli2.png", Texture.class);
             case "CrocLesnar":
-                return this.getAssetManager().get("croc lesnar.png", Texture.class);
+                return this.getAssetManager().get("CrocLesnar.png", Texture.class);
             case "Doge":
-                return this.getAssetManager().get("doge.png", Texture.class);
+                return this.getAssetManager().get("Doge.png", Texture.class);
             case "MouseHunter":
-                return this.getAssetManager().get("mouse hunter.png", Texture.class);
+                return this.getAssetManager().get("MouseHunter.png", Texture.class);
             case "Dragon":
-                return this.getAssetManager().get("dragon.png", Texture.class);
+                return this.getAssetManager().get("Dragon.png", Texture.class);
             case "Froggy":
                 return this.getAssetManager().get("froggy.png", Texture.class);
+        }
+        return null; //change this
+    }
+
+    public String getAnimationTextureIdle(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Idle.png";
+            case "CrocLesnar":
+                return "CrocLesnarIdle.png";
+            case "Doge":
+                return "DogeIdle.png";
+            case "MouseHunter":
+                return "mousehunterIdle.png";
+            case "Dragon":
+                return "DragonIdle.png";
+            case "Froggy":
+                return "froggyIdle.png";
+        }
+        return null; //change this
+    }
+
+    public String getAnimationJsonIdle(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Idle.json";
+            case "CrocLesnar":
+                return "CrocLesnarIdle.json";
+            case "Doge":
+                return "DogeIdle.json";
+            case "MouseHunter":
+                return "mousehunterIdle.json";
+            case "Dragon":
+                return "DragonIdle.json";
+            case "Froggy":
+                return "froggyIdle.json";
+        }
+        return null; //change this
+    }
+
+    public String getAnimationTextureAttack(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Attack.png";
+            case "CrocLesnar":
+                return "CrocLesnarAttack.png";
+            case "Doge":
+                return "DogeAttack.png";
+            case "MouseHunter":
+                return "MouseHunterAttack.png";
+            case "Dragon":
+                return "DragonAttack.png";
+            case "Froggy":
+                return "froggyAttack.png";
+        }
+        return null; //change this
+    }
+
+    public String getAnimationJsonAttack(String type) {
+        switch (type) {
+            case "MeowmadAli":
+                return "MeowmadAli2Attack.json";
+            case "CrocLesnar":
+                return "CrocLesnarAttack.json";
+            case "Doge":
+                return "DogeAttack.json";
+            case "MouseHunter":
+                return "MouseHunterAttack.json";
+            case "Dragon":
+                return "DragonAttack.json";
+            case "Froggy":
+                return "froggyAttack.json";
         }
         return null; //change this
     }
