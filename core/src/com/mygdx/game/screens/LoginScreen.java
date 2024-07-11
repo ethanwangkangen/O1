@@ -191,6 +191,7 @@ public class LoginScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+//        changeToLogin.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
 
         signupTable.clear();
         signupTable.add(signUpLabel).colspan(3).expandX().row();

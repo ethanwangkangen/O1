@@ -127,7 +127,7 @@ public class BattleScreen implements Screen {
 
         bgTable.add(changeTable).expandY().bottom();
         bgTable.add(skillsWindow).center().bottom().padBottom(10).colspan(2).left().padLeft(30);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
     }
     public void initialisePlayers() {
         // set players
@@ -312,12 +312,15 @@ public class BattleScreen implements Screen {
             } else {
                 newButton.setTouchable(Touchable.disabled);
                 petAvailable[index] = false;
+                newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
+
             }
         } else {
             // pet not owned
-            newButton = new TextImageButton("No petNum owned", skin, crossedBox);
+            newButton = new TextImageButton("No pet owned", skin, crossedBox);
             newButton.setTouchable(Touchable.disabled);
             petAvailable[index] = false;
+            newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
         }
 
         // add new button to petButtons list
