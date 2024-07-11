@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.events.PlayerSkipEvent;
 import com.mygdx.game.handlers.UserBattleHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.events.PlayerAttackEvent;
@@ -68,6 +69,7 @@ public class BattleScreen implements Screen {
 
     private TextButton changeSkillButton;
     private TextButton changePetButton;
+    private TextButton skipButton;
     private Boolean endBattleTextRendered = false;
 
     // tables, windows and stacks
@@ -154,7 +156,7 @@ public class BattleScreen implements Screen {
         bgTable.add(changeTable).center();
         bgTable.add(skillsWindow).bottom().padBottom(50).center();
 
-//        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
     }
     public void initialisePlayers() {
         // set players
@@ -263,10 +265,13 @@ public class BattleScreen implements Screen {
     public void initialiseChangeButtons() {
         changePetButton = new TextButton("Pets", skin);
         changeSkillButton = new TextButton("Attack", skin);
+        skipButton = new TextButton("Skip", skin);
 
         changeTable.add(changeSkillButton).left().width(screenWidth / 9).height(screenHeight / 11);
         changeTable.row();
         changeTable.add(changePetButton).left().width(screenWidth / 9).height(screenHeight / 11);
+        changeTable.row();
+        changeTable.add(skipButton).left().width(screenWidth / 9).height(screenHeight / 11);
 
         changePetButton.addListener(new ClickListener() {
             @Override
@@ -282,6 +287,20 @@ public class BattleScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 petsWindow.setVisible(false);
                 skillsWindow.setVisible(true);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        skipButton.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                petsWindow.setVisible(false);
+                skillsWindow.setVisible(true);
+                PlayerSkipEvent skip = new PlayerSkipEvent();
+                skip.id = myId;
+                skip.battleId = battleId;
+                DarwinsDuel.getClient().sendTCP(skip);
+                System.out.println("Sending skip");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
