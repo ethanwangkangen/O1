@@ -366,7 +366,7 @@ public class BattleScreen implements Screen {
             // player has this pet (ie not out of bounds of arraylist)
             Creature pet = battlePets.get(index);
             newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()));
-            if (pet.isAlive()) {
+            if (pet.isAlive() && !Objects.equals(pet, thisPet)) {
                 newButton.setTouchable(Touchable.enabled);
                 // records if pet is available
                 petAvailable[index] = true;
