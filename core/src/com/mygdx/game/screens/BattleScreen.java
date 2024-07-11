@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
@@ -80,6 +81,12 @@ public class BattleScreen implements Screen {
     private Window petsWindow = new Window("Pets", skin);
     private Table changeTable = new Table();
     private Stack stack = new Stack();
+
+
+    private AnimationActor animationActor1;
+    private AnimationActor animationActor2;
+    private FlippedAnimationActor animationActorFlip;
+    private Timer.Task animationCompleteTask;
 
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
@@ -174,11 +181,27 @@ public class BattleScreen implements Screen {
         pet2imageTable.clear();
 
         System.out.println("initialising PetImages table");
-        pet1Image = new FlippedImage(TextureHandler.getInstance().getTexture(thisPet.getType()));
-        pet2Image = new Image(TextureHandler.getInstance().getTexture(opponentPet.getType()));
 
-        pet1imageTable.add(pet1Image).height(screenWidth / 6).width(screenWidth / 6);
-        pet2imageTable.add(pet2Image).height(screenWidth / 6).width(screenWidth / 6);
+        animationActor1 = new AnimationActor(
+                TextureHandler.getInstance().getAnimationTextureIdle(thisPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonIdle(thisPet.getType()),
+                TextureHandler.getInstance().getAnimationTextureAttack(thisPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonAttack(thisPet.getType()));
+
+        animationActor2 = new AnimationActor(
+                TextureHandler.getInstance().getAnimationTextureIdle(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonIdle(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationTextureAttack(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonAttack(opponentPet.getType()));
+
+        animationActorFlip = new FlippedAnimationActor(
+                TextureHandler.getInstance().getAnimationTextureIdle(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonIdle(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationTextureAttack(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationJsonAttack(opponentPet.getType()));
+
+        pet1imageTable.add(animationActor1).height(screenWidth / 6).width(screenWidth / 6);
+        pet2imageTable.add(animationActorFlip).height(screenWidth / 6).width(screenWidth / 6);
     }
 
     public void initialisePetInfo() {
@@ -407,10 +430,16 @@ public class BattleScreen implements Screen {
         }
     }
 
+    /**
+     * Listen for attack
+     * @param skillButton
+     * @param skill
+     */
     public void addSkillListener(TextButton skillButton, Skill skill) {
         skillButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
                 PlayerAttackEvent attackEvent = new PlayerAttackEvent();
                 attackEvent.id = myId;
                 attackEvent.skill = skill;
@@ -472,6 +501,11 @@ public class BattleScreen implements Screen {
         }
     }
 
+    public boolean isMyTurn() {
+        return UserBattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(UserBattleHandler.getPlayer1().getUserId(), myId)
+                || UserBattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(UserBattleHandler.getPlayer2().getUserId(), myId);
+    }
+
     @Override
     public void render(float delta) {
 
@@ -484,10 +518,22 @@ public class BattleScreen implements Screen {
             if (UserBattleHandler.petAttacked()) {
                 System.out.println("A pet has attacked.");
 
-                updatePetInfo();
-                initialisePetImages();
-                initialiseSkillsWindow();
-                initialisePetsWindow();
+                if (!isMyTurn()) {
+                    animationActor1.startAttack();
+                } else {
+                    animationActorFlip.startAttack();
+                }
+
+                animationCompleteTask  = new Timer.Task() {
+                    @Override
+                    public void run() {
+                        updatePetInfo();
+                        initialisePetImages();
+                        initialiseSkillsWindow();
+                        initialisePetsWindow();
+                    }
+                };
+                Timer.schedule(animationCompleteTask, 0.5f); // Delay of 1 second (adjust as needed)
             }
 
             // pet change has occurred
@@ -522,8 +568,7 @@ public class BattleScreen implements Screen {
         }
 
         // enable/disable skillButtons
-        if (UserBattleHandler.getTurn() == BattleState.Turn.PLAYERONETURN && Objects.equals(UserBattleHandler.getPlayer1().getUserId(), myId)
-                || UserBattleHandler.getTurn() == BattleState.Turn.PLAYERTWOTURN && Objects.equals(UserBattleHandler.getPlayer2().getUserId(), myId)) {
+        if (isMyTurn()) {
             // this player's turn
             setAllSkillTouchable();
             turnLabel.setText("Your Turn");
@@ -570,6 +615,9 @@ public class BattleScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        if (animationCompleteTask != null) {
+            animationCompleteTask.cancel();
+        }
     }
 
 
