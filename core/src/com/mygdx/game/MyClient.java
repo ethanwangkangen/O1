@@ -20,6 +20,7 @@ import com.mygdx.game.events.PlayerChangePetEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.events.PlayerNPCBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
+import com.mygdx.game.events.PlayerSkipEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.*;
@@ -43,6 +44,7 @@ public class MyClient {
         myClient.getKryo().register(PlayerNPCBattleEvent.class); // added
         myClient.getKryo().register(EndBattleEvent.class);
         myClient.getKryo().register(AddPetEvent.class); // added
+        myClient.getKryo().register(PlayerSkipEvent.class);
 
         // Add all creatures
         myClient.getKryo().register(Entity.class);
@@ -87,7 +89,7 @@ public class MyClient {
 
     private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "192.168.0.159"; // Server's IP address if not running locally
+            String host = "42.60.220.147"; // Server's IP address if not running locally
 
             int tcpPort = 55555;       // Must match the server's TCP port
             int udpPort = 55555;       // Must match the server's UDP port
