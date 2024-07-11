@@ -154,6 +154,7 @@ public class LoginScreen implements Screen {
                 String email, password;
                 email = usernameLField.getText();
                 password = passwordLField.getText();
+
                 //for testing
                 if (isValidInput(email, password)) {
                     //to Login:

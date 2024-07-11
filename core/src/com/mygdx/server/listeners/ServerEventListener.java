@@ -13,6 +13,7 @@ import com.mygdx.game.events.PlayerChangePetEvent;
 import com.mygdx.game.events.PlayerJoinServerEvent;
 import com.mygdx.game.events.PlayerNPCBattleEvent;
 import com.mygdx.game.events.PlayerRequestBattleEvent;
+import com.mygdx.game.events.PlayerSkipEvent;
 import com.mygdx.server.ServerFoundation;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.server.handlers.ServerBattleHandler;
@@ -21,8 +22,6 @@ import com.mygdx.server.handlers.ServerPlayerHandler;
 public class ServerEventListener extends Listener {
 
     Server server = ServerFoundation.getServer();
-
-
     @Override
     public void received(Connection connection, final Object object) {
         if (object instanceof PlayerJoinServerEvent) {
@@ -59,6 +58,30 @@ public class ServerEventListener extends Listener {
             String battleId = attackEvent.battleId;
 
             ServerBattleHandler.getBattleState(battleId).playerAttack(attackEvent.id, attackEvent.skill);
+            ServerBattleHandler.sendBattleState(battleId);
+
+            // if players are all dead -> battle has ended
+            if (!ServerBattleHandler.getBattleState(battleId).playersAlive()){
+                ServerBattleHandler.sendEndBattle(battleId);
+                return;
+            }
+
+            // players still alive -> checking if against NPC
+            if (ServerBattleHandler.getBattleState(battleId).isAgainstNPC()) {
+                // fighting against NPC; NPC's turn
+                System.out.println("NPC attacking");
+                ServerBattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
+            }
+        }
+
+        if (object instanceof PlayerSkipEvent) {
+            System.out.println("PlayerSkipEvent received by server");
+            PlayerSkipEvent skipEvent = (PlayerSkipEvent) object;
+            String battleId = skipEvent.battleId;
+
+            ServerBattleHandler.getBattleState(battleId).changeTurn();
+            // change turn manually since nothing happens that initiates the change turn
+
             ServerBattleHandler.sendBattleState(battleId);
 
             // if players are all dead -> battle has ended
