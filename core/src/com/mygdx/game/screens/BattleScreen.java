@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.*;
+import com.mygdx.game.handlers.AnimationHandler;
 import com.mygdx.game.handlers.UserBattleHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.events.PlayerAttackEvent;
@@ -174,11 +175,21 @@ public class BattleScreen implements Screen {
         pet2imageTable.clear();
 
         System.out.println("initialising PetImages table");
-        pet1Image = new FlippedImage(TextureHandler.getInstance().getTexture(thisPet.getType()));
-        pet2Image = new Image(TextureHandler.getInstance().getTexture(opponentPet.getType()));
 
-        pet1imageTable.add(pet1Image).height(screenWidth / 6).width(screenWidth / 6);
-        pet2imageTable.add(pet2Image).height(screenWidth / 6).width(screenWidth / 6);
+        AnimationHandler petAnimationHandler1 = new AnimationHandler(
+                TextureHandler.getInstance().getAnimationTexture(thisPet.getType()),
+                TextureHandler.getInstance().getAnimationJson(thisPet.getType()));
+        AnimationActor animationActor1 = new AnimationActor(petAnimationHandler1.getAnimation());
+
+        AnimationHandler petAnimationHandler2 = new AnimationHandler(
+                TextureHandler.getInstance().getAnimationTexture(opponentPet.getType()),
+                TextureHandler.getInstance().getAnimationJson(opponentPet.getType()));
+        AnimationActor animationActor2 = new AnimationActor(petAnimationHandler2.getAnimation());
+//        pet1Image = new FlippedImage(TextureHandler.getInstance().getTexture(thisPet.getType()));
+//        pet2Image = new Image(TextureHandler.getInstance().getTexture(opponentPet.getType()));
+
+        pet1imageTable.add(animationActor1).height(screenWidth / 6).width(screenWidth / 6);
+        pet2imageTable.add(animationActor2).height(screenWidth / 6).width(screenWidth / 6);
     }
 
     public void initialisePetInfo() {
