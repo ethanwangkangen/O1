@@ -7,9 +7,9 @@ public class NPCDragon extends Creature {
     public NPCDragon() {
 
         super(200, 200, "Dragon", Creature.Element.FIRE);
-        skill1 = new Skill("Firebreath", 20 * dmgFactor, Creature.Element.FIRE);
-        skill2 = new Skill("Stomp", 50 * dmgFactor, Creature.Element.FIRE);
-        skill3 = new Skill("Roast", 30 * dmgFactor, Creature.Element.FIRE);
+        skill1 = new Skill("Firebreath", 20 * dmgFactor, Creature.Element.FIRE, Skill.Status.STUN);
+        skill2 = new Skill("Stomp", 50 * dmgFactor, Creature.Element.FIRE, Skill.Status.NIL);
+        skill3 = new Skill("Roast", 30 * dmgFactor, Creature.Element.FIRE, Skill.Status.POISON);
 
         setType("Dragon");
         setLevel(0);
