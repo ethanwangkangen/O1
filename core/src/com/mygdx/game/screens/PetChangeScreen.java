@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
+import com.mygdx.game.handlers.UserBattleHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
 import com.mygdx.game.handlers.TextureHandler;
@@ -26,7 +27,7 @@ public class PetChangeScreen implements Screen {
     private AssetManager manager;
     private Table table;
     private Stack topBarStack;
-    private Stack errorStack;
+    private Stack stack;
     private Table errorTable;
     private Dialog errorMessage;
 
@@ -91,10 +92,10 @@ public class PetChangeScreen implements Screen {
         table.add(pane1).expand();
         table.add(pane2).expand().row();
 
-        errorStack.add(table);
-        errorStack.add(errorTable);
+        stack.add(table);
+        stack.add(errorTable);
 
-        stage.addActor(errorStack);
+        stage.addActor(stack);
         stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
@@ -163,25 +164,23 @@ public class PetChangeScreen implements Screen {
     }
 
     public void initialiseErrorMessage() {
-        errorStack = new Stack();
-        errorStack.setFillParent(true);
+        stack = new Stack();
+        stack.setFillParent(true);
 
-        errorMessage = new Dialog("Error", skin);
+        errorMessage = new Dialog("Error", skin) {
+            protected void result(Object obj) {
+                errorMessage.setVisible(false);
+            }
+        };
         errorMessage.text("Battle team cannot be empty");
+        errorMessage.button("Close");
 
-        Button button = new TextButton("Close", skin);
-//        button.addListener(new ClickListener() {
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                errorMessage.show(stage);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-        errorMessage.button(button);
+        errorTable = new Table();
+        errorTable.setFillParent(true);
+
+        errorTable.add(errorMessage).width((float)(Gdx.graphics.getWidth() / 2)).height((float)(Gdx.graphics.getHeight() / 1.2));
 
         errorMessage.setVisible(false);
-        errorTable = new Table();
-        errorTable.add(errorMessage);
     }
 
     public void initialiseScrollPanes() {
