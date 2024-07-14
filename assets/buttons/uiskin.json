@@ -64,8 +64,14 @@
 			up: default-round,
 			checked: default-round-down,
 			font: default-font,
+			fontColor: white
+		},
+		fixed: {
+			down: default-round,
+			up: default-round,
+			checked: default-round,
+			font: default-font,
 			fontColor: white,
-			downFontColor: red
 		}
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
@@ -81,12 +87,6 @@
 			font: default-font,
 			fontColor: white
 		},
-		selected: {
-			down: default-round-down,
-			up: default-round,
-			font: default-font,
-			fontColor: green
-		}
 	},
 	com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 		default: {
