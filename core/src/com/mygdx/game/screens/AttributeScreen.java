@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -37,11 +39,11 @@ public class AttributeScreen implements Screen {
     private AssetManager manager;
     private Table table;
     private Stack topBarStack;
-    private Stack stack;
 
     private Skin skin;
     private TextureRegionDrawable background;
     private TextureRegionDrawable backgroundBox;
+    private Texture emptyBox;
 
     private int screenWidth;
     private int screenHeight;
@@ -49,12 +51,12 @@ public class AttributeScreen implements Screen {
     private ArrayList<Creature> petsList = new ArrayList<>();
     private ScrollPane petsPane;
     private Table petsTable;
-    private ArrayList<TextImageButton> buttonList = new ArrayList<>();
+    private ArrayList<Button> buttonList = new ArrayList<>();
 
     private Label skillDescription;
-    TextButton skillButton1;
-    TextButton skillButton2;
-    TextButton skillButton3;
+    Button skillButton1;
+    Button skillButton2;
+    Button skillButton3;
 
     private Table infoTable;
 
@@ -70,6 +72,7 @@ public class AttributeScreen implements Screen {
         skin = manager.get("buttons/uiskin.json", Skin.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
         backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
+        emptyBox = manager.get("crossedbox.png", Texture.class);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class AttributeScreen implements Screen {
         table.add(infoTable).expand().fill();
 
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         System.out.println("AttributeScreen shown");
     }
@@ -152,13 +155,13 @@ public class AttributeScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-        backButtonTable.add(backButton).right().pad(10).expandX();
+        backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).expandX();
     }
 
     public void initialiseScrollPanes() {
 
         petsTable = new Table();
-        for (TextImageButton button : buttonList) {
+        for (Button button : buttonList) {
             petsTable.add(button).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).padLeft(screenWidth / 20).padRight(screenWidth / 20);
             petsTable.row();
         }
@@ -208,6 +211,7 @@ public class AttributeScreen implements Screen {
         Label name = new Label("Name: " + pet.getName(), skin);
         Label level = new Label("Level: " + pet.getLevel(), skin);
         Label element = new Label("Element: " + pet.getElementString(), skin);
+        Label health = new Label("Health: " + pet.getMaxHealth(), skin);
 
         skillDescription = new Label("", skin);
 
@@ -219,35 +223,37 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.row();
         petDescriptionTable.add(level);
         petDescriptionTable.row();
+        petDescriptionTable.add(health);
+        petDescriptionTable.row();
         petDescriptionTable.add(element);
 
-        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).uniform();
-        topTable.add(petDescriptionTable).uniform();
+        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5);
+        topTable.add(petDescriptionTable);
 
         // create table for skills list and skill description
         Table bottomTable = new Table();
         ScrollPane pane = createSkillTable(pet);
         bottomTable.add(pane);
-        bottomTable.add(skillDescription).expandX();
+        bottomTable.add(skillDescription).expand().fill().pad(10);
 
         // add everything to infoTable
         infoTable.add(topTable).expandX();
-        infoTable.padTop(screenHeight / 10).row();
+        infoTable.row();
         infoTable.add(bottomTable).expand().fill();
     }
 
     private void clearTableSkin() {
-        for (TextImageButton button : buttonList) {
+        for (Button button : buttonList) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
         }
     }
 
-    public TextButton createSkillButton(Skill skill) {
-        TextButton button;
+    public Button createSkillButton(Skill skill) {
+        Button button;
         if (skill != null) {
             button = new TextButton(skill.getName(), skin);
         } else {
-            button = new TextButton("No skill", skin);
+            button = new TextButton("-", skin);
             button.setTouchable(Touchable.disabled);
         }
         button.addListener(new ClickListener() {
@@ -260,6 +266,7 @@ public class AttributeScreen implements Screen {
 
                 // display description of skill of button pressed
                 skillDescription.setText(skill.getName() + "\n\n" + skill.getStatusDescription());
+                skillDescription.setWrap(true);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -272,11 +279,12 @@ public class AttributeScreen implements Screen {
         skillButton2 = createSkillButton(pet.skill2);
         skillButton3 = createSkillButton(pet.skill3);
 
-        table.add(skillButton1).width(screenWidth / 7).height(screenHeight / 8);
-        table.row();
-        table.add(skillButton2).width(screenWidth / 7).height(screenHeight / 8);
-        table.row();
-        table.add(skillButton3).width(screenWidth / 7).height(screenHeight / 8);
+        table.add(skillButton1).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+//        table.row().padBottom(5);
+        table.add(skillButton2).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+//        table.row().padBottom(5);
+        table.add(skillButton3).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+//        table.row().padBottom(5);
 
         return new ScrollPane(table);
     }
