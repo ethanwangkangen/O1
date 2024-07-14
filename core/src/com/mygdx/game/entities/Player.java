@@ -113,6 +113,26 @@ public class Player extends Entity implements Serializable{
         return false;
     }
 
+    public Boolean updateStatus() {
+        // returns true if a pet has died
+
+        boolean petDied = false;
+        System.out.println("Updating status");
+
+        for (Creature pet : getBattlePets()) {
+            if (pet.updateStatus()) {
+                // a pet has died
+                petDied = true;
+                changeNextPet();
+            }
+        }
+        return petDied;
+    }
+
+    public void absorb(int dmg) {
+        getCurrentPet().absorb(dmg);
+    }
+
     public void setCurrentPet(PetNum p) {
         this.currentPetNum = p;
     }
