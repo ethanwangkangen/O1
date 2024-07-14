@@ -51,27 +51,27 @@ public class Skill {
 
     public String getStatusDescription() {
 
-        if (status == Status.ABSORB) {
-            return "ABSORB";
-        } else if (status == Status.STUN) {
-            return "STUN";
-        } else if (status == Status.POISON) {
-            return "POISON";
-        } else {
-            return "NIL";
-        }
-
-
 //        if (status == Status.ABSORB) {
-//            return "Inflicts " + getDamageDescription() + " damage, and recover a portion of the damage dealt to the target as HP.";
-//        } else if (status == Status.POISON) {
-//            return "Inflicts " + getDamageDescription() + " damage, and poisons the target for 3 turns.\n" +
-//                    "Poison deals damage equals to a portion of the skill's damage each turn.";
+//            return "ABSORB";
 //        } else if (status == Status.STUN) {
-//            return "Inflicts " + getDamageDescription() + " damage, and stuns the target for 3 turns.\n" +
-//                    "Target cannot attack while stunned. Opponent can still change pets or skip turn.";
+//            return "STUN";
+//        } else if (status == Status.POISON) {
+//            return "POISON";
 //        } else {
-//            return "Inflicts " + getDamageDescription() + " damage.";
+//            return "NIL";
 //        }
+
+
+        if (status == Status.ABSORB) {
+            return "Inflicts " + getDamageDescription() + " damage, and recover a portion of the damage dealt to the target as HP.";
+        } else if (status == Status.POISON) {
+            return "Inflicts " + getDamageDescription() + " damage, and poisons the target for 3 turns.\n" +
+                    "Poison deals damage equals to a portion of the skill's damage each turn.";
+        } else if (status == Status.STUN) {
+            return "Inflicts " + getDamageDescription() + " damage, and stuns the target for 3 turns.\n" +
+                    "Target cannot attack while stunned. Opponent can still change pets or skip turn.";
+        } else {
+            return "Inflicts " + getDamageDescription() + " damage.";
+        }
     }
 }
