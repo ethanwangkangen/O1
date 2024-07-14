@@ -392,12 +392,14 @@ public class BattleScreen implements Screen {
             } else {
                 newButton.setTouchable(Touchable.disabled);
                 petAvailable[index] = false;
+                newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
             }
         } else {
             // pet not owned
             newButton = new TextImageButton("No pet owned", skin, crossedBox);
             newButton.setTouchable(Touchable.disabled);
             petAvailable[index] = false;
+            newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
         }
 
         // add new button to petButtons list
