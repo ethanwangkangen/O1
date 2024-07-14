@@ -14,9 +14,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
 import com.mygdx.game.handlers.UserPlayerHandler;
-import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
-import org.w3c.dom.Text;
 import com.mygdx.game.handlers.TextureHandler;
 
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public class PetChangeScreen implements Screen {
     private Table table;
     private Stack topBarStack;
     private Stack errorStack;
-    private Container container;
+    private Table errorTable;
     private Dialog errorMessage;
 
     private Skin skin;
@@ -94,7 +92,7 @@ public class PetChangeScreen implements Screen {
         table.add(pane2).expand().row();
 
         errorStack.add(table);
-        errorStack.add(container);
+        errorStack.add(errorTable);
 
         stage.addActor(errorStack);
 //        stage.setDebugAll(true);
@@ -182,7 +180,8 @@ public class PetChangeScreen implements Screen {
         errorMessage.button(button);
 
         errorMessage.setVisible(false);
-        container = new Container(errorMessage);
+        errorTable = new Table();
+        errorTable.add(errorMessage);
     }
 
     public void initialiseScrollPanes() {
