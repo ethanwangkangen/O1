@@ -37,6 +37,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		WIN,
 		LOSS,
 		SPLASH,
+		ATTRIBUTE,
 	}
 
 	public static GameState gameState = GameState.SPLASH;
@@ -126,6 +127,12 @@ public class DarwinsDuel extends Game implements GameCommunication {
 				if (!(getScreen() instanceof SplashScreen)) {
 					System.out.println("Changing to SplashScreen");
 					this.setScreen(new SplashScreen(this));
+				}
+				break;
+			case ATTRIBUTE:
+				if (!(getScreen() instanceof AttributeScreen)) {
+					System.out.println("Changing to AttributeScreen");
+					this.setScreen(new AttributeScreen(this));
 				}
 				break;
 			case WIN:

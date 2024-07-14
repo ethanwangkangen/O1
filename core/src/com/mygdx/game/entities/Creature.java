@@ -65,6 +65,16 @@ public abstract class Creature extends Entity implements Serializable{
         this.type = type;
     }
 
+    public String getElementString() {
+        if (this.element == Creature.Element.FIRE) {
+            return "FIRE";
+        } else if (this.element == Creature.Element.EARTH) {
+            return "EARTH";
+        } else {
+            return "WATER";
+        }
+    }
+
     private int calculateModifiedDamage(Skill skill) {
         Element skillElement = skill.element;
         Element petElement = this.element;

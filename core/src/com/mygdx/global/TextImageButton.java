@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.mygdx.game.entities.Creature;
+import com.mygdx.game.entities.Skill;
 import com.mygdx.game.handlers.TextureHandler;
 
 public class TextImageButton extends ImageTextButton {
@@ -57,6 +58,19 @@ public class TextImageButton extends ImageTextButton {
         table.add(petImage).padLeft(15).width(screenwidth / 10).height(screenwidth / 10);
         table.add(textTable).expandX();
         // Add the table to the button
+        add(table).expand().fill();
+    }
+
+    public TextImageButton(Skill skill, Skin skin, int screenWidth) {
+        super(skill.getName(), skin);
+        clearChildren();
+
+        // create labels
+        Label nameLabel = new Label("Name: " + skill.getName(), skin);
+        Label skillDescription = new Label("Description: \n" + skill.getStatusDescription(), skin);
+
+        Table table = new Table();
+
         add(table).expand().fill();
     }
 
