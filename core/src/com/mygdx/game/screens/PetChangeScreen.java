@@ -95,7 +95,7 @@ public class PetChangeScreen implements Screen {
         errorStack.add(errorTable);
 
         stage.addActor(errorStack);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
     }
