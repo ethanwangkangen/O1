@@ -27,7 +27,10 @@ public class PetChangeScreen implements Screen {
     private Stage stage;
     private AssetManager manager;
     private Table table;
-    private Stack stack = new Stack();
+    private Stack topBarStack;
+    private Stack errorStack;
+    private Container container;
+    private Dialog errorMessage;
 
     private Skin skin;
     private Texture emptyBox;
@@ -77,18 +80,23 @@ public class PetChangeScreen implements Screen {
         createButtonList2();
         refreshTables();
         initialiseTopBar();
+        initialiseErrorMessage();
+
 
         table = new Table();
         table.setFillParent(true);
         table.setBackground(background);
 
-        table.add(stack).colspan(2).fillX().center().row();
+        table.add(topBarStack).colspan(2).fillX().center().row();
         table.add(new Label("Battle Pets", skin)).padTop(10);
         table.add(new Label("Reserve Pets", skin)).row();
         table.add(pane1).expand();
         table.add(pane2).expand().row();
 
-        stage.addActor(table);
+        errorStack.add(table);
+        errorStack.add(container);
+
+        stage.addActor(errorStack);
 //        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
@@ -96,10 +104,6 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        if (selectedButton1 != null && selectedButton2 != null) {
-//            swapSelectedButtons();
-//        }
-
         // draw screen
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
@@ -135,15 +139,16 @@ public class PetChangeScreen implements Screen {
 
     public void initialiseTopBar() {
         // Stack to overlay the label and the back button
+        topBarStack = new Stack();
 
         // Create the label for "Pet Change" and add it to the stack
         Label petChangeLabel = new Label("Pet Change", skin);
         petChangeLabel.setAlignment(center);
-        stack.add(petChangeLabel);
+        topBarStack.add(petChangeLabel);
 
         // Create a table for the back button and make it fill parent (right side)
         Table backButtonTable = new Table();
-        stack.add(backButtonTable);
+        topBarStack.add(backButtonTable);
 
         // Create the back button and add it to backButtonTable
         TextButton backButton = new TextButton("Save changes", skin);
@@ -157,6 +162,27 @@ public class PetChangeScreen implements Screen {
             }
         });
         backButtonTable.add(backButton).right().pad(10).expandX();
+    }
+
+    public void initialiseErrorMessage() {
+        errorStack = new Stack();
+        errorStack.setFillParent(true);
+
+        errorMessage = new Dialog("Error", skin);
+        errorMessage.text("Battle team cannot be empty");
+
+        Button button = new TextButton("Close", skin);
+//        button.addListener(new ClickListener() {
+//            @Override
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                errorMessage.show(stage);
+//                return super.touchDown(event, x, y, pointer, button);
+//            }
+//        });
+        errorMessage.button(button);
+
+        errorMessage.setVisible(false);
+        container = new Container(errorMessage);
     }
 
     public void initialiseScrollPanes() {
@@ -211,6 +237,7 @@ public class PetChangeScreen implements Screen {
         table1.clearChildren();
 //        table1.clear();
         for (TextImageButton button : buttonList1) {
+            button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
             table1.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
 
@@ -229,23 +256,53 @@ public class PetChangeScreen implements Screen {
         table2.clearChildren();
 //        table2.clear();
         for (TextImageButton button : buttonList2) {
+            button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
             table2.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
         }
         table2.invalidateHierarchy();
     }
 
+    private void clearTableSkin() {
+        for (TextImageButton button : buttonList1) {
+            button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
+        }
+        for (TextImageButton button : buttonList2) {
+            button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
+        }
+    }
 
     private void handleButtonClick(TextImageButton button, int listNumber) {
         if (listNumber == 1) {
+            int size = 0;
+            for (TextImageButton list1Button : buttonList1) {
+                if (list1Button.getPet() != null) {
+                    size += 1;
+                }
+            }
+            System.out.println("Size: " + size);
+
             System.out.println("button1 has been clicked");
             // Handle clicks for buttonList1
-            if (button == lastClickedButton && buttonList1.indexOf(button) != 0) {
+            if (button == lastClickedButton) {
                 // same button clicked twice in a row
-                // Move to list1 and replace with empty button
-                removeButtonFromList1(button);
-                selectedButton1 = null;
-                selectedButton2 = null;
-                lastClickedButton = null;
+                if (size > 1) {
+                    // list1 has > 1 pet
+                    // Move to list1 and replace with empty button
+                    removeButtonFromList1(button);
+                    selectedButton1 = null;
+                    selectedButton2 = null;
+                    lastClickedButton = null;
+                } else if (button.getPet() != null) {
+                    // list1 only has 1 pet; cannot remove further
+                    // button clicked is not empty button
+                    errorMessage.setVisible(true);
+                    errorMessage.show(stage);
+                    refreshTables();
+                    selectedButton1 = null;
+                    selectedButton2 = null;
+                    lastClickedButton = null;
+                }
+
             } else if (lastClickedButton != null) {
                 // 2 different buttons from buttonList1 have been clicked in succession
                 // swap these 2 buttons
@@ -257,12 +314,16 @@ public class PetChangeScreen implements Screen {
                 // Single click detected, update selected button
                 selectedButton1 = button;
                 lastClickedButton = button;
+                clearTableSkin();
+                button.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
             }
         } else if (listNumber == 2){
             System.out.println("button2 has been clicked");
             // Handle clicks for buttonList2
             lastClickedButton = null;
             selectedButton2 = button;
+            clearTableSkin();
+            button.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
         }
 
         // If both selected buttons are set, swap them
@@ -309,23 +370,22 @@ public class PetChangeScreen implements Screen {
         System.out.println("Index2: " + index2);
 
         if (index1 == -1) {
-            // array index out of bounds
             System.err.println("Error: selectedButton1 not found in buttonList1: " + button.getText());
             return;
         } else if (index2 == -1) {
-            // array index out of bounds
             System.err.println("Error: lastClickedButton not found in buttonList1: " + lastClickedButton.getText());
             return;
-        } else if (index1 == index2) {
-            // clicking on the same button in list1
-            System.out.println("Error lastClickedButton and selectedButton1 have the same index:"
-                     + "\nselectedButton1: " + button.getText()
-                     + "\nlastClickedButton: " + lastClickedButton.getText());
-            return;
-        } else if (lastClickedButton.getPet() == null || button.getPet() == null) {
-            // trying to swap an empty button in list1
-            System.out.println("Cannot swap empty button");
-            return;
+//        } else if (index1 == index2) {
+//            System.err.println("Error lastClickedButton and selectedButton1 have the same index:"
+//                     + "\nselectedButton1: " + button.getText()
+//                     + "\nlastClickedButton: " + lastClickedButton.getText());
+//            errorMessage.setVisible(true);
+//            errorMessage.show(stage);
+//            refreshTables();
+//            return;
+//        } else if (lastClickedButton.getPet() == null || button.getPet() == null) {
+//            System.out.println("Cannot swap empty button"); // changed
+//            return;
         }
 
         // Swap the buttons
