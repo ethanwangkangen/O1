@@ -31,8 +31,8 @@ import java.util.Objects;
 public class BattleScreen implements Screen {
 
     private Stage stage;
-    private Skin skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));;
-    private AssetManager manager;
+    private AssetManager manager = TextureHandler.getInstance().getAssetManager();
+    private Skin skin = manager.get("buttons/uiskin.json", Skin.class);
     private ExtendViewport extendViewport;
     private int screenWidth;
     private int screenHeight;
@@ -92,13 +92,10 @@ public class BattleScreen implements Screen {
 
     public BattleScreen(Game gameObj) {
         System.out.println("BattleScreen created");
-        skin.getFont("default-font").getData().setScale(3,3);
-
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
 
-        manager = TextureHandler.getInstance().getAssetManager();
         crossedBox = manager.get("crossedbox.png", Texture.class);
 
         //set stage
@@ -148,9 +145,9 @@ public class BattleScreen implements Screen {
         bgTable.add(pet2Info).right().padRight(50).uniform();
         bgTable.row();
 
-        bgTable.add(pet1imageTable).left().expandY().padLeft(50);
+        bgTable.add(pet1imageTable).left().expandY().padLeft(screenWidth / 20);
         bgTable.add();
-        bgTable.add(pet2imageTable).right().padRight(50);
+        bgTable.add(pet2imageTable).right().padRight(screenWidth / 20);
         bgTable.row();
 
         bgTable.add(changeTable).center();
@@ -270,7 +267,7 @@ public class BattleScreen implements Screen {
         changeTable.add(changeSkillButton).left().width(screenWidth / 9).height(screenHeight / 11);
         changeTable.row();
         changeTable.add(changePetButton).left().width(screenWidth / 9).height(screenHeight / 11);
-        changeTable.row();
+        changeTable.row().padTop(20);
         changeTable.add(skipButton).left().width(screenWidth / 9).height(screenHeight / 11);
 
         changePetButton.addListener(new ClickListener() {
@@ -384,7 +381,7 @@ public class BattleScreen implements Screen {
         if (index < thisPlayer.getBattlePets().size()) {
             // player has this pet (ie not out of bounds of arraylist)
             Creature pet = battlePets.get(index);
-            newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()));
+            newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
             if (pet.isAlive() && !Objects.equals(pet, thisPet)) {
                 newButton.setTouchable(Touchable.enabled);
                 // records if pet is available
@@ -396,7 +393,7 @@ public class BattleScreen implements Screen {
             }
         } else {
             // pet not owned
-            newButton = new TextImageButton("No pet owned", skin, crossedBox);
+            newButton = new TextImageButton("No pet owned", skin, crossedBox, screenWidth);
             newButton.setTouchable(Touchable.disabled);
             petAvailable[index] = false;
             newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
@@ -432,7 +429,6 @@ public class BattleScreen implements Screen {
     }
 
     public void setAllSkillTouchable() {
-
         // sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
             if (skillAvailable[i]) {
@@ -445,6 +441,7 @@ public class BattleScreen implements Screen {
                 petButtons.get(i).setTouchable(Touchable.enabled);
             }
         }
+        skipButton.setTouchable(Touchable.enabled);
     }
 
     public void setAllNotTouchable() {
@@ -455,6 +452,8 @@ public class BattleScreen implements Screen {
         for (TextImageButton button: petButtons) {
             button.setTouchable(Touchable.disabled);
         }
+
+        skipButton.setTouchable(Touchable.disabled);
     }
 
     /**

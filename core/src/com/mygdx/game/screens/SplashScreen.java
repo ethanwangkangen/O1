@@ -55,7 +55,7 @@ public class SplashScreen implements Screen {
         // Increase UI window to look nicer
         Skin skin = TextureHandler.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
         NinePatch dialogBack = skin.getPatch("default-window");
-        dialogBack.scale(5,50);
+//        dialogBack.scale(5,50);
 
         // Increase font size for use
         skin.getFont("default-font").getData().setScale(3,3);
