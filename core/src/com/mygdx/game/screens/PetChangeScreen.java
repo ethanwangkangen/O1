@@ -36,8 +36,8 @@ public class PetChangeScreen implements Screen {
     private TextureRegionDrawable background;
     private TextureRegionDrawable backgroundBox;
 
-    private int width = Gdx.graphics.getWidth();
-    private int height = Gdx.graphics.getHeight();
+    private int width;
+    private int height;
 
     // to be located on the left side of the screen
     // for pets that will be carried into battle by the player
@@ -61,7 +61,10 @@ public class PetChangeScreen implements Screen {
     public PetChangeScreen(DarwinsDuel gameObj) {
         System.out.println("PetChangeScreen created");
 
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
         stage = new Stage(new FillViewport(width, height));
+        Gdx.input.setInputProcessor(stage);
 
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
@@ -72,7 +75,6 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
 
         initialiseScrollPanes();
         createButtonList1();
@@ -81,6 +83,9 @@ public class PetChangeScreen implements Screen {
         initialiseTopBar();
         initialiseErrorMessage();
 
+        stack = new Stack();
+        stack.setFillParent(true);
+        stage.addActor(stack);
 
         table = new Table();
         table.setFillParent(true);
@@ -95,8 +100,7 @@ public class PetChangeScreen implements Screen {
         stack.add(table);
         stack.add(errorTable);
 
-        stage.addActor(stack);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
     }
@@ -164,22 +168,19 @@ public class PetChangeScreen implements Screen {
     }
 
     public void initialiseErrorMessage() {
-        stack = new Stack();
-        stack.setFillParent(true);
-
-        errorMessage = new Dialog("Error", skin) {
+        errorMessage = new Dialog("Error", skin)
+        {
             protected void result(Object obj) {
                 errorMessage.setVisible(false);
             }
         };
-        errorMessage.text("Battle team cannot be empty");
         errorMessage.button("Close");
 
         errorTable = new Table();
         errorTable.setFillParent(true);
+        errorTable.add(errorMessage).width((float)(width / 2)).height((float)(height / 2));
 
-        errorTable.add(errorMessage).width((float)(Gdx.graphics.getWidth() / 2)).height((float)(Gdx.graphics.getHeight() / 1.2));
-
+        errorMessage.text("Battle team cannot be empty").pad(5);
         errorMessage.setVisible(false);
     }
 
@@ -199,7 +200,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList1() {
 
         for (Creature pet: pets1) {
-            TextImageButton button = new TextImageButton(pet, skin);
+            TextImageButton button = new TextImageButton(pet, skin, width);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -215,7 +216,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList2() {
 
         for (Creature pet : pets2) {
-            TextImageButton button = new TextImageButton(pet, skin);
+            TextImageButton button = new TextImageButton(pet, skin, width);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -236,7 +237,7 @@ public class PetChangeScreen implements Screen {
 //        table1.clear();
         for (TextImageButton button : buttonList1) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
-            table1.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
+            table1.add(button).pad(5).size((float) (width / 3.5), (float) height / 4).row();
         }
 
         // Calculate how many empty buttons are needed
@@ -245,7 +246,7 @@ public class PetChangeScreen implements Screen {
         // for empty buttons to make 3 buttons
         for (int i = 0; i < emptyButtonCount; i ++) {
             TextImageButton emptyButton = createEmptyButton();
-            table1.add(emptyButton).pad(5).size((float) width / 4, (float) height / 4).row();
+            table1.add(emptyButton).pad(5).size((float) (width / 3.5), (float) height / 4).row();
             buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
@@ -255,7 +256,7 @@ public class PetChangeScreen implements Screen {
 //        table2.clear();
         for (TextImageButton button : buttonList2) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
-            table2.add(button).pad(5).size((float) width / 4, (float) height / 4).row();
+            table2.add(button).pad(5).size((float) (width / 3.5), (float) height / 4).row();
         }
         table2.invalidateHierarchy();
     }
@@ -294,7 +295,7 @@ public class PetChangeScreen implements Screen {
                     // list1 only has 1 pet; cannot remove further
                     // button clicked is not empty button
                     errorMessage.setVisible(true);
-                    errorMessage.show(stage);
+//                    errorMessage.show(stage);
                     refreshTables();
                     selectedButton1 = null;
                     selectedButton2 = null;
@@ -445,7 +446,7 @@ public class PetChangeScreen implements Screen {
     }
 
     public TextImageButton createEmptyButton() {
-        TextImageButton button = new TextImageButton("No pet", skin, emptyBox);
+        TextImageButton button = new TextImageButton("No pet", skin, emptyBox, width);
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
