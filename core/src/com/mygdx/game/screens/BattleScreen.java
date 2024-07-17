@@ -137,6 +137,7 @@ public class BattleScreen implements Screen {
         stack.setFillParent(true);
         stage.addActor(stack);
 
+
         turnLabel = new Label("Testing", skin);
         bgTable.add(turnLabel).center().colspan(3).padTop(50).top().expandY();
         bgTable.row();
@@ -358,9 +359,12 @@ public class BattleScreen implements Screen {
         if (skill != null) {
             newButton = new TextButton(skill.getName(), skin);
             newButton.setTouchable(Touchable.enabled);
+            newButton.setStyle(skin.get("default", TextButton.TextButtonStyle.class));
+
         } else {
-            newButton = new TextButton("No Skill Acquired", skin);
+            newButton = new TextButton("-", skin);
             newButton.setTouchable(Touchable.disabled);
+            newButton.setStyle(skin.get("clicked", TextButton.TextButtonStyle.class));
         }
         return newButton;
     }
@@ -397,8 +401,18 @@ public class BattleScreen implements Screen {
         if (index < thisPlayer.getBattlePets().size()) {
             // player has this pet (ie not out of bounds of arraylist)
             Creature pet = battlePets.get(index);
-            newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
-            if (pet.isAlive() && !Objects.equals(pet, thisPet)) {
+            newButton = new TextImageButton(pet.getName() + "\n(CURRENT)", skin, TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
+            if (Objects.equals(pet.getType(), thisPet.getType())) {
+                // pet is current pet
+
+            } else  {
+                newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
+            }
+            if (Objects.equals(pet, thisPet)) {
+                // this pet is current pet
+                newButton.setTouchable(Touchable.disabled);
+                petAvailable[index] = false;
+            } else if (pet.isAlive()) {
                 newButton.setTouchable(Touchable.enabled);
                 // records if pet is available
                 petAvailable[index] = true;
@@ -472,6 +486,21 @@ public class BattleScreen implements Screen {
         }
 
         skipButton.setTouchable(Touchable.disabled);
+    }
+
+    public void setAllNotVisible() {
+        petsWindow.setVisible(false);
+        skillsWindow.setVisible(false);
+        skipButton.setVisible(false);
+        changePetButton.setVisible(false);
+        changeSkillButton.setVisible(false);
+    }
+
+    public void setAllVisible() {
+        skillsWindow.setVisible(true);
+        skipButton.setVisible(true);
+        changePetButton.setVisible(true);
+        changeSkillButton.setVisible(true);
     }
 
     /**
@@ -553,6 +582,7 @@ public class BattleScreen implements Screen {
     @Override
     public void render(float delta) {
         handleBattleLogic();
+        handleTurnLogic();
         renderScreen();
     }
 
@@ -604,8 +634,6 @@ public class BattleScreen implements Screen {
                     initialisePetsWindow();
                     if (UserBattleHandler.petChanged()) {
                         schedulePetChangeCheck();
-                    } else {
-                        handleTurnLogic();
                     }
                 } else {
                     // Schedule another check if animations are still running
@@ -625,7 +653,6 @@ public class BattleScreen implements Screen {
                     initialisePetImages();
                     initialiseSkillsWindow();
                     initialisePetsWindow();
-                    handleTurnLogic();
                 } else {
                     // Schedule another check if animations are still running
                     schedulePetChangeCheck();
@@ -656,6 +683,7 @@ public class BattleScreen implements Screen {
         if (isMyTurn()) {
             // This player's turn
             setAllSkillTouchable();
+            setAllVisible();
             turnLabel.setText("Your Turn");
 
             if (thisPlayer.getCurrentPet().isStunned()) {
@@ -665,6 +693,7 @@ public class BattleScreen implements Screen {
         } else {
             // Opponent's turn
             setAllNotTouchable();
+            setAllNotVisible();
             turnLabel.setText("Opponent's Turn");
         }
     }
