@@ -181,7 +181,7 @@ public class LoginScreen implements Screen {
                                     MyClient.sendJoinServerEvent();
                                     System.out.println("playerJoinServerEvent sent");
 
-                                    DarwinsDuel.gameState = DarwinsDuel.GameState.ATTRIBUTE;
+                                    DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                                 }
                                 @Override
                                 public void onFailure() { //on failure of getPlayerFromFirebase
