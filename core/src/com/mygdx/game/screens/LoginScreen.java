@@ -265,7 +265,7 @@ public class LoginScreen implements Screen {
         signUpLabel = new Label("Sign Up", skin);
 
         usernameSField = new TextField("", skin);
-        usernameSField.setMessageText("Username");
+        usernameSField.setMessageText("Email");
 
         passwordSField = new TextField("", skin);
         passwordSField.setMessageText("Password");
