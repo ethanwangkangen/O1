@@ -9,6 +9,8 @@ public interface GameCommunication {
     void onQuitMapActivity();
 
     void onNPCReqReceived();
+
+    void onAttributeActivity();
 }
 
 /*
