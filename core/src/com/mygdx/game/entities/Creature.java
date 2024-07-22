@@ -130,7 +130,11 @@ public abstract class Creature extends Entity implements Serializable{
         return name;
     }
 
-    public String getLevel() {
+    public int getLevel() {
+        return this.level;
+    }
+
+    public String getLevelString() {
         if (this.level >= MAX_LEVEL) {
             return "MAX";
         } else {
