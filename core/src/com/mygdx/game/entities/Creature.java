@@ -9,8 +9,6 @@ public abstract class Creature extends Entity implements Serializable{
     //private boolean alive;
     private int maxhealth;
     private int health;
-    private int maxmana;
-    private int mana;
     private int exp;
     private int maxexp;
     private int level;
@@ -35,21 +33,17 @@ public abstract class Creature extends Entity implements Serializable{
 
     public Creature(){}
 
-    public Creature(int health, int mana, String name) {
+    public Creature(int health, String name) {
         this.maxhealth = health;
         this.health = health;
-        this.maxmana = mana;
-        this.mana = mana;
         //this.alive = true;
         this.level = 1;
         this.name = name;
     }
 
-    public Creature(int health, int mana, String name, Element element) {
+    public Creature(int health, String name, Element element) {
         this.maxhealth = health;
         this.health = health;
-        this.maxmana = mana;
-        this.mana = mana;
         this.exp = 0;
         this.maxexp = 10;
 
@@ -192,8 +186,6 @@ public abstract class Creature extends Entity implements Serializable{
             this.level += 1;
             this.maxhealth += 20;
             health = maxhealth;
-            this.maxmana += 20;
-            mana = maxmana;
 
             if (skill1 != null) {
                 skill1.levelUp();
