@@ -42,7 +42,7 @@ public class AttributeScreen implements Screen {
 
     private Skin skin;
     private TextureRegionDrawable background;
-    private TextureRegionDrawable backgroundBox;
+    private Texture backgroundBox;
     private Texture emptyBox;
 
     private int screenWidth;
@@ -71,7 +71,7 @@ public class AttributeScreen implements Screen {
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
-        backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
+        backgroundBox = manager.get("border.png", Texture.class);
         emptyBox = manager.get("crossedbox.png", Texture.class);
     }
 
@@ -162,7 +162,7 @@ public class AttributeScreen implements Screen {
 
         petsTable = new Table();
         for (Button button : buttonList) {
-            petsTable.add(button).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).padLeft(screenWidth / 20).padRight(screenWidth / 20);
+            petsTable.add(button).pad(5).padTop(0).size((float) (screenWidth / 3.5), (float) screenHeight / 4).padLeft(screenWidth / 20).padRight(screenWidth / 20);
             petsTable.row();
         }
 //        table1.setBackground(backgroundBox);
@@ -219,6 +219,7 @@ public class AttributeScreen implements Screen {
         Table topTable = new Table();
         Table petDescriptionTable = new Table();
 
+        petDescriptionTable.padTop(50).padLeft(50).padRight(50);
         petDescriptionTable.add(name);
         petDescriptionTable.row();
         petDescriptionTable.add(level);
@@ -226,9 +227,15 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.add(health);
         petDescriptionTable.row();
         petDescriptionTable.add(element);
+        petDescriptionTable.padBottom(50);
 
-        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5);
-        topTable.add(petDescriptionTable);
+        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(backgroundBox));
+        background.setMinHeight(0);
+        background.setMinWidth(0);
+        petDescriptionTable.setBackground(background);
+
+        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
+        topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));//.height((int)(screenHeight / 3.5));
 
         // create table for skills list and skill description
         Table bottomTable = new Table();

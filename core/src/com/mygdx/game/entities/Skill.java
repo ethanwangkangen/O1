@@ -12,6 +12,17 @@ public class Skill {
         STUN,
         NIL,
     }
+
+    public enum DamageDescription {
+        mild,
+        moderate,
+        high,
+        extreme,
+        NIL,
+    }
+
+    public DamageDescription damageDescription;
+
     public Status status;
 
     public int getDamage() {
@@ -27,6 +38,22 @@ public class Skill {
         this.damage = damage;
         this.element = element;
         this.status = status;
+
+        setDamageDescription(damage);
+    }
+
+    public void setDamageDescription(int damage) {
+        if (damage == 10) {
+            damageDescription = DamageDescription.mild;
+        } else if (damage == 20) {
+            damageDescription = DamageDescription.moderate;
+        } else if (damage == 30) {
+            damageDescription = DamageDescription.high;
+        } else if (damage == 50) {
+            damageDescription = DamageDescription.extreme;
+        } else {
+            damageDescription = DamageDescription.NIL;
+        }
     }
 
     public Skill() {}
@@ -36,31 +63,10 @@ public class Skill {
     }
 
     public String getDamageDescription() {
-        if (damage == 10) {
-            return "mild";
-        } else if (damage == 20) {
-            return "moderate";
-        } else if (damage == 30) {
-            return "high";
-        } else if (damage == 50) {
-            return "extreme";
-        } else {
-            return "Description not available";
-        }
+        return damageDescription.toString();
     }
 
     public String getStatusDescription() {
-
-//        if (status == Status.ABSORB) {
-//            return "ABSORB";
-//        } else if (status == Status.STUN) {
-//            return "STUN";
-//        } else if (status == Status.POISON) {
-//            return "POISON";
-//        } else {
-//            return "NIL";
-//        }
-
 
         if (status == Status.ABSORB) {
             return "Inflicts " + getDamageDescription() + " damage, and recover a portion of the damage dealt to the target as HP.";
