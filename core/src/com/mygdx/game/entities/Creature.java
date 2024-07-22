@@ -4,12 +4,11 @@ import java.io.Serializable;
 
 public abstract class Creature extends Entity implements Serializable{
 
+    private static final int MAX_LEVEL = 30;
 
     //private boolean alive;
     private int maxhealth;
     private int health;
-    private int maxmana;
-    private int mana;
     private int exp;
     private int maxexp;
     private int level;
@@ -34,21 +33,17 @@ public abstract class Creature extends Entity implements Serializable{
 
     public Creature(){}
 
-    public Creature(int health, int mana, String name) {
+    public Creature(int health, String name) {
         this.maxhealth = health;
         this.health = health;
-        this.maxmana = mana;
-        this.mana = mana;
         //this.alive = true;
         this.level = 1;
         this.name = name;
     }
 
-    public Creature(int health, int mana, String name, Element element) {
+    public Creature(int health, String name, Element element) {
         this.maxhealth = health;
         this.health = health;
-        this.maxmana = mana;
-        this.mana = mana;
         this.exp = 0;
         this.maxexp = 10;
 
@@ -135,48 +130,17 @@ public abstract class Creature extends Entity implements Serializable{
         return name;
     }
 
-    public int getLevel() {
-        return level;
+    public String getLevel() {
+        if (this.level >= MAX_LEVEL) {
+            return "MAX";
+        } else {
+            return Integer.toString(this.level);
+        }
     }
 
     public boolean isAlive() {
         return this.health > 0;
     }
-
-//    public void addSkill(int damage) {
-//        Skill newSkill = new Skill(damage);
-//        skillList.add(newSkill);
-//    }
-
-//    public Map<String, Object> toMap() {
-//        Map<String, Object> result = new HashMap<>();
-//        result.put("type", getType());
-//        // Add other properties
-//        return result;
-//    }
-
-//    public void loadTexture(Runnable callback) {
-//        Gdx.app.postRunnable(() -> {
-//            try {
-//                System.out.println("loading texture of creature");
-//                System.out.println("path is: " + path);
-//                this.texturePath = new Texture(path);
-//                if (this.texturePath == null) {
-//                    System.out.println("texturePath is null????");
-//                } else {
-//                    System.out.println("texturePath ok");
-//                }
-//                if (callback != null) {
-//                    callback.run();
-//                }
-//                System.out.println("finished loading creature texture");
-//
-//            } catch (Exception e) { // Catching general Exception for simplicity
-//                System.out.println(e.getMessage());
-//                System.out.println("Creature texture not loaded");
-//            }
-//        });
-//    }
 
     public int getMaxHealth() {
         return maxhealth;
@@ -184,7 +148,6 @@ public abstract class Creature extends Entity implements Serializable{
     public void setMaxHealth(int maxhealth) {
         this.maxhealth = maxhealth;
     }
-
 
     public int getHealth() {
         return health;
@@ -196,50 +159,51 @@ public abstract class Creature extends Entity implements Serializable{
     public void update(Creature pet) {
         this.health = pet.getHealth();
         this.maxhealth = pet.getMaxHealth();
-//        alive = pet.isAlive();
-//      update mana, level, skills in the future
+
         this.poisonTurn = pet.poisonTurn;
         this.stunTurn = pet.stunTurn;
     }
 
     public void gainEXP(int i) {
-        this.exp += i;
+        if (this.level < MAX_LEVEL) {
+            this.exp += i;
+        }
+
         while (exp >= maxexp) {
             this.levelUp();
         }
     }
 
     private void levelUp() {
-        System.out.println(this.name + " has levelled up");
+        if (this.level < MAX_LEVEL) {
+            System.out.println(this.name + " has levelled up");
 
-        exp -= maxexp;
-        maxexp += 10;
+            exp -= maxexp;
+            maxexp += 10;
 
-        if (exp < 0) {
-            System.err.println("Bug: exp is less than 0");
-            exp = 0;
-            return;
+            if (exp < 0) {
+                System.err.println("Bug: exp is less than 0");
+                exp = 0;
+                return;
+            }
+
+            this.level += 1;
+            this.maxhealth += 20;
+            health = maxhealth;
+
+            if (skill1 != null) {
+                skill1.levelUp();
+                System.out.println(skill1.name + " has levelled up");
+            }
+            if (skill2 != null) {
+                skill2.levelUp();
+                System.out.println(skill2.name + " has levelled up");
+            }
+            if (skill3 != null) {
+                skill3.levelUp();
+                System.out.println(skill3.name + " has levelled up");
+            }
         }
-
-        this.level += 1;
-        this.maxhealth += 20;
-        health = maxhealth;
-        this.maxmana += 20;
-        mana = maxmana;
-
-        if (skill1 != null) {
-            skill1.levelUp();
-            System.out.println(skill1.name + " has levelled up");
-        }
-        if (skill2 != null) {
-            skill2.levelUp();
-            System.out.println(skill2.name + " has levelled up");
-        }
-        if (skill3 != null) {
-            skill3.levelUp();
-            System.out.println(skill3.name + " has levelled up");
-        }
-
     }
 
     public void setLevel(int i) {
