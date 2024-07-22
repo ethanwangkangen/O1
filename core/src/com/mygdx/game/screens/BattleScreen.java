@@ -204,8 +204,8 @@ public class BattleScreen implements Screen {
                 TextureHandler.getInstance().getAnimationTextureAttack(opponentPet.getType()),
                 TextureHandler.getInstance().getAnimationJsonAttack(opponentPet.getType()));
 
-        pet1imageTable.add(animationActor1).height(screenWidth / 6).width(screenWidth / 6);
-        pet2imageTable.add(animationActorFlip).height(screenWidth / 6).width(screenWidth / 6);
+        pet1imageTable.add(animationActor1).height(screenWidth / 6).width(screenWidth / 6).padTop(screenHeight / 20);
+        pet2imageTable.add(animationActorFlip).height(screenWidth / 6).width(screenWidth / 6).padTop(screenHeight / 20);
     }
 
     public void initialisePetInfo() {
