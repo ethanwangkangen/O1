@@ -158,7 +158,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("ethanwangkangen@gmail.com", "ethan20nov", new AuthResultCallback() {
+                    authService1.signIn("ethankewang@gmail.com", "ethanwang", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -265,7 +265,7 @@ public class LoginScreen implements Screen {
         signUpLabel = new Label("Sign Up", skin);
 
         usernameSField = new TextField("", skin);
-        usernameSField.setMessageText("Username");
+        usernameSField.setMessageText("Email");
 
         passwordSField = new TextField("", skin);
         passwordSField.setMessageText("Password");
