@@ -40,6 +40,7 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		intentFilter.addAction("sending battle req");
 		intentFilter.addAction("quit map activity");
 		intentFilter.addAction("sending NPC req");
+		intentFilter.addAction("attribute activity");
 		LocalBroadcastManager.getInstance(this).registerReceiver(receiver, intentFilter);
 
 		// Initialize Firebase

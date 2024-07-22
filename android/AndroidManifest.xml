@@ -39,6 +39,9 @@
             <intent-filter>
                 <action android:name="sending battle req" />
                 <action android:name="quit map activity" />
+                <action android:name="quit map activity" />
+                <action android:name="attribute activity" />
+
             </intent-filter>
         </receiver>
 
