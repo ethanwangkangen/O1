@@ -76,6 +76,12 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	}
 
 	@Override
+	public void onAttributeActivity() {
+		System.out.println("changing screen to AttributeScreen");
+		gameState = GameState.ATTRIBUTE;
+	}
+
+	@Override
 	public void onNPCReqReceived() {
 		MyClient.sendNPCReq();
 	}
