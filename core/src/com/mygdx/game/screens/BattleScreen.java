@@ -459,7 +459,7 @@ public class BattleScreen implements Screen {
         }
     }
 
-    public void setAllSkillTouchable() {
+    public void setAllTouchable() {
         // sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
             if (skillAvailable[i]) {
@@ -582,7 +582,9 @@ public class BattleScreen implements Screen {
     @Override
     public void render(float delta) {
         handleBattleLogic();
-        handleTurnLogic();
+        if (!healthBar1.isAnimating() && !healthBar2.isAnimating()) {
+            handleTurnLogic();
+        }
         renderScreen();
     }
 
@@ -610,6 +612,7 @@ public class BattleScreen implements Screen {
 
                 scheduleHealthBarCheck(); // Schedule the task to check health bar animations
             } else if (UserBattleHandler.petChanged()) {
+                updatePetInfo();
                 initialisePets();
                 System.out.println("A pet change has occurred.");
                 schedulePetChangeCheck(); // Schedule the task to handle pet changes
@@ -682,14 +685,14 @@ public class BattleScreen implements Screen {
     private void handleTurnLogic() {
         if (isMyTurn()) {
             // This player's turn
-            setAllSkillTouchable();
-            setAllVisible();
-            turnLabel.setText("Your Turn");
-
+            setAllTouchable();
             if (thisPlayer.getCurrentPet().isStunned()) {
                 // Current pet is stunned; disable skill buttons
                 setSkillNotTouchable();
             }
+            setAllVisible();
+            turnLabel.setText("Your Turn");
+
         } else {
             // Opponent's turn
             setAllNotTouchable();
@@ -707,106 +710,6 @@ public class BattleScreen implements Screen {
         this.stage.act();
         this.stage.draw();
     }
-
-
-//    @Override
-//    public void render(float delta) {
-//
-//        //logic for battle
-//        if (UserBattleHandler.updatePetInfo) {
-//            // new battleState has been received
-//            initialisePlayers();
-//            // for both attacking and changing pets updates
-//
-//            // pet has attacked
-//            if (UserBattleHandler.petAttacked()) {
-//                System.out.println("A pet has attacked.");
-//
-//                if (!isMyTurn()) {
-//                    animationActor1.startAttack();
-//                } else {
-//                    animationActorFlip.startAttack();
-//                }
-//
-////                animationCompleteTask  = new Timer.Task() {
-////                    @Override
-////                    public void run() {
-////                        updatePetInfo();
-////                        initialisePetImages();
-////                        initialiseSkillsWindow();
-////                        initialisePetsWindow();
-////                    }
-////                };
-////                Timer.schedule(animationCompleteTask, 0.5f); // Delay of 1 second (adjust as needed)
-//                updatePetInfo();
-//                initialisePetImages();
-//                initialiseSkillsWindow();
-//                initialisePetsWindow();
-//
-//                while (healthBar1.isAnimating() || healthBar2.isAnimating()) {
-//
-//                }
-//            }
-//
-//            // pet change has occurred
-//            if (UserBattleHandler.petChanged()) {
-//                System.out.println("A pet change has occurred.");
-//
-//                initialisePetInfo();
-//                initialisePetImages();
-//                initialiseSkillsWindow();
-//                initialisePetsWindow();
-//            }
-//
-//            UserBattleHandler.updatePetInfo = false;
-//        }
-//
-//        // battle has ended
-//        if (UserBattleHandler.battleEnd) {
-//            setAllNotTouchable();
-//            if (!endBattleTextRendered) {
-//                if (thisPlayer.isAlive()) {
-//                    // You have won !!
-//                    endBattleDialog.text("You have achieved victory").pad(5);
-//                    UserPlayerHandler.wonBattle();
-//                } else {
-//                    // You have lost
-//                    endBattleDialog.text("You have lost ... noob.\nTry harder next time").pad(5);
-//                    UserPlayerHandler.lostBattle();
-//                }
-//                endBattleTextRendered = true;
-//            }
-//            endBattleDialog.setVisible(true);
-//        }
-//
-//        // enable/disable skillButtons
-//        if (isMyTurn()) {
-//            // this player's turn
-//            setAllSkillTouchable();
-//            turnLabel.setText("Your Turn");
-//
-//            if (thisPlayer.getCurrentPet().isStunned()) {
-//                // current pet is stunned; disable skill buttons
-//                setSkillNotTouchable();
-//            }
-//
-//        } else {
-//            // opponent's turn
-//            setAllNotTouchable();
-//            turnLabel.setText("Opponent's Turn");
-//        }
-//
-//
-//        // draw screen
-//        Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
-//        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
-//
-//        // Clear the stage
-//
-//        this.stage.getViewport().apply();
-//        this.stage.act();
-//        this.stage.draw();
-//    }
 
     @Override
     public void resize(int width, int height) {
