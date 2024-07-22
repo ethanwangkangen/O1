@@ -209,7 +209,7 @@ public class AttributeScreen implements Screen {
 
         Image image = new Image(new TextureRegion(TextureHandler.getInstance().getTexture(pet.getType())));
         Label name = new Label("Name: " + pet.getName(), skin);
-        Label level = new Label("Level: " + pet.getLevel(), skin);
+        Label level = new Label("Level: " + pet.getLevelString(), skin);
         Label element = new Label("Element: " + pet.getElementString(), skin);
         Label health = new Label("Health: " + pet.getMaxHealth(), skin);
 

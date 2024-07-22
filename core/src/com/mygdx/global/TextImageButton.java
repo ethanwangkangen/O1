@@ -40,7 +40,7 @@ public class TextImageButton extends ImageTextButton {
 
         // Create labels
         Label nameLabel = new Label(pet.getName(), skin);
-        Label additionalLabel = new Label("(" + pet.getLevel() + ") " + pet.element, skin);
+        Label additionalLabel = new Label("(" + pet.getLevelString() + ") " + pet.element, skin);
 
         // Clear children from the button
         clearChildren();
