@@ -42,6 +42,12 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             if (gameCommunication != null) {
                 gameCommunication.onNPCReqReceived();
             }
+        } else if ("attribute activity".equals(action)) {
+            System.out.println("Quitting map");
+            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
+            if (gameCommunication != null) {
+                gameCommunication.onAttributeActivity();
+            }
         }
     }
 }

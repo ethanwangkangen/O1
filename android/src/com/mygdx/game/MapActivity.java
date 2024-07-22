@@ -105,6 +105,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+        // Attribute button
+        Button attributeButton = findViewById(R.id.attribute_button);
+        attributeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Exit the activity
+                sendAttributeToLibGDX();
+                finish();
+            }
+        });
+
         // Fight button
         Button fightButton = findViewById(R.id.fight_button);
         fightButton.setOnClickListener(new View.OnClickListener() {
@@ -477,6 +488,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void sendQuitToLibGDX() {
         Intent intent = new Intent("quit map activity");
         System.out.println("Going to Pet change screen");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void sendAttributeToLibGDX() {
+        Intent intent = new Intent("attribute activity");
+        System.out.println("Going to attribute screen");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
