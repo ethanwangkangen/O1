@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Creature extends Entity implements Serializable{
 
-//    private static final int MAX_LEVEL = 30;
+    private static final int MAX_LEVEL = 30;
 
     //private boolean alive;
     private int maxhealth;
@@ -130,8 +130,12 @@ public abstract class Creature extends Entity implements Serializable{
         return name;
     }
 
-    public int getLevel() {
-        return level;
+    public String getLevel() {
+        if (this.level >= MAX_LEVEL) {
+            return "MAX";
+        } else {
+            return Integer.toString(this.level);
+        }
     }
 
     public boolean isAlive() {
@@ -161,7 +165,7 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     public void gainEXP(int i) {
-        if (this.level < 30) {
+        if (this.level < MAX_LEVEL) {
             this.exp += i;
         }
 
@@ -171,7 +175,7 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     private void levelUp() {
-        if (this.level < 30) {
+        if (this.level < MAX_LEVEL) {
             System.out.println(this.name + " has levelled up");
 
             exp -= maxexp;
