@@ -30,20 +30,20 @@ public class Skill {
         this.element = element;
         this.status = status;
 
-        setDamageDescription(damage);
+        this.damageDescription = setDamageDescription(damage);
     }
 
-    public void setDamageDescription(int damage) {
+    public String setDamageDescription(int damage) {
         if (damage == 10) {
-            damageDescription = "MILD";
+            return damageDescription = "MILD";
         } else if (damage == 20) {
-            damageDescription = "MODERATE";
+            return damageDescription = "MODERATE";
         } else if (damage == 30) {
-            damageDescription = "HIGH";
+            return damageDescription = "HIGH";
         } else if (damage == 50) {
-            damageDescription = "EXTREME";
+            return damageDescription = "EXTREME";
         } else {
-            damageDescription = "NIL";
+            return damageDescription = "NIL";
         }
     }
 
