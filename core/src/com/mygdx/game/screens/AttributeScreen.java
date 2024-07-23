@@ -258,7 +258,15 @@ public class AttributeScreen implements Screen {
     public Button createSkillButton(Skill skill) {
         Button button;
         if (skill != null) {
-            button = new TextButton(skill.getName(), skin);
+            if (skill.status == Skill.Status.ABSORB) {
+                button = new TextImageButton(skill.getName(), manager.get("absorb_effect.png", Texture.class), skin, screenWidth);
+            } else if (skill.status == Skill.Status.POISON) {
+                button = new TextImageButton(skill.getName(), manager.get("poison_effect.png", Texture.class), skin, screenWidth);
+            } else if (skill.status == Skill.Status.STUN) {
+                button = new TextImageButton(skill.getName(), manager.get("stun_effect.png", Texture.class), skin, screenWidth);
+            } else {
+                button = new TextButton(skill.getName(), skin);
+            }
         } else {
             button = new TextButton("-", skin);
             button.setTouchable(Touchable.disabled);
@@ -268,7 +276,7 @@ public class AttributeScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // set skill button clicked red
                 clearSkillStyle();
-                TextButton thisButton = (TextButton) event.getListenerActor();
+                Button thisButton = (Button) event.getListenerActor();
                 thisButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
 
                 // display description of skill of button pressed
@@ -286,11 +294,11 @@ public class AttributeScreen implements Screen {
         skillButton2 = createSkillButton(pet.skill2);
         skillButton3 = createSkillButton(pet.skill3);
 
-        table.add(skillButton1).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+        table.add(skillButton1).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
 //        table.row().padBottom(5);
-        table.add(skillButton2).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+        table.add(skillButton2).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
 //        table.row().padBottom(5);
-        table.add(skillButton3).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
+        table.add(skillButton3).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
 //        table.row().padBottom(5);
 
         return new ScrollPane(table);
