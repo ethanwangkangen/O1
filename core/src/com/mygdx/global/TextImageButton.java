@@ -26,7 +26,7 @@ public class TextImageButton extends ImageTextButton {
         super(text, skin);
         clearChildren();
         add(getLabel());
-        add(new Image(texture)).padLeft(5).height(screenWidth / 22).width(screenWidth / 22);
+        add(new Image(texture)).padLeft(5).height(screenWidth / 25).width(screenWidth / 25);
     }
 
     public TextImageButton(String text, Skin skin) {

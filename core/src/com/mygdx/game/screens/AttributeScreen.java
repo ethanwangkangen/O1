@@ -154,12 +154,6 @@ public class AttributeScreen implements Screen {
         topBarStack.add(backButtonTable);
         backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).expandX();
         topBarStack.add(topLabel);
-
-        // set background for bottomTable
-        TextureRegionDrawable bottomTableBackground = new TextureRegionDrawable(new TextureRegion(backgroundBox));
-        bottomTableBackground.setMinHeight(0);
-        bottomTableBackground.setMinWidth(0);
-        backButtonTable.setBackground(bottomTableBackground);
     }
 
     public void initialiseScrollPanes() {
