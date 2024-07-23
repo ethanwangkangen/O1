@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,8 +29,6 @@ import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class AttributeScreen implements Screen {
@@ -43,7 +40,7 @@ public class AttributeScreen implements Screen {
     private Skin skin;
     private TextureRegionDrawable background;
     private Texture backgroundBox;
-    private Texture emptyBox;
+    private Texture backgroundBrown;
 
     private int screenWidth;
     private int screenHeight;
@@ -72,7 +69,7 @@ public class AttributeScreen implements Screen {
         skin = manager.get("buttons/uiskin.json", Skin.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
         backgroundBox = manager.get("border.png", Texture.class);
-        emptyBox = manager.get("crossedbox.png", Texture.class);
+        backgroundBrown = manager.get("brownBorder.png", Texture.class);
     }
 
     @Override
@@ -139,11 +136,7 @@ public class AttributeScreen implements Screen {
         // Create the label for "Pet Change" and add it to the stack
         Label topLabel = new Label("Pet Attributes", skin);
         topLabel.setAlignment(center);
-        topBarStack.add(topLabel);
 
-        // Create a table for the back button and make it fill parent (right side)
-        Table backButtonTable = new Table();
-        topBarStack.add(backButtonTable);
 
         // Create the back button and add it to backButtonTable
         TextButton backButton = new TextButton("Back", skin);
@@ -155,7 +148,18 @@ public class AttributeScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+
+        // Create a table for the back button and make it fill parent (right side)
+        Table backButtonTable = new Table();
+        topBarStack.add(backButtonTable);
         backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).expandX();
+        topBarStack.add(topLabel);
+
+        // set background for bottomTable
+        TextureRegionDrawable bottomTableBackground = new TextureRegionDrawable(new TextureRegion(backgroundBox));
+        bottomTableBackground.setMinHeight(0);
+        bottomTableBackground.setMinWidth(0);
+        backButtonTable.setBackground(bottomTableBackground);
     }
 
     public void initialiseScrollPanes() {
@@ -229,15 +233,16 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.add(element);
         petDescriptionTable.padBottom(50);
 
-        TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(backgroundBox));
-        background.setMinHeight(0);
-        background.setMinWidth(0);
-        petDescriptionTable.setBackground(background);
+        // set background for petDescriptionTable
+        TextureRegionDrawable petDescriptionTableBackground = new TextureRegionDrawable(new TextureRegion(backgroundBrown));
+        petDescriptionTableBackground.setMinHeight(0);
+        petDescriptionTableBackground.setMinWidth(0);
+        petDescriptionTable.setBackground(petDescriptionTableBackground);
 
         topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
         topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));//.height((int)(screenHeight / 3.5));
 
-        // create table for skills list and skill description
+        // create bottom table for skills list and skill description
         Table bottomTable = new Table();
         ScrollPane pane = createSkillTable(pet);
         bottomTable.add(pane);
