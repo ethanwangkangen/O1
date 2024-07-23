@@ -1,7 +1,5 @@
 package com.mygdx.game.entities;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 public class Skill {
     public String name;
     public int damage;
@@ -13,15 +11,8 @@ public class Skill {
         NIL,
     }
 
-    public enum DamageDescription {
-        mild,
-        moderate,
-        high,
-        extreme,
-        NIL,
-    }
 
-    public DamageDescription damageDescription;
+    public String damageDescription;
 
     public Status status;
 
@@ -44,15 +35,15 @@ public class Skill {
 
     public void setDamageDescription(int damage) {
         if (damage == 10) {
-            damageDescription = DamageDescription.mild;
+            damageDescription = "MILD";
         } else if (damage == 20) {
-            damageDescription = DamageDescription.moderate;
+            damageDescription = "MODERATE";
         } else if (damage == 30) {
-            damageDescription = DamageDescription.high;
+            damageDescription = "HIGH";
         } else if (damage == 50) {
-            damageDescription = DamageDescription.extreme;
+            damageDescription = "EXTREME";
         } else {
-            damageDescription = DamageDescription.NIL;
+            damageDescription = "NIL";
         }
     }
 
@@ -63,7 +54,7 @@ public class Skill {
     }
 
     public String getDamageDescription() {
-        return damageDescription.toString();
+        return damageDescription;
     }
 
     public String getStatusDescription() {

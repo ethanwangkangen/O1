@@ -68,7 +68,6 @@ public class MyClient {
         myClient.getKryo().register(Creature.Element.class);
         myClient.getKryo().register(Skill.class);
         myClient.getKryo().register(Skill.Status.class);
-        myClient.getKryo().register(Skill.DamageDescription.class);
         myClient.getKryo().register(TextImageButton.class);
         myClient.getKryo().register(String.class);
 
