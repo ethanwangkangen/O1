@@ -67,7 +67,6 @@ public class ServerFoundation {
         server.getKryo().register(Creature.Element.class); // added
         server.getKryo().register(Skill.class);
         server.getKryo().register(Skill.Status.class);
-        server.getKryo().register(Skill.DamageDescription.class);
         server.getKryo().register(TextImageButton.class);
         server.getKryo().register(String.class);
 
