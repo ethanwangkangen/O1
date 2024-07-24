@@ -143,7 +143,6 @@ public class AttributeScreen implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // todo confirm which screen to return to
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -234,7 +233,7 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.setBackground(petDescriptionTableBackground);
 
         topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
-        topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));//.height((int)(screenHeight / 3.5));
+        topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));
 
         // create bottom table for skills list and skill description
         Table bottomTable = new Table();
@@ -294,11 +293,8 @@ public class AttributeScreen implements Screen {
         skillButton3 = createSkillButton(pet.skill3);
 
         table.add(skillButton1).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
         table.add(skillButton2).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
         table.add(skillButton3).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
 
         return new ScrollPane(table);
     }

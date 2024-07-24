@@ -17,8 +17,8 @@ import com.mygdx.game.handlers.TextureHandler;
 public class SplashScreen implements Screen {
 
     Texture background = new Texture("mainscreen.png");
-    Stage stage = new Stage();
-    Table table = new Table();
+    Stage stage;
+    Table table;
 
     public SplashScreen(Game gameobj) {
         this.stage = new Stage();
@@ -46,16 +46,10 @@ public class SplashScreen implements Screen {
         stage.draw();
         stage.act(delta);
 
-//        if (TextureHandler.getInstance().getAssetManager().update()) {
-//            DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
-//        }
-
         TextureHandler.getInstance().getAssetManager().finishLoading(); //this is blocking so EVERYTHING will be loaded first
 
         // Increase UI window to look nicer
         Skin skin = TextureHandler.getInstance().getAssetManager().get("buttons/uiskin.json", Skin.class);
-        NinePatch dialogBack = skin.getPatch("default-window");
-//        dialogBack.scale(5,50);
 
         // Increase font size for use
         skin.getFont("default-font").getData().setScale(3,3);
