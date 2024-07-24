@@ -143,14 +143,14 @@ public class BattleScreen implements Screen {
         bgTable.add(turnLabel).center().colspan(3).padTop(screenHeight / 30).top();
         bgTable.row();
 
-        bgTable.add(pet1Info).left().padLeft(screenHeight / 15).uniform();
-        bgTable.add().uniform().expandX();
-        bgTable.add(pet2Info).right().padRight(screenHeight / 15).uniform();
-        bgTable.row();
-
         bgTable.add(pet1imageTable).left().padLeft(screenWidth / 17);
         bgTable.add();
         bgTable.add(pet2imageTable).right().padRight(screenWidth / 17);
+        bgTable.row();
+
+        bgTable.add(pet1Info).left().padLeft(screenHeight / 15).uniform();
+        bgTable.add().uniform().expandX();
+        bgTable.add(pet2Info).right().padRight(screenHeight / 15).uniform();
         bgTable.row();
 
         bgTable.add(changeTable).center().expandY();
