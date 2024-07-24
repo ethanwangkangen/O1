@@ -39,7 +39,6 @@ public class AttributeScreen implements Screen {
 
     private Skin skin;
     private TextureRegionDrawable background;
-    private Texture backgroundBox;
     private Texture backgroundBrown;
 
     private int screenWidth;
@@ -68,7 +67,6 @@ public class AttributeScreen implements Screen {
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
-        backgroundBox = manager.get("border.png", Texture.class);
         backgroundBrown = manager.get("brownBorder.png", Texture.class);
     }
 
@@ -88,7 +86,7 @@ public class AttributeScreen implements Screen {
         table.add(infoTable).expand().fill();
 
         stage.addActor(table);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
         System.out.println("AttributeScreen shown");
     }
@@ -143,6 +141,7 @@ public class AttributeScreen implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("back button pressed");
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }
@@ -150,9 +149,9 @@ public class AttributeScreen implements Screen {
 
         // Create a table for the back button and make it fill parent (right side)
         Table backButtonTable = new Table();
+        topBarStack.add(topLabel);
         topBarStack.add(backButtonTable);
         backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).expandX();
-        topBarStack.add(topLabel);
     }
 
     public void initialiseScrollPanes() {
