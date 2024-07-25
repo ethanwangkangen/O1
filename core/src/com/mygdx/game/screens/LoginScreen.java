@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -31,6 +32,7 @@ public class LoginScreen implements Screen {
     private Stage stage;
     private AssetManager manager;
     Drawable background;
+    Drawable backgroundBrown;
 
     private final Table loginTable = new Table();
     private final Table signupTable = new Table();
@@ -61,45 +63,14 @@ public class LoginScreen implements Screen {
 
         authService1 = gameObj.authService; //  has error in intellij. taking Authservice from services instead of game
 
-//        //to check if use is signed in:
-//        authService1.isUserSignedIn();
-//        //to sign out:
-//        authService1.signOut();
-
-        //for testing: start
-//        authService1.signIn("testing@gmail.com", "password123", new AuthResultCallback() {
-//            @Override
-//            public void onSuccess() { //on success of signIn
-//                System.out.println("Player has logged in");
-//                authService1.getPlayerFromFirebase(new PlayerCallback() {
-//                    @Override
-//                    public void onCallback(Player player) { //on success of getPlayerFromFirebase
-//                        PlayerHandler.updatePlayer(player);
-//                        String userId = authService1.getUserId(); //get unique Id from firebase
-//                        PlayerHandler.updateIdOfPlayer(userId);
-//                        connectToServer();
-//                    }
-//                    @Override
-//                    public void onFailure() { //on failure of getPlayerFromFirebase
-//                        // todo what if getPlayerFromFirebase fails
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onFailure(Exception exception) { //on failure of signIn
-//                errorLabel.setText("Login failed: " + exception.getLocalizedMessage());
-//                Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
-//            }
-//        });
-//
-         //for testing: end
-
         System.out.println("LoginScreen created");
         manager = TextureHandler.getInstance().getAssetManager();
-        background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));;
+        background = new TextureRegionDrawable(manager.get("mainscreen.png", Texture.class));
+        backgroundBrown = new TextureRegionDrawable(manager.get("brownBorder.png", Texture.class));
         stage = new Stage(new FitViewport(width, height));
         skin = manager.get("buttons/uiskin.json", Skin.class);
+        backgroundBrown.setMinHeight(0);
+        backgroundBrown.setMinWidth(0);
 
         // initialise tables
         initialiseErrorLabel();
@@ -115,8 +86,7 @@ public class LoginScreen implements Screen {
         stack.add(signupTable);
 
         stage.addActor(stack);
-//        stage.setDebugAll(true);  for testing
-
+//        stage.setDebugAll(true);
     }
 
     public void initialiseBgTable() {
@@ -133,8 +103,6 @@ public class LoginScreen implements Screen {
 
     public void initialiseLoginTable() {
         // login table
-        loginTable.setFillParent(true);
-
         loginLabel = new Label("Login", skin);
 
         usernameLField = new TextField("", skin);
@@ -158,7 +126,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("sk3@gmail.com", "123456", new AuthResultCallback() {
+                    authService1.signIn("sk2@gmail.com", "123456", new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");
@@ -197,42 +165,8 @@ public class LoginScreen implements Screen {
                     });
                 }
                 return super.touchDown(event, x, y, pointer, button);
-                //create client, connect client to server. start battle
             }
         });
-//                if (isValidInput(email, password)) {
-//                    //to Login:
-//                    authService1.signIn(email, password, new AuthResultCallback() {
-//                        @Override
-//                        public void onSuccess() { //on success of signIn
-//                            System.out.println("Player has logged in");
-//                            authService1.getPlayerFromFirebase(new PlayerCallback() {
-//                                @Override
-//                                public void onCallback(Player player) { //on success of getPlayerFromFirebase
-//                                    UserPlayerHandler.updatePlayer(player);
-//                                    String userId = authService1.getUserId(); //get unique Id from firebase
-//                                    UserPlayerHandler.updateIdOfPlayer(userId);
-//
-//                                    MyClient.connectToServer();
-//                                    DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
-//                                }
-//                                @Override
-//                                public void onFailure() { //on failure of getPlayerFromFirebase
-//                                    // todo what if getPlayerFromFirebase fails
-//                                }
-//                            });
-//                        }
-//                        @Override
-//                        public void onFailure(Exception exception) { //on failure of signIn
-//                            loginErrorLabel.setText("Login failed: " + exception.getLocalizedMessage());
-//                            Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
-//                        }
-//                    });
-//                }
-//                return super.touchDown(event, x, y, pointer, button);
-//                //create client, connect client to server. start battle
-//            }
-//        });
 
         changeToSignUp = new TextButton("Sign up", skin);
         changeToSignUp.addListener(new ClickListener() {
@@ -247,20 +181,27 @@ public class LoginScreen implements Screen {
             }
         });
 
+        Table table = new Table();
+        table.setBackground(backgroundBrown);
+        table.add(loginLabel).colspan(3).expandX().padTop(height / 30);
+        table.row().pad(height / 50);
+        table.add(usernameLField).width(width / 4).height(height / 12).colspan(3);
+        table.row().pad(10);
+        table.add(passwordLField).width(width / 4).height(height / 12).colspan(3);
+        table.row().pad(height / 20);
+        table.add().uniform();
+        table.add(loginButton).size(width / 10, height / 12).uniform();
+        table.add(changeToSignUp).uniform().size(width / 10, height / 12);
+
         loginTable.clear();
-        loginTable.add(loginLabel).colspan(3).expandX().row();
-        loginTable.add(usernameLField).width(500).height(80).padTop(50).colspan(3).row();
-        loginTable.add(passwordLField).width(500).height(80).padTop(10).colspan(3).row();
-        loginTable.add().padTop(100).uniform();
-        loginTable.add(loginButton).size(200, 80).uniform();
-        loginTable.add(changeToSignUp).uniform().top().row();
-        loginTable.add(loginErrorLabel).colspan(3).center().row();
+        loginTable.add(table);
+        loginTable.row();
+        loginTable.add(loginErrorLabel);
         loginTable.setVisible(true);
     }
 
     public void initialiseSignUpTable() {
         // sign up table
-        signupTable.setFillParent(true);
 
         signUpLabel = new Label("Sign Up", skin);
 
@@ -301,7 +242,7 @@ public class LoginScreen implements Screen {
                             UserPlayerHandler.updateIdOfPlayer(userId);
 
                             MyClient.sendJoinServerEvent();
-                            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
+                            DarwinsDuel.gameState = DarwinsDuel.GameState.WELCOME;
                         }
                         @Override
                         public void onFailure(Exception exception) {
@@ -312,36 +253,6 @@ public class LoginScreen implements Screen {
                     });
                 }
                 return super.touchDown(event, x, y, pointer, button);
-
-//                if (isValidInput(email, password)) {
-//                    //to sign up/register:
-//                    authService1.signUp(email, password, new AuthResultCallback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            //change login screen to game screen or wtv
-//                            Player newPlayer = new Player();
-//                            newPlayer.setUsername(usernameSField.getText());
-//                            authService1.sendPlayerToFirebase(newPlayer);
-//
-//                            System.out.println("Registered player successfully");
-//                            UserPlayerHandler.updatePlayer(newPlayer);
-//
-//                            String userId = authService1.getUserId(); //get unique Id from firebase
-//                            UserPlayerHandler.updateIdOfPlayer(userId);
-//
-//                            MyClient.connectToServer();
-//                            DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
-//                        }
-//                        @Override
-//                        public void onFailure(Exception exception) {
-//                            String errorMessage = exception.getLocalizedMessage();
-//                            loginErrorLabel.setText("Sign up failed: " + errorMessage);
-//                            Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
-//                        }
-//                    });
-//                }
-//                return super.touchDown(event, x, y, pointer, button);
-                //create client, connect client to server. start battle
             }
         });
 
@@ -358,14 +269,23 @@ public class LoginScreen implements Screen {
             }
         });
 
+        Table table = new Table();
+        table.setBackground(backgroundBrown);
+
+        table.add(signUpLabel).colspan(3).expandX().padTop(height / 30);
+        table.row().pad(height / 50);
+        table.add(usernameSField).width(width / 4).height(height / 12).colspan(3);
+        table.row().pad(10);
+        table.add(passwordSField).width(width / 4).height(height / 12).colspan(3);
+        table.row().pad(height / 20);
+        table.add().uniform();
+        table.add(signUpButton).size(width / 10, height / 12).uniform();
+        table.add(changeToLogin).uniform().size(width / 10, height / 12);
+
         signupTable.clear();
-        signupTable.add(signUpLabel).colspan(3).expandX().row();
-        signupTable.add(usernameSField).size(500, 80).padTop(50).colspan(3).row();
-        signupTable.add(passwordSField).size(500, 80).padTop(10).colspan(3).row();
-        signupTable.add().uniform().padTop(100);
-        signupTable.add(signUpButton).size(200, 80).uniform();
-        signupTable.add(changeToLogin).uniform().top().row();
-        signupTable.add(signUpErrorLabel).colspan(3).center().row();
+        signupTable.add(table);
+        signupTable.row();
+        signupTable.add(signUpErrorLabel);
         signupTable.setVisible(false);
     }
 

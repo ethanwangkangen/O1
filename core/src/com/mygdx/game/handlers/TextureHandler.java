@@ -21,6 +21,7 @@ public class TextureHandler {
         manager.load("crossedbox.png", Texture.class);
         manager.load("mainscreen.png", Texture.class);
         manager.load("Pixel_art_grass_image.png", Texture.class);
+        manager.load("brownBorder.png", Texture.class);
 
         // Creatures textures
         manager.load("CrocLesnar.png", Texture.class);
@@ -31,6 +32,11 @@ public class TextureHandler {
         manager.load("MouseHunter.png", Texture.class);
 
         manager.load("player1.png", Texture.class);
+
+        manager.load("absorb_effect.png", Texture.class);
+        manager.load("poison_effect.png", Texture.class);
+        manager.load("stun_effect.png", Texture.class);
+
     }
 
     public Texture getTexture(String type) {
