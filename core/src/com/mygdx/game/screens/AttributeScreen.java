@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,8 +29,6 @@ import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class AttributeScreen implements Screen {
@@ -42,8 +39,7 @@ public class AttributeScreen implements Screen {
 
     private Skin skin;
     private TextureRegionDrawable background;
-    private TextureRegionDrawable backgroundBox;
-    private Texture emptyBox;
+    private Texture backgroundBrown;
 
     private int screenWidth;
     private int screenHeight;
@@ -71,8 +67,7 @@ public class AttributeScreen implements Screen {
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
-        backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
-        emptyBox = manager.get("crossedbox.png", Texture.class);
+        backgroundBrown = manager.get("brownBorder.png", Texture.class);
     }
 
     @Override
@@ -91,7 +86,7 @@ public class AttributeScreen implements Screen {
         table.add(infoTable).expand().fill();
 
         stage.addActor(table);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
 
         System.out.println("AttributeScreen shown");
     }
@@ -139,22 +134,23 @@ public class AttributeScreen implements Screen {
         // Create the label for "Pet Change" and add it to the stack
         Label topLabel = new Label("Pet Attributes", skin);
         topLabel.setAlignment(center);
-        topBarStack.add(topLabel);
 
-        // Create a table for the back button and make it fill parent (right side)
-        Table backButtonTable = new Table();
-        topBarStack.add(backButtonTable);
 
         // Create the back button and add it to backButtonTable
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // todo confirm which screen to return to
+                System.out.println("back button pressed");
                 DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
+
+        // Create a table for the back button and make it fill parent (right side)
+        Table backButtonTable = new Table();
+        topBarStack.add(topLabel);
+        topBarStack.add(backButtonTable);
         backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).expandX();
     }
 
@@ -162,7 +158,7 @@ public class AttributeScreen implements Screen {
 
         petsTable = new Table();
         for (Button button : buttonList) {
-            petsTable.add(button).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).padLeft(screenWidth / 20).padRight(screenWidth / 20);
+            petsTable.add(button).pad(5).padTop(0).size((float) (screenWidth / 3.5), (float) screenHeight / 4).padLeft(screenWidth / 20).padRight(screenWidth / 20);
             petsTable.row();
         }
 //        table1.setBackground(backgroundBox);
@@ -219,6 +215,7 @@ public class AttributeScreen implements Screen {
         Table topTable = new Table();
         Table petDescriptionTable = new Table();
 
+        petDescriptionTable.padTop(50).padLeft(50).padRight(50);
         petDescriptionTable.add(name);
         petDescriptionTable.row();
         petDescriptionTable.add(level);
@@ -226,11 +223,18 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.add(health);
         petDescriptionTable.row();
         petDescriptionTable.add(element);
+        petDescriptionTable.padBottom(50);
 
-        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5);
-        topTable.add(petDescriptionTable);
+        // set background for petDescriptionTable
+        TextureRegionDrawable petDescriptionTableBackground = new TextureRegionDrawable(new TextureRegion(backgroundBrown));
+        petDescriptionTableBackground.setMinHeight(0);
+        petDescriptionTableBackground.setMinWidth(0);
+        petDescriptionTable.setBackground(petDescriptionTableBackground);
 
-        // create table for skills list and skill description
+        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
+        topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));
+
+        // create bottom table for skills list and skill description
         Table bottomTable = new Table();
         ScrollPane pane = createSkillTable(pet);
         bottomTable.add(pane);
@@ -251,7 +255,15 @@ public class AttributeScreen implements Screen {
     public Button createSkillButton(Skill skill) {
         Button button;
         if (skill != null) {
-            button = new TextButton(skill.getName(), skin);
+            if (skill.status == Skill.Status.ABSORB) {
+                button = new TextImageButton(skill.getName(), manager.get("absorb_effect.png", Texture.class), skin, screenWidth);
+            } else if (skill.status == Skill.Status.POISON) {
+                button = new TextImageButton(skill.getName(), manager.get("poison_effect.png", Texture.class), skin, screenWidth);
+            } else if (skill.status == Skill.Status.STUN) {
+                button = new TextImageButton(skill.getName(), manager.get("stun_effect.png", Texture.class), skin, screenWidth);
+            } else {
+                button = new TextButton(skill.getName(), skin);
+            }
         } else {
             button = new TextButton("-", skin);
             button.setTouchable(Touchable.disabled);
@@ -261,7 +273,7 @@ public class AttributeScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 // set skill button clicked red
                 clearSkillStyle();
-                TextButton thisButton = (TextButton) event.getListenerActor();
+                Button thisButton = (Button) event.getListenerActor();
                 thisButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
 
                 // display description of skill of button pressed
@@ -279,12 +291,9 @@ public class AttributeScreen implements Screen {
         skillButton2 = createSkillButton(pet.skill2);
         skillButton3 = createSkillButton(pet.skill3);
 
-        table.add(skillButton1).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
-        table.add(skillButton2).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
-        table.add(skillButton3).width(screenWidth / 7).height(screenHeight / 8).pad(5).row();
-//        table.row().padBottom(5);
+        table.add(skillButton1).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
+        table.add(skillButton2).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
+        table.add(skillButton3).width(screenWidth / 6).height(screenHeight / 8).pad(5).row();
 
         return new ScrollPane(table);
     }

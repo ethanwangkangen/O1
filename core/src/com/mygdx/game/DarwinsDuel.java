@@ -18,16 +18,13 @@ import com.mygdx.game.screens.*;
 
 
 public class DarwinsDuel extends Game implements GameCommunication {
-	SpriteBatch batch;
-	Texture img;
+	private SpriteBatch batch;
+	private Texture img;
 	private static DarwinsDuel instance;
 	private OrthographicCamera camera;
 	public static Client client;
 
 	public AuthService authService;
-
-
-	float y = 0;
 
 	public enum GameState {
 		FREEROAM,
@@ -38,6 +35,7 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		LOSS,
 		SPLASH,
 		ATTRIBUTE,
+		WELCOME,
 	}
 
 	public static GameState gameState = GameState.SPLASH;
@@ -97,7 +95,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 
 	@Override
 	public void resize(int width, int height) {
-
 	}
 
 	//this is the main loop, render() is called every frame.
@@ -141,6 +138,11 @@ public class DarwinsDuel extends Game implements GameCommunication {
 					this.setScreen(new AttributeScreen(this));
 				}
 				break;
+			case WELCOME:
+				if (!(getScreen() instanceof WelcomeScreen)) {
+					System.out.println("Changing to WelcomeScreen");
+					this.setScreen(new WelcomeScreen(this));
+			}
 			case WIN:
 				break;
 			case LOSS:
@@ -188,10 +190,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		return instance;
 	}
 
-	public OrthographicCamera getCamera() {
-		return camera;
-	}
-
 	public static Client getClient() {
 		return client;
 	}
@@ -200,15 +198,4 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	{
 		TextureHandler.getInstance().loadTextures();
 	}
-
-
-//   get manager
-//	 DarwinsDuel.getInstance().getAssetManager()
-//	 get Skin
-//	 skin = manager.get("buttons/uiskin.json", Skin.class);
-//	 get Texture
-//	 manager.get("skin", Texture.class);
-//	 get Background
-//	 table.setBackground(new TextureRegionDrawable(background))
-
 }

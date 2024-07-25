@@ -20,6 +20,15 @@ public class TextImageButton extends ImageTextButton {
         add(new Image(texture)).padLeft(15).height(screenwidth / 10).width(screenwidth / 10);
         add(getLabel()).expandX();
     }
+
+    public TextImageButton(String text, Texture texture, Skin skin, int screenWidth) {
+        // for creating skill buttons with status ailments image
+        super(text, skin);
+        clearChildren();
+        add(getLabel());
+        add(new Image(texture)).padLeft(5).height(screenWidth / 25).width(screenWidth / 25);
+    }
+
     public TextImageButton(String text, Skin skin) {
         super(text, skin);
         clearChildren();
