@@ -46,7 +46,6 @@ public class Player extends Entity implements Serializable{
         battlePets.add(new MeowmadAli());
         battlePets.add(new MouseHunter());
         battlePets.add(new Froggy());
-        reservePets.add(new Doge());
 
     } //no arg constructor for serialisation
 
@@ -79,27 +78,6 @@ public class Player extends Entity implements Serializable{
     }
 
     public ArrayList<Creature> getReservePets() {return reservePets;}
-
-//    public Map<String, Object> toMap() {
-//        Map<String, Object> result = new HashMap<>();
-//        result.put("username", username);
-//        result.put("userId", userId);
-//        result.put("currentPetNum", currentPetNum.toString());
-//
-//        List<Map<String, Object>> battlePetsList = new ArrayList<>();
-//        for (Creature pet : battlePets) {
-//            battlePetsList.add(pet.toMap());
-//        }
-//        result.put("battlePets", battlePetsList);
-//
-//        List<Map<String, Object>> reservePetsList = new ArrayList<>();
-//        for (Creature pet : reservePets) {
-//            reservePetsList.add(pet.toMap());
-//        }
-//        result.put("reservePets", reservePetsList);
-//
-//        return result;
-//    }
 
     public Boolean takeDamage(Skill skill) {
 
@@ -205,10 +183,6 @@ public class Player extends Entity implements Serializable{
         }
     }
 
-    public int getNumPets() {
-        return battlePets.size();
-    }
-
     public void update(Player player) {
         // to update pet info during battle
         if (!Objects.equals(player.getUserId(), userId)) {
@@ -233,8 +207,6 @@ public class Player extends Entity implements Serializable{
         // to update pet info after PetChangeScreen
         battlePets = pets1;
         reservePets = pets2;
-
-//        DarwinsDuel.authService.sendPlayerToFirebase(newPlayer);
 
         System.out.print("Updating pets: ");
         for (Creature pet : pets1) {

@@ -64,21 +64,6 @@ public class NPC extends Player implements Serializable {
         return null;
     }
 
-//    @Override
-//    public Boolean takeDamage(Skill skill) {
-//        // returns true if petchange (ie a petNum has died)
-//        getCurrentPet().takeDamage(skill);
-//
-//        if (!getCurrentPet().isAlive()) {
-//            // pet has died
-//            return true;
-//        }
-//
-//        // pet has not died
-//        return false;
-//
-//    }
-
     @Override
     public boolean isAlive() {
         return battlePets.get(0).isAlive();
@@ -92,10 +77,6 @@ public class NPC extends Player implements Serializable {
     @Override
     public Skill npcAttack(int turns) {
         Creature npcPet = battlePets.get(0);
-//        if (npcPet.skill1 == null || npcPet.skill2 == null || npcPet.skill3 == null) {
-//            System.out.println("One of the NPC skills is null");
-//            return null;
-//        }
 
         // only for NPC use
         // NPC attacks; skill used depends on count variable and cycles through skills

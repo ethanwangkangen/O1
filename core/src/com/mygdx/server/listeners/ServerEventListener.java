@@ -21,7 +21,6 @@ import com.mygdx.server.handlers.ServerPlayerHandler;
 
 public class ServerEventListener extends Listener {
 
-    Server server = ServerFoundation.getServer();
     @Override
     public void received(Connection connection, final Object object) {
         if (object instanceof PlayerJoinServerEvent) {

@@ -19,7 +19,6 @@ import com.mygdx.game.screens.*;
 
 public class DarwinsDuel extends Game implements GameCommunication {
 	private SpriteBatch batch;
-	private Texture img;
 	private static DarwinsDuel instance;
 	private OrthographicCamera camera;
 	public static Client client;
@@ -38,23 +37,16 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		WELCOME,
 	}
 
+	// starting screen == SplashScreen
 	public static GameState gameState = GameState.SPLASH;
-
-	// should make variables above private
-	/*public void changeState(GameState gameState) {
-		this.gameState = gameState;
-	}
-	public static void setClient(Client client) {
-		client = client;
-	}*/
-
 
 	public DarwinsDuel(AuthService authService) {
 		this.authService = authService;
 		//this is an instance of FireBaseAuthServiceAndroid
 	}
 
-	public DarwinsDuel() { //unused. just for DesktopLauncher. unimportant
+	public DarwinsDuel() {
+		//unused. just for DesktopLauncher. unimportant
 	}
 
 	/**
@@ -180,7 +172,6 @@ public class DarwinsDuel extends Game implements GameCommunication {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 
 	public static DarwinsDuel getInstance() {

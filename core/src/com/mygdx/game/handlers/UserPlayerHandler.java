@@ -22,19 +22,6 @@ public class UserPlayerHandler {
         player = update;
     }
 
-//    public static Texture getTexture() {
-//        return player.getTexture();
-//    }
-
-//    public static void loadTextures(Runnable callback) {
-//        try{
-//            player.loadTextures(callback);
-//            System.out.println("PlayerHandler textures loading");
-//        } catch (Exception e) {
-//            System.err.println("PlayerHandler texture loading error");
-//        }
-//    }
-
     public static Player getPlayer() {
         return player;
     }
