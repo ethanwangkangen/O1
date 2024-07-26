@@ -82,7 +82,6 @@ public class BattleScreen implements Screen {
 
 
     private AnimationActor animationActor1;
-    private AnimationActor animationActor2;
     private FlippedAnimationActor animationActorFlip;
     private Timer.Task animationCompleteTask;
 
@@ -159,8 +158,8 @@ public class BattleScreen implements Screen {
         skillsWindow.setVisible(true);
         handleTurnLogic();
 //        stage.setDebugAll(true);
-        skillTable.setDebug(true);
-        table.setDebug(true);
+//        skillTable.setDebug(true);
+//        table.setDebug(true);
     }
     public void initialisePlayers() {
         // set players
@@ -196,12 +195,6 @@ public class BattleScreen implements Screen {
                 TextureHandler.getInstance().getAnimationJsonIdle(thisPet.getType()),
                 TextureHandler.getInstance().getAnimationTextureAttack(thisPet.getType()),
                 TextureHandler.getInstance().getAnimationJsonAttack(thisPet.getType()));
-
-        animationActor2 = new AnimationActor(
-                TextureHandler.getInstance().getAnimationTextureIdle(opponentPet.getType()),
-                TextureHandler.getInstance().getAnimationJsonIdle(opponentPet.getType()),
-                TextureHandler.getInstance().getAnimationTextureAttack(opponentPet.getType()),
-                TextureHandler.getInstance().getAnimationJsonAttack(opponentPet.getType()));
 
         animationActorFlip = new FlippedAnimationActor(
                 TextureHandler.getInstance().getAnimationTextureIdle(opponentPet.getType()),
@@ -296,11 +289,6 @@ public class BattleScreen implements Screen {
     }
 
     public void updatePetInfo() {
-//        health1.setText(thisPet.getHealth() + " / " + thisPet.getMaxhealth());
-//        health2.setText(opponentPet.getHealth() + " / " + opponentPet.getMaxhealth());
-//        healthBar1.setValue(thisPet.getHealth());
-//        healthBar2.setValue(opponentPet.getHealth());
-
         for (Creature pet : thisPlayer.battlePets) {
             if (Objects.equals(thisPet.getType(), pet.getType())) {
                 healthBar1.setValue(pet.getHealth());
@@ -488,6 +476,7 @@ public class BattleScreen implements Screen {
             }
         };
         endBattleDialog.button("Return to game");
+        endBattleDialog.padTop(skillButtons.get(0).getHeight() + 15);
 
         endBattleTable.setFillParent(true);
         endBattleTable.add(endBattleDialog).width((float)(screenWidth / 2)).height((float)(screenHeight / 1.2));

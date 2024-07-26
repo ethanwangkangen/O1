@@ -27,6 +27,7 @@ import com.mygdx.game.entities.Creature;
 import com.mygdx.game.entities.Skill;
 import com.mygdx.game.handlers.TextureHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
+import com.mygdx.global.AnimationActor;
 import com.mygdx.global.TextImageButton;
 
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class AttributeScreen implements Screen {
     Button skillButton3;
 
     private Table infoTable;
+    private AnimationActor animationActor;
 
     public AttributeScreen(DarwinsDuel gameObj) {
         System.out.println("PetChangeScreen created");
@@ -86,7 +88,7 @@ public class AttributeScreen implements Screen {
         table.add(infoTable).expand().fill();
 
         stage.addActor(table);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
 
         System.out.println("AttributeScreen shown");
     }
@@ -199,6 +201,16 @@ public class AttributeScreen implements Screen {
         }
     }
 
+    public void createAnimations(Creature pet) {
+
+        animationActor = new AnimationActor(
+                TextureHandler.getInstance().getAnimationTextureIdle(pet.getType()),
+                TextureHandler.getInstance().getAnimationJsonIdle(pet.getType()),
+                TextureHandler.getInstance().getAnimationTextureAttack(pet.getType()),
+                TextureHandler.getInstance().getAnimationJsonAttack(pet.getType())
+        );
+    }
+
     private void handleButtonClick(Creature pet) {
         // displays the info of the pet of the button clicked
         infoTable.clear();
@@ -210,6 +222,9 @@ public class AttributeScreen implements Screen {
         Label health = new Label("Health: " + pet.getMaxHealth(), skin);
 
         skillDescription = new Label("", skin);
+
+        // create pet animations
+        createAnimations(pet);
 
         // create table for pet image and pet description
         Table topTable = new Table();
@@ -231,13 +246,13 @@ public class AttributeScreen implements Screen {
         petDescriptionTableBackground.setMinWidth(0);
         petDescriptionTable.setBackground(petDescriptionTableBackground);
 
-        topTable.add(image).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
+        topTable.add(animationActor).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
         topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));
 
         // create bottom table for skills list and skill description
         Table bottomTable = new Table();
         ScrollPane pane = createSkillTable(pet);
-        bottomTable.add(pane);
+        bottomTable.add(pane).padLeft(100); // temp
         bottomTable.add(skillDescription).expand().fill().pad(10);
 
         // add everything to infoTable

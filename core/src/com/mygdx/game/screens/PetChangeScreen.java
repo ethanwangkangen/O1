@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.game.DarwinsDuel;
 import com.mygdx.game.entities.Creature;
-import com.mygdx.game.handlers.UserBattleHandler;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.global.TextImageButton;
 import com.mygdx.game.handlers.TextureHandler;
@@ -25,19 +25,19 @@ import static com.badlogic.gdx.utils.Align.center;
 public class PetChangeScreen implements Screen {
     private Stage stage;
     private AssetManager manager;
-    private Table table;
+    private Table mainTable;
     private Stack topBarStack;
     private Stack stack;
     private Table errorTable;
-    private Dialog errorMessage;
+//    private Dialog errorMessage;
 
     private Skin skin;
     private Texture emptyBox;
     private TextureRegionDrawable background;
-    private TextureRegionDrawable backgroundBox;
+    private TextureRegionDrawable backgroundBrown;
 
-    private int width;
-    private int height;
+    private int screenWidth;
+    private int screenHeight;
 
     // to be located on the left side of the screen
     // for pets that will be carried into battle by the player
@@ -61,16 +61,16 @@ public class PetChangeScreen implements Screen {
     public PetChangeScreen(DarwinsDuel gameObj) {
         System.out.println("PetChangeScreen created");
 
-        width = Gdx.graphics.getWidth();
-        height = Gdx.graphics.getHeight();
-        stage = new Stage(new FillViewport(width, height));
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
+        stage = new Stage(new FillViewport(screenWidth, screenHeight));
         Gdx.input.setInputProcessor(stage);
 
         manager = TextureHandler.getInstance().getAssetManager();
         skin = manager.get("buttons/uiskin.json", Skin.class);
         emptyBox = manager.get("crossedbox.png", Texture.class);
         background = new TextureRegionDrawable(manager.get("Pixel_art_grass_image.png", Texture.class));
-        backgroundBox = new TextureRegionDrawable(manager.get("border.png", Texture.class));
+        backgroundBrown = new TextureRegionDrawable(manager.get("brownBorder.png", Texture.class));
     }
 
     @Override
@@ -87,20 +87,18 @@ public class PetChangeScreen implements Screen {
         stack.setFillParent(true);
         stage.addActor(stack);
 
-        table = new Table();
-        table.setFillParent(true);
-        table.setBackground(background);
+        mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.setBackground(background);
 
-        table.add(topBarStack).colspan(2).fillX().center().row();
-        table.add(new Label("Battle Pets", skin)).padTop(10);
-        table.add(new Label("Reserve Pets", skin)).row();
-        table.add(pane1).expand();
-        table.add(pane2).expand().row();
+        mainTable.add(topBarStack).colspan(2).fillX().center().row();
+        mainTable.add(new Label("Battle Pets", skin));
+        mainTable.add(new Label("Reserve Pets", skin)).row();
+        mainTable.add(pane1).expand();
+        mainTable.add(pane2).expand().row();
 
-        stack.add(table);
+        stack.add(mainTable);
         stack.add(errorTable);
-
-//        stage.setDebugAll(true);
 
         System.out.println("Petchangescreen shown");
     }
@@ -164,43 +162,61 @@ public class PetChangeScreen implements Screen {
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
-        backButtonTable.add(backButton).right().pad(10).expandX();
+        backButtonTable.add(backButton).right().pad(screenWidth / 60).padRight(screenWidth / 30).padBottom(0).expandX();
+
     }
 
     public void initialiseErrorMessage() {
-        errorMessage = new Dialog("Error", skin)
-        {
-            protected void result(Object obj) {
-                errorMessage.setVisible(false);
-            }
-        };
-        errorMessage.button("Close");
 
         errorTable = new Table();
         errorTable.setFillParent(true);
-        errorTable.add(errorMessage).width((float)(width / 2)).height((float)(height / 2));
 
-        errorMessage.text("Battle team cannot be empty").pad(5);
-        errorMessage.setVisible(false);
+        // create contents for errorTable
+        Label errorLabel = new Label("Error", skin);
+        errorLabel.setColor(1, 0, 0, 1);
+        Label errorMessage = new Label("Battle team cannot be empty", skin);
+        errorMessage.setColor(1, 0, 0, 1);
+        Button button = new TextButton("Close", skin);
+        button.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                errorTable.setVisible(false);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+
+        // create table to store contents
+        Table table = new Table();
+        TextureRegionDrawable errorBackground = new TextureRegionDrawable(backgroundBrown);
+        errorBackground.setMinHeight(0);
+        errorBackground.setMinWidth(0);
+        table.setBackground(errorBackground);
+
+        table.add(errorLabel).pad(screenHeight / 30);
+        table.row();
+        table.add(errorMessage).pad(screenHeight / 30);
+        table.row();
+        table.add(button).pad(screenHeight / 30).size(screenWidth / 10, screenHeight / 12);
+
+        errorTable.add(table).width((float)(screenWidth / 2)).height((float)(screenHeight / 2));
+        errorTable.setVisible(false);
     }
 
     public void initialiseScrollPanes() {
 
         table1 = new Table();
-//        table1.setBackground(backgroundBox);
         pane1 = new ScrollPane(table1);
-        pane1.setWidth((float) width / 4);
+        pane1.setWidth((float) screenWidth / 4);
 
         table2 = new Table();
-//        table2.setBackground(backgroundBox);
         pane2 = new ScrollPane(table2);
-        pane2.setWidth((float) width / 4);
+        pane2.setWidth((float) screenWidth / 4);
     }
 
     private void createButtonList1() {
 
         for (Creature pet: pets1) {
-            TextImageButton button = new TextImageButton(pet, skin, width);
+            TextImageButton button = new TextImageButton(pet, skin, screenWidth);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -216,7 +232,7 @@ public class PetChangeScreen implements Screen {
     private void createButtonList2() {
 
         for (Creature pet : pets2) {
-            TextImageButton button = new TextImageButton(pet, skin, width);
+            TextImageButton button = new TextImageButton(pet, skin, screenWidth);
             button.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -234,10 +250,9 @@ public class PetChangeScreen implements Screen {
         // add buttons from buttonLists to tables
         // table1
         table1.clearChildren();
-//        table1.clear();
         for (TextImageButton button : buttonList1) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
-            table1.add(button).pad(5).size((float) (width / 3.5), (float) height / 4).row();
+            table1.add(button).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).row();
         }
 
         // Calculate how many empty buttons are needed
@@ -246,17 +261,16 @@ public class PetChangeScreen implements Screen {
         // for empty buttons to make 3 buttons
         for (int i = 0; i < emptyButtonCount; i ++) {
             TextImageButton emptyButton = createEmptyButton();
-            table1.add(emptyButton).pad(5).size((float) (width / 3.5), (float) height / 4).row();
+            table1.add(emptyButton).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).row();
             buttonList1.add(emptyButton);
         }
         table1.invalidateHierarchy();
 
         // table2
         table2.clearChildren();
-//        table2.clear();
         for (TextImageButton button : buttonList2) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
-            table2.add(button).pad(5).size((float) (width / 3.5), (float) height / 4).row();
+            table2.add(button).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).row();
         }
         table2.invalidateHierarchy();
     }
@@ -284,24 +298,24 @@ public class PetChangeScreen implements Screen {
             // Handle clicks for buttonList1
             if (button == lastClickedButton) {
                 // same button clicked twice in a row
-                if (size > 1) {
-                    // list1 has > 1 pet
-                    // Move to list1 and replace with empty button
-                    removeButtonFromList1(button);
-                    selectedButton1 = null;
-                    selectedButton2 = null;
-                    lastClickedButton = null;
-                } else if (button.getPet() != null) {
+                if (size <= 1 && button.getPet() != null) {
                     // list1 only has 1 pet; cannot remove further
                     // button clicked is not empty button
-                    errorMessage.setVisible(true);
+                    System.out.println("setting to visible");
+                    errorTable.setVisible(true);
 //                    errorMessage.show(stage);
                     refreshTables();
                     selectedButton1 = null;
                     selectedButton2 = null;
                     lastClickedButton = null;
+                } else {
+                    // Move to list1 and replace with empty button
+                    removeButtonFromList1(button);
+                    refreshTables();
+                    selectedButton1 = null;
+                    selectedButton2 = null;
+                    lastClickedButton = null;
                 }
-
             } else if (lastClickedButton != null) {
                 // 2 different buttons from buttonList1 have been clicked in succession
                 // swap these 2 buttons
@@ -374,17 +388,6 @@ public class PetChangeScreen implements Screen {
         } else if (index2 == -1) {
             System.err.println("Error: lastClickedButton not found in buttonList1: " + lastClickedButton.getText());
             return;
-//        } else if (index1 == index2) {
-//            System.err.println("Error lastClickedButton and selectedButton1 have the same index:"
-//                     + "\nselectedButton1: " + button.getText()
-//                     + "\nlastClickedButton: " + lastClickedButton.getText());
-//            errorMessage.setVisible(true);
-//            errorMessage.show(stage);
-//            refreshTables();
-//            return;
-//        } else if (lastClickedButton.getPet() == null || button.getPet() == null) {
-//            System.out.println("Cannot swap empty button"); // changed
-//            return;
         }
 
         // Swap the buttons
@@ -446,7 +449,7 @@ public class PetChangeScreen implements Screen {
     }
 
     public TextImageButton createEmptyButton() {
-        TextImageButton button = new TextImageButton("No pet", skin, emptyBox, width);
+        TextImageButton button = new TextImageButton("No pet", skin, emptyBox, screenWidth);
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

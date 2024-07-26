@@ -6,7 +6,7 @@ public class NPCDoge extends Creature {
 
     public NPCDoge() {
         super(200, "Doge", Element.EARTH);
-        skill1 = new Skill("Bark", 20 * dmgFactor, Element.EARTH, Skill.Status.STUN);
+        skill1 = new Skill("Puppy eyes", 20 * dmgFactor, Element.EARTH, Skill.Status.STUN);
         skill2 = new Skill("Smile", 50 * dmgFactor, Element.EARTH, Skill.Status.NIL);
         skill3 = new Skill("Rug pull", 30 * dmgFactor, Element.EARTH, Skill.Status.ABSORB);
         setType("Doge");
