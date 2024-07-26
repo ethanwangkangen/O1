@@ -153,10 +153,10 @@ public class BattleScreen implements Screen {
         bgTable.row();
 
         bgTable.add(changeTable).center().expandY();
-//        bgTable.add(skillsWindow).bottom().padBottom(50).center();
 
         skillsWindow.setVisible(true);
         handleTurnLogic();
+
 //        stage.setDebugAll(true);
 //        skillTable.setDebug(true);
 //        table.setDebug(true);
@@ -562,7 +562,6 @@ public class BattleScreen implements Screen {
             petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    // todo: swap pet1 (current pet) and pet (in argument)
                     PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.petNum = Player.PetNum.PET1;
                     changePetEvent.playerId = myId;
@@ -577,7 +576,6 @@ public class BattleScreen implements Screen {
             petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    // todo: swap pet1 (current pet) and pet (in argument)
                     PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.petNum = Player.PetNum.PET2;
                     changePetEvent.playerId = myId;
@@ -592,7 +590,6 @@ public class BattleScreen implements Screen {
             petButton.addListener(new ClickListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    // todo: swap pet1 (current pet) and pet (in argument)
                     PlayerChangePetEvent changePetEvent = new PlayerChangePetEvent();
                     changePetEvent.petNum = Player.PetNum.PET3;
                     changePetEvent.playerId = myId;

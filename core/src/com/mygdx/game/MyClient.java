@@ -24,6 +24,7 @@ import com.mygdx.game.events.PlayerSkipEvent;
 import com.mygdx.game.handlers.UserPlayerHandler;
 import com.mygdx.game.listeners.UserEventListener;
 import com.mygdx.global.*;
+import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class MyClient {
 
     }
 
-    private static Thread getThread(com.esotericsoftware.kryonet.Client myClient) {
+    private static Thread getThread(Client myClient) {
         Thread connectThread = new Thread(() -> {
             String host = "115.66.106.220"; // Server's IP address if not running locally
 
