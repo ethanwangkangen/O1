@@ -7,6 +7,7 @@ import com.mygdx.game.handlers.UserBattleHandler;
 import com.mygdx.server.handlers.ServerBattleHandler;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -118,8 +119,21 @@ public class BattleState{
                 p1Player.absorb(Math.min(dmg, (int)(p2Player.getCurrentPet().getHealth() * 0.3)));
             }
             if (skill.status == Skill.Status.STUN) {
-                p2Player.getCurrentPet().stunTurn = 3;
+                Random random = new Random();
+
+                // Generate a random number between 0 and 1
+                int chance = random.nextInt(2); // 0 or 1
+
+                // Set stunTurn based on the random outcome
+                if (chance == 1) {
+                    // player is stunned
+                    p2Player.getCurrentPet().stunTurn = 3;
+                } else {
+                    // player is not stunned
+                    p2Player.getCurrentPet().stunTurn = 0;
+                }
             }
+
             if (skill.status == Skill.Status.POISON) {
                 p2Player.getCurrentPet().poisonTurn = 3;
                 p2Player.getCurrentPet().poisonDamage = (int)(skill.getDamage() * 0.3);
