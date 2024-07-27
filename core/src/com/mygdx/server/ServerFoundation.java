@@ -12,6 +12,7 @@ import com.mygdx.game.events.PlayerRequestBattleEvent;
 import com.mygdx.game.events.PlayerSkipEvent;
 import com.mygdx.global.EndBattleEvent;
 import com.mygdx.global.*;
+import com.mygdx.server.handlers.ServerPlayerHandler;
 import com.mygdx.server.listeners.ServerEventListener;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class ServerFoundation {
     private static Server server;
+    public static ServerPlayerHandler serverPlayerHandler = new ServerPlayerHandler();
 
     public static void main(String[] args) {
         ServerFoundation instance = new ServerFoundation();
