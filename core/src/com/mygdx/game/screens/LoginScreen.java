@@ -40,9 +40,9 @@ public class LoginScreen implements Screen {
 
     // UI for login
     private Label loginLabel;
-    private TextButton loginButton;
-    private TextField usernameLField;
-    private TextField passwordLField;
+    public TextButton loginButton;
+    public TextField usernameLField;
+    public TextField passwordLField;
     private TextButton changeToSignUp;
 
     // UI for sign up
@@ -126,7 +126,7 @@ public class LoginScreen implements Screen {
                 //for testing
                 if (true) {
                     //to Login:
-                    authService1.signIn("sk3@gmail.com", "123456", new AuthResultCallback() {
+                    authService1.signIn(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() { //on success of signIn
                             System.out.println("Player has logged in");

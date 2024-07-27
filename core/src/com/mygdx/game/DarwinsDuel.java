@@ -185,8 +185,8 @@ public class DarwinsDuel extends Game implements GameCommunication {
 		return client;
 	}
 
-	public void loadTextures()
+	public boolean loadTextures()
 	{
-		TextureHandler.getInstance().loadTextures();
+		return TextureHandler.getInstance().loadTextures();
 	}
 }

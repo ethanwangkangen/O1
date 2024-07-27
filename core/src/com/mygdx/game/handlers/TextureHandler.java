@@ -12,7 +12,7 @@ public class TextureHandler {
         return instance;
     }
 
-    public void loadTextures() {
+    public boolean loadTextures() {
         // UI assets
         manager.load("buttons/uiskin.json", Skin.class);
 
@@ -37,6 +37,7 @@ public class TextureHandler {
         manager.load("poison_effect.png", Texture.class);
         manager.load("stun_effect.png", Texture.class);
 
+        return true;
     }
 
     public Texture getTexture(String type) {

@@ -7,46 +7,43 @@ import com.mygdx.game.interfaces.GameCommunication;
 
 /**
  * Used to relay messages between components of Android;
- * from Map activity to libgdx.
+ * from Map activity to libgdx. Instantiated in AndroidManifest.xml
  */
-public class MyBroadcastReceiver extends BroadcastReceiver{
+public class MyBroadcastReceiver extends BroadcastReceiver {
+    private static GameCommunication staticGameCommunication;
+    private GameCommunication gameCommunication;
 
-    private static MyBroadcastReceiver instance = new MyBroadcastReceiver();
-    /**
-     * gameCommunication is the game instance.
-     * when MapActivity wants to send info to the game, i will send out a broadcast which is caught here.
-     * @param context The Context in which the receiver is running.
-     * @param intent The Intent being received.
-     */
+    public MyBroadcastReceiver() {
+        // Default constructor for use with AndroidManifest.xml
+    }
+
+    // Constructor for dependency injection
+    public MyBroadcastReceiver(GameCommunication gameCommunication) {
+        this.gameCommunication = gameCommunication;
+    }
+
+    // Static method to set the game communication instance
+    public static void setStaticGameCommunication(GameCommunication gameCommunication) {
+        MyBroadcastReceiver.staticGameCommunication = gameCommunication;
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         System.out.println("Action is " + action);
-        if ("sending battle req".equals(action)) {
-            System.out.println("Sending battle req (in broadcast receiver)");
-            String playerUserId = intent.getStringExtra("playerUserId");
-            // Use static reference to communicate with the LibGDX game
-            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
-            if (gameCommunication != null) {
 
-                gameCommunication.onEnemyInfoReceived(playerUserId);
-            }
-        } else if ("quit map activity".equals(action)) {
-            System.out.println("Quitting map");
-            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
-            if (gameCommunication != null) {
-                gameCommunication.onQuitMapActivity();
-            }
-        } else if ("sending NPC req".equals(action)) {
-            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
-            if (gameCommunication != null) {
-                gameCommunication.onNPCReqReceived();
-            }
-        } else if ("attribute activity".equals(action)) {
-            System.out.println("Quitting map");
-            GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
-            if (gameCommunication != null) {
-                gameCommunication.onAttributeActivity();
+        GameCommunication currentGameCommunication = gameCommunication != null ? gameCommunication : staticGameCommunication;
+
+        if (currentGameCommunication != null) {
+            if ("sending battle req".equals(action)) {
+                String playerUserId = intent.getStringExtra("playerUserId");
+                currentGameCommunication.onEnemyInfoReceived(playerUserId);
+            } else if ("quit map activity".equals(action)) {
+                currentGameCommunication.onQuitMapActivity();
+            } else if ("sending NPC req".equals(action)) {
+                currentGameCommunication.onNPCReqReceived();
+            } else if ("attribute activity".equals(action)) {
+                currentGameCommunication.onAttributeActivity();
             }
         }
     }

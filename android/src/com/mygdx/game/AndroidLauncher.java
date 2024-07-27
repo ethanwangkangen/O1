@@ -15,10 +15,16 @@ import com.mygdx.game.interfaces.MapInterface;
 
 public class AndroidLauncher extends AndroidApplication implements MapInterface {
 
+
 	private static GameCommunication gameCommunication; //will be the game instance
 	private MyBroadcastReceiver receiver;
 
 	private Boolean isMapOn;
+
+	public static void setGameCommunication(GameCommunication gameCommunication) {
+		AndroidLauncher.gameCommunication = gameCommunication;
+		MyBroadcastReceiver.setStaticGameCommunication(gameCommunication);
+	}
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
@@ -32,7 +38,7 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		initialize(game, config);
 
 		//Initialise GameCommunication
-		this.gameCommunication = game;
+		setGameCommunication(game);
 
 		// Register the broadcast receiver
 		receiver = new MyBroadcastReceiver();

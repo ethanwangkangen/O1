@@ -84,6 +84,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private NPCLocations locations = new NPCLocations();
 
 
+    public void setFirebaseDatabase(FirebaseDatabase database) {
+        this.database = database;
+    }
+
+    public void setFusedLocationClient(FusedLocationProviderClient client) {
+        this.fusedLocationClient = client;
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +144,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
 
         // Initialise firebase fields
-        database = FirebaseDatabase.getInstance();
+        setFirebaseDatabase(FirebaseDatabase.getInstance());
+        //database = FirebaseDatabase.getInstance();
         databaseUsers = database.getReference().child("users");
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
@@ -230,7 +241,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    private void sendLocationToFirebase(Location location) {
+    public void sendLocationToFirebase(Location location) {
 
         long currentTime = System.currentTimeMillis();
 //        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {

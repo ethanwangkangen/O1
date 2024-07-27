@@ -120,6 +120,11 @@ dependencies {
     //Location services?
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'junit:junit:4.12'
+    implementation 'androidx.test.ext:junit:1.2.1'
+    implementation 'androidx.test:rules:1.6.1'
+
+
+
 
 }
 
