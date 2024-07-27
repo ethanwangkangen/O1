@@ -215,7 +215,6 @@ public class AttributeScreen implements Screen {
         // displays the info of the pet of the button clicked
         infoTable.clear();
 
-        Image image = new Image(new TextureRegion(TextureHandler.getInstance().getTexture(pet.getType())));
         Label name = new Label("Name: " + pet.getName(), skin);
         Label level = new Label("Level: " + pet.getLevelString(), skin);
         Label element = new Label("Element: " + pet.getElementString(), skin);

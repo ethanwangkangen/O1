@@ -65,8 +65,8 @@ public class Skill {
             return "Inflicts " + getDamageDescription() + " damage, and poisons target for 3 turns.\n" +
                     "Poison deals damage equals to a portion of skill's damage each turn.";
         } else if (status == Status.STUN) {
-            return "Inflicts " + getDamageDescription() + " damage, and stuns target for 3 turns.\n" +
-                    "Pet cannot perform attacks when stunned (still able to change pets or skip turn).";
+            return "Inflicts " + getDamageDescription() + " damage, and has a 50% chance to stun target for 3 turns.\n" +
+                    "Pet cannot perform attacks when stunned.";
         } else {
             return "Inflicts " + getDamageDescription() + " damage.";
         }
