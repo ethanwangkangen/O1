@@ -14,7 +14,7 @@ import com.mygdx.game.handlers.TextureHandler;
 public class TextImageButton extends ImageTextButton {
     Creature pet = null;
     public TextImageButton(String text, Skin skin, Texture texture, int screenwidth) {
-        // for pet changing in BattleScreen
+        // For pet changing in BattleScreen
         super(text, skin);
         clearChildren();
         add(new Image(texture)).padLeft(15).height(screenwidth / 10).width(screenwidth / 10);
@@ -22,7 +22,7 @@ public class TextImageButton extends ImageTextButton {
     }
 
     public TextImageButton(String text, Texture texture, Skin skin, int screenWidth) {
-        // for creating skill buttons with status ailments image
+        // For creating skill buttons with status ailments image
         super(text, skin);
         clearChildren();
         add(getLabel());
@@ -34,16 +34,10 @@ public class TextImageButton extends ImageTextButton {
         clearChildren();
         add(getLabel());
     }
-//    public TextImageButton(Creature pet, Skin skin) {
-//        super(pet.getName(), skin);
-//        clearChildren();
-//        add(new Image(TextureHandler.getInstance().getTexture(pet.getType())));
-//        add(getLabel());
-//        this.pet = pet;
-//    }
+
 
     public TextImageButton(Creature pet, Skin skin, int screenwidth) {
-        // for pet buttons in PetChangeScreen
+        // For pet buttons in PetChangeScreen
         super(pet.getName(), skin);
         this.pet = pet;
 
@@ -74,7 +68,7 @@ public class TextImageButton extends ImageTextButton {
         super(skill.getName(), skin);
         clearChildren();
 
-        // create labels
+        // Create labels
         Label nameLabel = new Label("Name: " + skill.getName(), skin);
         Label skillDescription = new Label("Description: \n" + skill.getStatusDescription(), skin);
 

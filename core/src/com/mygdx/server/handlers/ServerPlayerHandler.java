@@ -24,15 +24,4 @@ public class ServerPlayerHandler {
         return connectionTable.get(id);
     }
 
-
-    /*public Player getPlayerByConnection(Connection connection) {
-        if (player1.getConnection = connection) {
-            return player1;
-        } else if (player2.getConnection = connection) {
-            return player2;
-        } else {
-            return null;
-            // error
-        }
-    }*/
 }

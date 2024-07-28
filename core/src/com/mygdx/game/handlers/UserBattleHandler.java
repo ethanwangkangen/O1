@@ -11,7 +11,6 @@ public class UserBattleHandler {
     private static BattleState battleState;
     public static boolean updatePetInfo = false;
     public static boolean battleEnd = false;
-    //note: current implementation is such that BattleState is (and is required to be) mutable. should change this in the future
 
     public static void setBattleId(String id) {
         battleId = id;
@@ -54,7 +53,7 @@ public class UserBattleHandler {
     }
 
     public static void clearBattleHandler() {
-        // to clear UserBattleHandler after battle ends
+        // To clear UserBattleHandler after battle ends
         battleId = null;
         battleState = null;
         updatePetInfo = false;

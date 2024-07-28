@@ -45,15 +45,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.mygdx.game.interfaces.BattleResponseListener;
 import com.mygdx.game.listeners.UserEventListener;
 
-
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-
+/**
+ * Activity that shows the google Maps screen, including buttons and player markers.
+ */
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BattleResponseListener {
     private double selfLatitude = 1.2431;
     private double selfLongitude = 103.8198;
@@ -199,11 +199,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdates();
-            } else {
-                // todo tell player to allow location tracking
             }
         }
     }
+
+    /**
+     * Start updating location. sendLocationToFirebase(location) called, which updates location data.
+     */
     private void startLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 100)
@@ -230,13 +232,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    /**
+     * Used by startLocationUpdates() to send location data to firebase database.
+     * @param location
+     */
     private void sendLocationToFirebase(Location location) {
 
         long currentTime = System.currentTimeMillis();
-//        if (currentTime - lastUpdateTime < MIN_TIME_BETWEEN_UPDATES) {
-//            System.out.println("LocationUpdate" + "Location update blocked - too fast");
-//            return;
-//        }
+
         lastUpdateTime = currentTime;
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
@@ -256,6 +259,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         System.out.println("sending location" + latitude + " " + longitude);
     }
 
+    /**
+     * Sets player status in firebase to "online" upon starting of the Map activity.
+     */
     private void setUserOnlineStatus() {
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
@@ -274,18 +280,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-
-
+    /**
+     * Called to show the accept or reject popup when another player has requested a fight
+     */
     public void showAcceptOrReject(){
         // Show the accept or reject popup.
         acceptOrReject = new Dialog(this);
-        acceptOrReject.setContentView(R.layout.accept); // Create a custom layout for your dialog
+        acceptOrReject.setContentView(R.layout.accept);
         Button acceptButton = acceptOrReject.findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBattleResponse(true);
-                acceptOrReject.dismiss();
+                onBattleResponse(true); // Accept the duel
+                acceptOrReject.dismiss(); // Dismiss the popup
             }
         });
 
@@ -293,13 +300,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBattleResponse(false);
-                acceptOrReject.dismiss();
+                onBattleResponse(false); // Reject the duel
+                acceptOrReject.dismiss(); // Dismiss the popup
             }
         });
         acceptOrReject.show();
     }
 
+
+    /**
+     * Called after the showAcceptOrReject popup has been shown and either accept or reject has been pressed.
+     * UserEventListener.getInstance().getResponseListener() returns a custom BattleResponseListener inside UserEventListener
+     * that waits for onBattleResponse() to be called from within here.
+     * @param accepted true if Accepted else false
+     */
     @Override
     public void onBattleResponse(boolean accepted) {
         if (UserEventListener.getInstance() != null) {
@@ -330,7 +344,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
     /**
-     * Add all players (except self)
+     * Method that shows all current online players as markers on the map.
+     * Listens out for changes in user data (eg. new players connecting, current players leaving)
+     * and updates the map accordingly.
      */
     public void displayAll() {
         databaseUsers.addValueEventListener(new ValueEventListener() {
@@ -392,7 +408,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             System.out.println("Latitude or Longitude is null");
                         }
 
-                        // todo make button for menuscreen
                     }
                 }
 
@@ -438,7 +453,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    //todo in future: change logic such that only nearby players can be fought
     @Override
     public boolean onMarkerClick(Marker marker) {
         System.out.println("Registered click");
@@ -457,7 +471,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return false;
             }
         }
-        //sendInfoToLibGDX(playerUserId); //send userId of target enemy to client side libgdx
         return false;
     }
 
@@ -466,7 +479,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void setTargetEnemy(String playerUserId) {
-        //todo prevent self from being targeted
         if (playerUserId != myUserId) {
             this.enemyUID = playerUserId;
         }

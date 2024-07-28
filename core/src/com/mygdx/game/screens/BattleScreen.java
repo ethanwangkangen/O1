@@ -103,16 +103,12 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
-        System.out.println("show() run");
-        //load textures
 
-        System.out.println("finished loading all textures");
-
-        //set Players, Creatures, etc.
+        // Set Players, Creatures, etc.
         initialisePlayers();
         initialisePets();
 
-        //initialise UI elements
+        // Initialise UI elements
         initialiseBgTable();
         initialisePetInfo();
         initialisePetImages();
@@ -121,7 +117,7 @@ public class BattleScreen implements Screen {
         initialisePetsWindow();
         initialiseEndBattle();
 
-        //then add all the tables to the stage
+        // Add all the tables to the stage
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(new TextureRegionDrawable(manager.get("border.png", Texture.class)));
@@ -162,7 +158,7 @@ public class BattleScreen implements Screen {
 //        table.setDebug(true);
     }
     public void initialisePlayers() {
-        // set players
+        // Set players
         if (Objects.equals(myId, UserBattleHandler.getPlayer1().getUserId())) {
             thisPlayer = UserBattleHandler.getPlayer1();
             opponentPlayer = UserBattleHandler.getPlayer2();
@@ -210,7 +206,7 @@ public class BattleScreen implements Screen {
         pet1Info.clear();
         pet2Info.clear();
 
-        // set backgrounds for both pet1 and pet2 info
+        // Set backgrounds for both pet1 and pet2 info
         TextureRegionDrawable pet1InfoBackground = new TextureRegionDrawable(new TextureRegion(backgroundBrown));
         pet1InfoBackground.setMinHeight(0);
         pet1InfoBackground.setMinWidth(0);
@@ -223,7 +219,7 @@ public class BattleScreen implements Screen {
 
         System.out.println("initialising PetInfo table");
 
-        // for thisPlayer's pet
+        // For thisPlayer's pet
         Label pet1Name = new Label(thisPet.getName(), skin);
         Label pet1Level = new Label("(" + (thisPet.getLevelString()) + ")", skin);
         Label pet1Element = createElementLabel(thisPet);
@@ -231,7 +227,7 @@ public class BattleScreen implements Screen {
         healthBar1.setValue(thisPet.getHealth());
 
 
-        // for opponent's pet
+        // For opponent's pet
         Label pet2Name = new Label(opponentPet.getName(), skin);
         Label pet2Level = new Label("(" + (opponentPet.getLevelString()) + ")", skin);
         Label pet2Element = createElementLabel(opponentPet);
@@ -360,7 +356,7 @@ public class BattleScreen implements Screen {
         skillButtons.add(skill2);
         skillButtons.add(skill3);
 
-        // initialize skillAvailable and skillButtons
+        // Initialize skillAvailable and skillButtons
         for (int i = 0; i < 3; i ++) {
             if (skillButtons.get(i).isTouchable()) {
                 skillAvailable[i] = true;
@@ -407,12 +403,12 @@ public class BattleScreen implements Screen {
         }
         System.out.println("initialising initialisePetsWindow");
 
-        // initialize skillAvailable and skillButtons
+        // Initialize skillAvailable and skillButtons
         for (int i = 0; i < 3; i ++) {
             createPetButton(i);
         }
 
-        // add buttons to petsWindow
+        // Add buttons to petsWindow
         for (TextImageButton button: petButtons) {
             petsWindow.add(button).pad(1).width(screenWidth / 3).height(screenHeight / 4);
             petsWindow.row();
@@ -429,22 +425,22 @@ public class BattleScreen implements Screen {
         ArrayList<Creature> battlePets = thisPlayer.getBattlePets();
 
         if (index < thisPlayer.getBattlePets().size()) {
-            // player has this pet (ie not out of bounds of arraylist)
+            // Player has this pet (ie not out of bounds of arraylist)
             Creature pet = battlePets.get(index);
             newButton = new TextImageButton(pet.getName() + "\n(CURRENT)", skin, TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
             if (Objects.equals(pet.getType(), thisPet.getType())) {
-                // pet is current pet
+                // Pet is current pet
 
             } else  {
                 newButton = new TextImageButton(pet.getName(), skin,  TextureHandler.getInstance().getTexture(pet.getType()), screenWidth);
             }
             if (Objects.equals(pet, thisPet)) {
-                // this pet is current pet
+                // This pet is current pet
                 newButton.setTouchable(Touchable.disabled);
                 petAvailable[index] = false;
             } else if (pet.isAlive()) {
                 newButton.setTouchable(Touchable.enabled);
-                // records if pet is available
+                // Records if pet is available
                 petAvailable[index] = true;
             } else {
                 newButton.setTouchable(Touchable.disabled);
@@ -452,17 +448,17 @@ public class BattleScreen implements Screen {
                 newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
             }
         } else {
-            // pet not owned
+            // Pet not owned
             newButton = new TextImageButton("No pet owned", skin, crossedBox, screenWidth);
             newButton.setTouchable(Touchable.disabled);
             petAvailable[index] = false;
             newButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
         }
 
-        // add new button to petButtons list
+        // Add new button to petButtons list
         petButtons.add(newButton);
 
-        // add pet listener
+        // Add pet listener
         addPetListener(newButton, index);
     }
 
@@ -491,7 +487,7 @@ public class BattleScreen implements Screen {
     }
 
     public void setAllTouchable() {
-        // sets skillButtons to correct touchable state
+        // Sets skillButtons to correct touchable state
         for (int i = 0; i < 3; i ++) {
             if (skillAvailable[i]) {
                 skillButtons.get(i).setTouchable(Touchable.enabled);
@@ -631,11 +627,8 @@ public class BattleScreen implements Screen {
                 System.out.println("A pet has attacked.");
 
                 animation();
-
                 updatePetInfo();
-
                 initialisePets();
-
                 scheduleHealthBarCheck(); // Schedule the task to check health bar animations
             } else if (UserBattleHandler.petChanged()) {
                 updatePetInfo();

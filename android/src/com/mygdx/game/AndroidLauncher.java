@@ -3,16 +3,17 @@ package com.mygdx.game;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.firebase.FirebaseApp;
 import com.mygdx.game.interfaces.GameCommunication;
 import com.mygdx.game.interfaces.MapInterface;
 
-
+/**
+ * The entry point of the application.
+ * Implements MapInterface such that methods like showMap() can be called from game instance.
+ */
 public class AndroidLauncher extends AndroidApplication implements MapInterface {
 
 	private static GameCommunication gameCommunication; //will be the game instance
@@ -20,6 +21,13 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 
 	private Boolean isMapOn;
 
+	/**
+	 * Called when AndroidLauncher is started.
+	 * @param savedInstanceState If the activity is being re-initialized after
+	 *     previously being shut down then this Bundle contains the data it most
+	 *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+	 *
+	 */
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,7 +60,7 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		} else {
 			System.out.println("Firebase initialization failed");
 		}
-		//FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+		// FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
 	}
 
@@ -68,6 +76,9 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		return gameCommunication;
 	}
 
+	/**
+	 * Called from within MapScreen of libgdx game to start the Map Activity.
+	 */
 	@Override
 	public void showMap() {
 		System.out.println("Showing the map");
@@ -78,6 +89,9 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		startActivity(intent);
 	}
 
+	/**
+	 * Called to stop showing the Map Activity.
+	 */
 	@Override
 	public void stopMap() {
 		if (isMapOn) {
@@ -87,6 +101,9 @@ public class AndroidLauncher extends AndroidApplication implements MapInterface 
 		}
 	}
 
+	/**
+	 * Tells the Map Activity to show the accept or reject battle popup
+	 */
 	@Override
 	public void acceptOrReject() {
 		Intent intent = new Intent("accept or reject");

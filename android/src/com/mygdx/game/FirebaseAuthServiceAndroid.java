@@ -1,6 +1,6 @@
 package com.mygdx.game;
-import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,10 +18,12 @@ import com.mygdx.game.entities.MeowmadAli;
 import com.mygdx.game.entities.MouseHunter;
 import com.mygdx.game.entities.Player;
 import com.mygdx.game.interfaces.AuthService;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Authenticator service within the Android module that implements methods that will be called from game instance.
+ */
 public class FirebaseAuthServiceAndroid implements AuthService {
     public FirebaseAuth auth;
     private DatabaseReference database;
@@ -38,24 +40,11 @@ public class FirebaseAuthServiceAndroid implements AuthService {
         playerRef.setValue(player);
     }
 
-    @Override
-    public void removeData(final AuthResultCallback callback) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference userRef = database.child("users").child(userId);
 
-        // Remove the entire user node from Firebase
-        userRef.removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Account data successfully removed
-                        callback.onSuccess();
-                    } else {
-                        // Handle failure
-                        callback.onFailure(task.getException());
-                    }
-                });
-    }
-
+    /**
+     * Retrieves the player data from firebase, passes Player instance to the PlayerCallback for the callback to handle.
+     * @param playerCallback
+     */
     @Override
     public void getPlayerFromFirebase(PlayerCallback playerCallback) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -152,26 +141,7 @@ public class FirebaseAuthServiceAndroid implements AuthService {
                 });
     }
 
-    @Override
-    public boolean isUserSignedIn() {
-        return auth.getCurrentUser() != null;
-    }
 
-    @Override
-    public void signOut() {
-        auth.signOut();
-    }
-
-    public void sendLocationToFirebase(double latitude, double longitude) {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid(); //unique uid used by firebase only. =/= username
-
-        //set location
-        DatabaseReference locationRef = database.child("users").child(userId).child("location");
-
-        // Update location data
-        locationRef.child("latitude").setValue(latitude);
-        locationRef.child("longitude").setValue(longitude);
-    }
 
 
 }

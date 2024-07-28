@@ -28,7 +28,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver{
             // Use static reference to communicate with the LibGDX game
             GameCommunication gameCommunication = AndroidLauncher.getGameCommunication();
             if (gameCommunication != null) {
-
                 gameCommunication.onEnemyInfoReceived(playerUserId);
             }
         } else if ("quit map activity".equals(action)) {

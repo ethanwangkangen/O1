@@ -61,7 +61,7 @@ public class BattleState{
         battleEnded = false;
         petChanged = false;
         petAttacked = false;
-        againstNPC = true; // unique for NPC
+        againstNPC = true; // Unique for NPC
 
         this.p1Player = player;
         this.p2Player = npc;
@@ -99,7 +99,7 @@ public class BattleState{
     }
 
     public void checkStatus() {
-        // applies status effects on pets
+        // Applies status effects on pets
         if (p1Player.updateStatus()) {
             petChanged = true;
         }
@@ -109,12 +109,12 @@ public class BattleState{
     }
 
     public void playerAttack(String id, Skill skill) {
-        // online multiplayer pvp
+        // Online multiplayer pvp
         if (Objects.equals(p1Player.getUserId(), id)) {
-            // player1 has launched the attack
+            // Player1 has launched the attack
 
             if (skill.status == Skill.Status.ABSORB) {
-                // absorbs 0.3 * damage dealt to enemy pet
+                // Absorbs 0.3 * damage dealt to enemy pet
                 int dmg = (int)(skill.damage * 0.3);
                 p1Player.absorb(Math.min(dmg, (int)(p2Player.getCurrentPet().getHealth() * 0.3)));
             }
@@ -126,10 +126,10 @@ public class BattleState{
 
                 // Set stunTurn based on the random outcome
                 if (chance == 1) {
-                    // player is stunned
+                    // Player is stunned
                     p2Player.getCurrentPet().stunTurn = 3;
                 } else {
-                    // player is not stunned
+                    // Player is not stunned
                     p2Player.getCurrentPet().stunTurn = 0;
                 }
             }
@@ -144,10 +144,10 @@ public class BattleState{
                 petChanged = true;
             }
         } else {
-            // player2 has launched the attack
+            // Player2 has launched the attack
 
             if (skill.status == Skill.Status.ABSORB) {
-                // absorbs 0.3 * damage dealt to enemy pet
+                // Absorbs 0.3 * damage dealt to enemy pet
                 int dmg = (int)(skill.damage * 0.3);
                 p2Player.absorb(Math.min(dmg, (int)(p1Player.getCurrentPet().getHealth() * 0.3)));
             }
@@ -172,18 +172,13 @@ public class BattleState{
     public void NPCAttack(String battleId) {
         // Player vs NPC
 
-//        System.out.println("player2 name: " + player2.username);
         if (!p2Player.getCurrentPet().isStunned()) {
             // NPC pet is not stunned
 
             Skill skill = p2Player.npcAttack(numofTurns);
 
-//        if (skill == null) {
-//            System.out.println("NPC skill is null");
-//        }
-
             if (skill.status == Skill.Status.ABSORB) {
-                // absorbs 0.3 * damage dealt to enemy pet
+                // Absorbs 0.3 * damage dealt to enemy pet
                 int dmg = (int)(skill.damage * 0.3);
                 p2Player.absorb(Math.min(dmg, (int)(p1Player.getCurrentPet().getHealth() * 0.3)));
             }
@@ -206,7 +201,7 @@ public class BattleState{
 
         ServerBattleHandler.sendBattleState(battleId);
 
-        // if battle has ended
+        // If battle has ended
         if (!ServerBattleHandler.getBattleState(battleId).playersAlive()){
             ServerBattleHandler.sendEndBattle(battleId);
         }
@@ -224,7 +219,7 @@ public class BattleState{
     }
 
     public void update(BattleState newState) {
-        // for updating client's battleState with newState during battle
+        // For updating client's battleState with newState during battle
         p1Player.update(newState.p1Player);
         p2Player.update(newState.p2Player);
         turn = newState.turn;

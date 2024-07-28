@@ -3,10 +3,7 @@ package com.mygdx.game.entities;
 import java.io.Serializable;
 
 public abstract class Creature extends Entity implements Serializable{
-
     private static final int MAX_LEVEL = 30;
-
-    //private boolean alive;
     private int maxhealth;
     private int health;
     private int exp;
@@ -16,7 +13,6 @@ public abstract class Creature extends Entity implements Serializable{
     private String type;
     public Element element;
 
-    //private ArrayList<Skill> skillList = new ArrayList();
     public Skill skill1;
     public Skill skill2;
     public Skill skill3 ;
@@ -36,7 +32,6 @@ public abstract class Creature extends Entity implements Serializable{
     public Creature(int health, String name) {
         this.maxhealth = health;
         this.health = health;
-        //this.alive = true;
         this.level = 1;
         this.name = name;
     }
@@ -46,7 +41,6 @@ public abstract class Creature extends Entity implements Serializable{
         this.health = health;
         this.exp = 0;
         this.maxexp = 10;
-
         this.level = 1;
         this.name = name;
         this.element = element;
@@ -112,17 +106,17 @@ public abstract class Creature extends Entity implements Serializable{
         }
 
         if (poisonTurn > 0 && isAlive()) {
-            // pet is poisoned
+            // Pet is poisoned
             poisonTurn -= 1;
             this.health -= poisonDamage;
             System.out.println("Poison damage dealt: " + poisonDamage + " to " + getName());
-            return !isAlive(); // returns true if pet has died
+            return !isAlive(); // Returns true if pet has died
         }
         return false;
     }
 
     public Boolean isStunned() {
-        // returns true if pet is stunned
+        // Returns true if pet is stunned
         return stunTurn > 0;
     }
 
@@ -163,7 +157,6 @@ public abstract class Creature extends Entity implements Serializable{
     public void update(Creature pet) {
         this.health = pet.getHealth();
         this.maxhealth = pet.getMaxHealth();
-
         this.poisonTurn = pet.poisonTurn;
         this.stunTurn = pet.stunTurn;
     }
@@ -172,7 +165,6 @@ public abstract class Creature extends Entity implements Serializable{
         if (this.level < MAX_LEVEL) {
             this.exp += i;
         }
-
         while (exp >= maxexp) {
             this.levelUp();
         }
