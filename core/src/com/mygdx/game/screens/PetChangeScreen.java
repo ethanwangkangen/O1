@@ -29,7 +29,6 @@ public class PetChangeScreen implements Screen {
     private Stack topBarStack;
     private Stack stack;
     private Table errorTable;
-//    private Dialog errorMessage;
 
     private Skin skin;
     private Texture emptyBox;
@@ -39,15 +38,15 @@ public class PetChangeScreen implements Screen {
     private int screenWidth;
     private int screenHeight;
 
-    // to be located on the left side of the screen
-    // for pets that will be carried into battle by the player
+    // To be located on the left side of the screen
+    // For pets that will be carried into battle by the player
     private ArrayList<Creature> pets1 = UserPlayerHandler.getBattlePets();
     private ScrollPane pane1;
     private Table table1;
     private ArrayList<TextImageButton> buttonList1 = new ArrayList<>();
 
-    // to be located on the right side of the screen
-    // for pets that are in player's storage
+    // To be located on the right side of the screen
+    // For pets that are in player's storage
     private ArrayList<Creature> pets2 = UserPlayerHandler.getReservePets();
     private ScrollPane pane2;
     private Table table2;
@@ -105,7 +104,7 @@ public class PetChangeScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        // draw screen
+        // Draw screen
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear to black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the color buffer
         stage.getViewport().apply();
@@ -171,7 +170,7 @@ public class PetChangeScreen implements Screen {
         errorTable = new Table();
         errorTable.setFillParent(true);
 
-        // create contents for errorTable
+        // Create contents for errorTable
         Label errorLabel = new Label("Error", skin);
         errorLabel.setColor(1, 0, 0, 1);
         Label errorMessage = new Label("Battle team cannot be empty", skin);
@@ -185,7 +184,7 @@ public class PetChangeScreen implements Screen {
             }
         });
 
-        // create table to store contents
+        // Create table to store contents
         Table table = new Table();
         TextureRegionDrawable errorBackground = new TextureRegionDrawable(backgroundBrown);
         errorBackground.setMinHeight(0);
@@ -247,7 +246,7 @@ public class PetChangeScreen implements Screen {
 
     private void refreshTables() {
 
-        // add buttons from buttonLists to tables
+        // Add buttons from buttonLists to tables
         // table1
         table1.clearChildren();
         for (TextImageButton button : buttonList1) {
@@ -258,7 +257,7 @@ public class PetChangeScreen implements Screen {
         // Calculate how many empty buttons are needed
         int emptyButtonCount = 3 - buttonList1.size();
 
-        // for empty buttons to make 3 buttons
+        // For empty buttons to make 3 buttons
         for (int i = 0; i < emptyButtonCount; i ++) {
             TextImageButton emptyButton = createEmptyButton();
             table1.add(emptyButton).pad(5).size((float) (screenWidth / 3.5), (float) screenHeight / 4).row();
@@ -266,7 +265,7 @@ public class PetChangeScreen implements Screen {
         }
         table1.invalidateHierarchy();
 
-        // table2
+        // Table2
         table2.clearChildren();
         for (TextImageButton button : buttonList2) {
             button.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
@@ -303,7 +302,6 @@ public class PetChangeScreen implements Screen {
                     // button clicked is not empty button
                     System.out.println("setting to visible");
                     errorTable.setVisible(true);
-//                    errorMessage.show(stage);
                     refreshTables();
                     selectedButton1 = null;
                     selectedButton2 = null;
@@ -353,7 +351,7 @@ public class PetChangeScreen implements Screen {
         System.out.println("removeButtonFromList1 function called");
 
         if (button.getPet() == null) {
-            // button is empty button: do nothing
+            // Button is empty button: do nothing
             System.out.println("Button is empty: cannot be removed");
             return;
         }

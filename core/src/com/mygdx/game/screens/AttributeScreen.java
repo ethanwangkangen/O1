@@ -212,7 +212,7 @@ public class AttributeScreen implements Screen {
     }
 
     private void handleButtonClick(Creature pet) {
-        // displays the info of the pet of the button clicked
+        // Displays the info of the pet of the button clicked
         infoTable.clear();
 
         Image image = new Image(new TextureRegion(TextureHandler.getInstance().getTexture(pet.getType())));
@@ -223,10 +223,10 @@ public class AttributeScreen implements Screen {
 
         skillDescription = new Label("", skin);
 
-        // create pet animations
+        // Create pet animations
         createAnimations(pet);
 
-        // create table for pet image and pet description
+        // Create table for pet image and pet description
         Table topTable = new Table();
         Table petDescriptionTable = new Table();
 
@@ -240,7 +240,7 @@ public class AttributeScreen implements Screen {
         petDescriptionTable.add(element);
         petDescriptionTable.padBottom(50);
 
-        // set background for petDescriptionTable
+        // Set background for petDescriptionTable
         TextureRegionDrawable petDescriptionTableBackground = new TextureRegionDrawable(new TextureRegion(backgroundBrown));
         petDescriptionTableBackground.setMinHeight(0);
         petDescriptionTableBackground.setMinWidth(0);
@@ -249,13 +249,13 @@ public class AttributeScreen implements Screen {
         topTable.add(animationActor).width(screenWidth / 5).height(screenWidth / 5).padRight(screenWidth / 14);
         topTable.add(petDescriptionTable).width((int)(screenWidth / 3.5));
 
-        // create bottom table for skills list and skill description
+        // Create bottom table for skills list and skill description
         Table bottomTable = new Table();
         ScrollPane pane = createSkillTable(pet);
         bottomTable.add(pane).padLeft(100); // temp
         bottomTable.add(skillDescription).expand().fill().pad(10);
 
-        // add everything to infoTable
+        // Add everything to infoTable
         infoTable.add(topTable).expandX();
         infoTable.row();
         infoTable.add(bottomTable).expand().fill();
@@ -286,12 +286,12 @@ public class AttributeScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // set skill button clicked red
+                // Set skill button clicked red
                 clearSkillStyle();
                 Button thisButton = (Button) event.getListenerActor();
                 thisButton.setStyle(skin.get("clicked", TextImageButton.ImageTextButtonStyle.class));
 
-                // display description of skill of button pressed
+                // Display description of skill of button pressed
                 skillDescription.setText(skill.getName() + "\n\n" + skill.getStatusDescription());
                 skillDescription.setWrap(true);
                 return super.touchDown(event, x, y, pointer, button);
@@ -314,7 +314,7 @@ public class AttributeScreen implements Screen {
     }
 
     public void clearSkillStyle() {
-        // makes all skill buttons not red
+        // Makes all skill buttons not red
         skillButton1.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
         skillButton2.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));
         skillButton3.setStyle(skin.get("default", TextImageButton.ImageTextButtonStyle.class));

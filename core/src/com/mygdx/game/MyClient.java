@@ -76,7 +76,7 @@ public class MyClient {
         // Add all listeners of server
         myClient.addListener(UserEventListener.getInstance());
 
-        //start the client
+        // Start the client
         myClient.start();
         DarwinsDuel.client = myClient;
         // Connect to the server in a separate thread

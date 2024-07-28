@@ -101,6 +101,7 @@ tasks.register('run', Exec) {
 dependencies {
     //kryonet dependencies (manual added, jar files)
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // 'com.android.tools.build:gradle:7.3.0'
     //implementation 'com.google.gms:google-services:4.3.14' // Specify the version here
@@ -119,6 +120,7 @@ dependencies {
 
     //Location services?
     implementation 'com.google.android.gms:play-services-location:21.0.1'
+
     implementation 'junit:junit:4.12'
 
 }

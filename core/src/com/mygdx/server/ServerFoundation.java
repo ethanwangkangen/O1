@@ -22,14 +22,15 @@ import java.util.ArrayList;
 
 public class ServerFoundation {
     private static Server server;
+    private static ServerFoundation instance;
     public static ServerPlayerHandler serverPlayerHandler = new ServerPlayerHandler();
 
     public static void main(String[] args) {
-        ServerFoundation instance = new ServerFoundation();
+        instance = new ServerFoundation();
         instance.startServer();
     }
 
-    public ServerFoundation() {
+    private ServerFoundation() {
         this.server = new Server();
 
         // Add all global events

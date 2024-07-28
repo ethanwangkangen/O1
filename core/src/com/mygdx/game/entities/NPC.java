@@ -78,7 +78,7 @@ public class NPC extends Player implements Serializable {
     public Skill npcAttack(int turns) {
         Creature npcPet = battlePets.get(0);
 
-        // only for NPC use
+        // Only for NPC use
         // NPC attacks; skill used depends on count variable and cycles through skills
         int skillIndex = turns % 3; // This will cycle between 0, 1, and 2
         if (skillIndex == 0 && npcPet.skill3 != null) {

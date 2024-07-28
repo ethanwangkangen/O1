@@ -53,10 +53,10 @@ public class SplashScreen implements Screen {
         // Increase font size for use
         skin.getFont("default-font").getData().setScale(3,3);
 
-        // connect to server
+        // Connect to server
         MyClient.connectToServer();
         if (DarwinsDuel.client.isConnected()) {
-            // client has successfully connected to the server
+            // Client has successfully connected to the server
             System.out.println("Player has connected to the server");
             DarwinsDuel.gameState = DarwinsDuel.GameState.LOGIN;
         }

@@ -41,13 +41,16 @@ public class Player extends Entity implements Serializable{
     }
 
 
+    /**
+     * No arg constructor for serialisation
+     */
     public Player() {
         currentPetNum = PetNum.PET1;
         battlePets.add(new MeowmadAli());
         battlePets.add(new MouseHunter());
         battlePets.add(new Froggy());
 
-    } //no arg constructor for serialisation
+    }
 
     public ArrayList<Creature> getBattlePets() {
         return battlePets;
@@ -70,8 +73,8 @@ public class Player extends Entity implements Serializable{
     }
 
     public void addPet(Creature pet) {
-        // adds a new pet to reservePets
-        if (!hasPet(pet)) { // checks if player already has the pet
+        // Adds a new pet to reservePets
+        if (!hasPet(pet)) { // Checks if player already has the pet
             System.out.println("Adding pet to player: " + pet.getName());
             reservePets.add(pet);
         }
@@ -93,14 +96,14 @@ public class Player extends Entity implements Serializable{
     }
 
     public Boolean updateStatus() {
-        // returns true if a pet has died
+        // Returns true if a pet has died
 
         boolean petDied = false;
         System.out.println("Updating status");
 
         for (Creature pet : getBattlePets()) {
             if (pet.updateStatus()) {
-                // a pet has died
+                // A pet has died
                 petDied = true;
                 changeNextPet();
             }
@@ -137,7 +140,6 @@ public class Player extends Entity implements Serializable{
         return battlePets.get(currentPetNum.ordinal());
     }
 
-
     public String getUsername() {
         return this.username;
     }
@@ -165,7 +167,7 @@ public class Player extends Entity implements Serializable{
 
     private boolean isValidPet(Player.PetNum petNum) {
         System.out.println("isValidPet function");
-        // checks if list has the petNum, or if its empty
+        // Checks if list has the petNum, or if its empty
         int index = petNum.ordinal(); // Assuming PET1 is 0, PET2 is 1, PET3 is 2
         return index < battlePets.size();
     }
@@ -184,7 +186,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void update(Player player) {
-        // to update pet info during battle
+        // To update pet info during battle
         if (!Objects.equals(player.getUserId(), userId)) {
             System.err.println("id not the same");
         }
@@ -204,7 +206,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public void updatePets(ArrayList<Creature> pets1, ArrayList<Creature> pets2) {
-        // to update pet info after PetChangeScreen
+        // To update pet info after PetChangeScreen
         battlePets = pets1;
         reservePets = pets2;
 
@@ -218,7 +220,7 @@ public class Player extends Entity implements Serializable{
     }
 
     public Skill npcAttack(int turns) {
-        // for NPC only
+        // For NPC only
         System.err.println("Bug: Player class is calling method exclusive for NPC (npcAttack).");
         return null;
     }

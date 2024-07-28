@@ -118,21 +118,20 @@ public class LoginScreen implements Screen {
         loginButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // connect to Firebase and get player info
+                // Connect to Firebase and get player info
                 String email, password;
                 email = usernameLField.getText();
                 password = passwordLField.getText();
 
-                //for testing
                 if (isValidInput(email, password)) {
-                    //to Login:
+                    // To Login:
                     authService1.signIn(email, password, new AuthResultCallback() {
                         @Override
-                        public void onSuccess() { //on success of signIn
+                        public void onSuccess() { // On success of signIn
                             System.out.println("Player has logged in");
                             authService1.getPlayerFromFirebase(new PlayerCallback() {
                                 @Override
-                                public void onCallback(Player player) { //on success of getPlayerFromFirebase
+                                public void onCallback(Player player) { // On success of getPlayerFromFirebase
                                     UserPlayerHandler.updatePlayer(player);
 
                                     for (Creature pet : player.battlePets) {
@@ -143,7 +142,7 @@ public class LoginScreen implements Screen {
                                     }
                                     System.out.println(authService1.getUserId());
 
-                                    String userId = authService1.getUserId(); //get unique Id from firebase
+                                    String userId = authService1.getUserId(); // Get unique Id from firebase
                                     UserPlayerHandler.updateIdOfPlayer(userId);
 
                                     MyClient.sendJoinServerEvent();
@@ -152,13 +151,13 @@ public class LoginScreen implements Screen {
                                     DarwinsDuel.gameState = DarwinsDuel.GameState.FREEROAM;
                                 }
                                 @Override
-                                public void onFailure() { //on failure of getPlayerFromFirebase
+                                public void onFailure() { // On failure of getPlayerFromFirebase
                                     // todo what if getPlayerFromFirebase fails
                                 }
                             });
                         }
                         @Override
-                        public void onFailure(Exception exception) { //on failure of signIn
+                        public void onFailure(Exception exception) { // On failure of signIn
                             loginErrorLabel.setText("Login failed: " + exception.getLocalizedMessage());
                             Gdx.app.log("Auth", "Sign up failed: " + exception.getMessage());
                         }
@@ -172,7 +171,7 @@ public class LoginScreen implements Screen {
         changeToSignUp.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // change to sign up interface
+                // Change to sign up interface
                 loginTable.setVisible(false);
                 signupTable.setVisible(true);
                 loginErrorLabel.setText("");
@@ -201,7 +200,7 @@ public class LoginScreen implements Screen {
     }
 
     public void initialiseSignUpTable() {
-        // sign up table
+        // Sign up table
 
         signUpLabel = new Label("Sign Up", skin);
 
@@ -217,18 +216,17 @@ public class LoginScreen implements Screen {
         signUpButton.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // create new player, connect to Firebase, and upload new player info
+                // Create new player, connect to Firebase, and upload new player info
                 String email, password;
                 email = usernameSField.getText();
                 password = passwordSField.getText();
 
-                // for testing only
                 if (isValidInput(email, password)) {
-                    //to sign up/register:
+                    // To sign up/register:
                     authService1.signUp(email, password, new AuthResultCallback() {
                         @Override
                         public void onSuccess() {
-                            //change login screen to game screen or wtv
+                            // Change login screen to game screen or wtv
                             Player newPlayer = new Player();
                             String username = generateUsername(email);
                             newPlayer.setUsername(username);
@@ -238,7 +236,7 @@ public class LoginScreen implements Screen {
                             System.out.println("Registered player successfully");
                             UserPlayerHandler.updatePlayer(newPlayer);
 
-                            String userId = authService1.getUserId(); //get unique Id from firebase
+                            String userId = authService1.getUserId(); // Get unique Id from firebase
                             UserPlayerHandler.updateIdOfPlayer(userId);
 
                             MyClient.sendJoinServerEvent();
@@ -260,7 +258,7 @@ public class LoginScreen implements Screen {
         changeToLogin.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // change to login interface
+                // Change to login interface
                 loginTable.setVisible(true);
                 signupTable.setVisible(false);
                 loginErrorLabel.setText("");
@@ -288,8 +286,6 @@ public class LoginScreen implements Screen {
         signupTable.add(signUpErrorLabel);
         signupTable.setVisible(false);
     }
-
-
 
     @Override
     public void show() {
@@ -352,7 +348,7 @@ public class LoginScreen implements Screen {
     }
 
     public String generateUsername(String email) {
-        // generate username with string in email before @ character
+        // Generate username with string in email before @ character
         if (email == null) {
             return "UsernameError";
         } else if (!email.contains("@")) {

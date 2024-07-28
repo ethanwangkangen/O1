@@ -42,7 +42,6 @@ public class UserEventListener extends Listener {
                 System.out.println("Showing accept reject screen");
                 map.acceptOrReject();
             }
-            //todo wait for response from Map Activity
             setResponseListener(new BattleResponseListener() {
                 @Override
                 public void onBattleResponse(boolean accepted) {

@@ -24,7 +24,7 @@ public class ServerEventListener extends Listener {
     @Override
     public void received(Connection connection, final Object object) {
         if (object instanceof PlayerJoinServerEvent) {
-            // add player-connection map to connectionTable
+            // Add player-connection map to connectionTable
             System.out.println("Player has requested to join the server.");
             PlayerJoinServerEvent playerJoinServerEvent = (PlayerJoinServerEvent) object;
             ServerPlayerHandler.addPlayer(playerJoinServerEvent.userId, connection);
@@ -36,7 +36,6 @@ public class ServerEventListener extends Listener {
             String opponentUID = request.opponentUID;
 
             try {
-
                 Connection enemyConnection = ServerPlayerHandler.connectionTable.get(opponentUID);
                 enemyConnection.sendTCP(request);
             } catch (Exception e) {
@@ -50,7 +49,7 @@ public class ServerEventListener extends Listener {
             Player p1Player = event.opponentPlayer;
             Player p2Player = event.requesterPlayer;
 
-            // create new battleState
+            // Create new battleState
             String battleId = ServerBattleHandler.initialiseBattle(p1Player, p2Player);
 
             ServerBattleHandler.sendStartBattle(battleId);
@@ -64,15 +63,15 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.getBattleState(battleId).playerAttack(attackEvent.id, attackEvent.skill);
             ServerBattleHandler.sendBattleState(battleId);
 
-            // if players are all dead -> battle has ended
+            // If players are all dead -> battle has ended
             if (!ServerBattleHandler.getBattleState(battleId).playersAlive()){
                 ServerBattleHandler.sendEndBattle(battleId);
                 return;
             }
 
-            // players still alive -> checking if against NPC
+            // Players still alive -> checking if against NPC
             if (ServerBattleHandler.getBattleState(battleId).isAgainstNPC()) {
-                // fighting against NPC; NPC's turn
+                // Fighting against NPC; NPC's turn
                 System.out.println("NPC attacking");
                 ServerBattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
             }
@@ -84,19 +83,19 @@ public class ServerEventListener extends Listener {
             String battleId = skipEvent.battleId;
 
             ServerBattleHandler.getBattleState(battleId).changeTurn();
-            // change turn manually since nothing happens that initiates the change turn
+            // Change turn manually since nothing happens that initiates the change turn
 
             ServerBattleHandler.sendBattleState(battleId);
 
-            // if players are all dead -> battle has ended
+            // If players are all dead -> battle has ended
             if (!ServerBattleHandler.getBattleState(battleId).playersAlive()){
                 ServerBattleHandler.sendEndBattle(battleId);
                 return;
             }
 
-            // players still alive -> checking if against NPC
+            // Players still alive -> checking if against NPC
             if (ServerBattleHandler.getBattleState(battleId).isAgainstNPC()) {
-                // fighting against NPC; NPC's turn
+                // Fighting against NPC; NPC's turn
                 System.out.println("NPC attacking");
                 ServerBattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
             }
@@ -111,7 +110,7 @@ public class ServerEventListener extends Listener {
             ServerBattleHandler.sendBattleState(battleId);
 
             if (ServerBattleHandler.getBattleState(battleId).isAgainstNPC()) {
-                // fighting against NPC; NPC's turn
+                // Fighting against NPC; NPC's turn
                 System.out.println("NPC attacking");
                 ServerBattleHandler.getBattleState(battleId).scheduleNPCAttack(battleId);
             }
@@ -121,14 +120,14 @@ public class ServerEventListener extends Listener {
             System.out.println("Battle starting between 2 players");
             PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
 
-            // create new battleState
+            // Create new battleState
             String battleId = ServerBattleHandler.initialiseBattle(event.requesterPlayer, event.opponentPlayer);
 
             ServerBattleHandler.sendStartBattle(battleId);
         }
 
         if (object instanceof PlayerNPCBattleEvent) {
-            // start battle against NPC
+            // Start battle against NPC
             System.out.println("Battle starting between player and NPC");
             PlayerNPCBattleEvent event = (PlayerNPCBattleEvent) object;
             NPC npc = new NPC();
