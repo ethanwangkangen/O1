@@ -157,7 +157,7 @@ public class BattleState{
                 // Set stunTurn based on the random outcome
                 if (chance == 1) {
                     // Player is stunned
-                    p2Player.getCurrentPet().stunTurn = 3;
+                    p1Player.getCurrentPet().stunTurn = 3;
                 }
             }
             if (skill.status == Skill.Status.POISON) {

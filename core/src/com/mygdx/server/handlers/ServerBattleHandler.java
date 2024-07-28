@@ -9,12 +9,7 @@ import com.mygdx.global.StartBattleEvent;
 
 import javax.xml.parsers.SAXParser;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class ServerBattleHandler {
 
@@ -22,19 +17,22 @@ public class ServerBattleHandler {
     // Map p1UID to the BattleState.
 
     public static Boolean checkPlayerFree(Player p) {
-        if (p.userId == "NPC") {
+        if (Objects.equals(p.getUserId(), "NPC")) {
+            System.out.println("Player is NPC");
             return true;
         }
 
         // If not an NPC, is a real player. Check that is not currently battling
         for (Map.Entry<String, BattleState> entry : battleStateList.entrySet()) {
-            if (entry.getValue().getPlayer1() == p) {
+            if (Objects.equals(entry.getValue().getPlayer1().getUserId(), p.getUserId())) {
+                System.out.println("Player1 is in a battle");
                 return false;
-            } else if (entry.getValue().getPlayer2() == p) {
+            } else if (Objects.equals(entry.getValue().getPlayer2().getUserId(), p.getUserId())) {
+                System.out.println("Player2 is in a battle");
                 return false;
             }
         }
-
+        System.out.println("No players are in a battle");
         return true;
     }
 
