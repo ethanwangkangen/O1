@@ -62,11 +62,11 @@ public class Skill {
         if (status == Status.ABSORB) {
             return "Inflicts " + getDamageDescription() + " damage, and recover a portion of the damage dealt to target as HP.";
         } else if (status == Status.POISON) {
-            return "Inflicts " + getDamageDescription() + " damage, and poisons target for 3 turns.\n" +
+            return "Inflicts " + getDamageDescription() + " damage, and poisons target for 1 turn.\n" +
                     "Poison deals damage equals to a portion of skill's damage each turn.";
         } else if (status == Status.STUN) {
-            return "Inflicts " + getDamageDescription() + " damage, and stuns target for 3 turns.\n" +
-                    "Pet cannot perform attacks when stunned (still able to change pets or skip turn).";
+            return "Inflicts " + getDamageDescription() + " damage, and possibly stuns target for 1 turn.\n" +
+                    "Pet cannot perform attacks when stunned.";
         } else {
             return "Inflicts " + getDamageDescription() + " damage.";
         }
