@@ -479,7 +479,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void setTargetEnemy(String playerUserId) {
-        if (playerUserId != myUserId) {
+        if (playerUserId == myUserId) {
+            this.enemyUID = null;
+        }
+        else {
             this.enemyUID = playerUserId;
         }
         System.out.println("setting target enemy to " + playerUserId);
