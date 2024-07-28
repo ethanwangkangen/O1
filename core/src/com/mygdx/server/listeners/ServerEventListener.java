@@ -50,7 +50,7 @@ public class ServerEventListener extends Listener {
             Player p2Player = event.requesterPlayer;
 
             //Check if players are free
-            if (ServerBattleHandler.checkPlayerFree(p1Player) && ServerBattleHandler.checkPlayerFree(p2Player) {
+            if (ServerBattleHandler.checkPlayerFree(p1Player) && ServerBattleHandler.checkPlayerFree(p2Player)) {
                 // Create new battleState
                 String battleId = ServerBattleHandler.initialiseBattle(p1Player, p2Player);
                 ServerBattleHandler.sendStartBattle(battleId);
