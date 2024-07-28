@@ -171,6 +171,9 @@ public abstract class Creature extends Entity implements Serializable{
     }
 
     private void levelUp() {
+        if (this.level >= MAX_LEVEL) {
+            exp = 0;
+        }
         if (this.level < MAX_LEVEL) {
             System.out.println(this.name + " has levelled up");
 
