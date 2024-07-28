@@ -127,10 +127,7 @@ public class BattleState{
                 // Set stunTurn based on the random outcome
                 if (chance == 1) {
                     // Player is stunned
-                    p2Player.getCurrentPet().stunTurn = 3;
-                } else {
-                    // Player is not stunned
-                    p2Player.getCurrentPet().stunTurn = 0;
+                    p2Player.getCurrentPet().stunTurn += 3;
                 }
             }
 
@@ -152,7 +149,16 @@ public class BattleState{
                 p2Player.absorb(Math.min(dmg, (int)(p1Player.getCurrentPet().getHealth() * 0.3)));
             }
             if (skill.status == Skill.Status.STUN) {
-                p1Player.getCurrentPet().stunTurn = 3;
+                Random random = new Random();
+
+                // Generate a random number between 0 and 1
+                int chance = random.nextInt(2); // 0 or 1
+
+                // Set stunTurn based on the random outcome
+                if (chance == 1) {
+                    // Player is stunned
+                    p2Player.getCurrentPet().stunTurn += 3;
+                }
             }
             if (skill.status == Skill.Status.POISON) {
                 p1Player.getCurrentPet().poisonTurn = 3;
