@@ -1,3 +1,6 @@
+NUS Orbital 2024
+Wang Kang En Ethan and Goh Sze Kang
+
 Updated readme: https://docs.google.com/document/d/1DwfnI6AzMFVhtee-DWFDQCVM1g0Ek8ns7yIK4_hRM4g/edit?usp=sharing
 
 Download link:

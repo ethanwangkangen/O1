@@ -119,16 +119,6 @@ public class ServerEventListener extends Listener {
             }
         }
 
-        if (object instanceof PlayerAcceptBattleEvent) {
-            System.out.println("Battle starting between 2 players");
-            PlayerAcceptBattleEvent event = (PlayerAcceptBattleEvent) object;
-
-            // Create new battleState
-            String battleId = ServerBattleHandler.initialiseBattle(event.requesterPlayer, event.opponentPlayer);
-
-            ServerBattleHandler.sendStartBattle(battleId);
-        }
-
         if (object instanceof PlayerNPCBattleEvent) {
             // Start battle against NPC
             System.out.println("Battle starting between player and NPC");

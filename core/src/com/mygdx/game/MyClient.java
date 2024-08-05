@@ -91,7 +91,7 @@ public class MyClient {
 
     private static Thread getThread(Client myClient) {
         Thread connectThread = new Thread(() -> {
-            String host = "115.66.106.220"; // Server's IP address if not running locally
+            String host = "192.168.0.159"; // Server's IP address if not running locally
 
             int tcpPort = 55555;       // Must match the server's TCP port
             int udpPort = 55555;       // Must match the server's UDP port
