@@ -2,53 +2,20 @@ https://docs.google.com/document/d/1DwfnI6AzMFVhtee-DWFDQCVM1g0Ek8ns7yIK4_hRM4g/
 
 Orbital MileStone 3 README
 CodeClown Creations 
-Members
-Wang Kang En Ethan 
-
-Goh Sze Kang
-Proposed Level of Achievement:
-Apollo
+Members: Wang Kang En Ethan, Goh Sze Kang
+Proposed Level of Achievement: Apollo
 
 
 
 Instructions to Run Darwin’s Duel
 
-MUST READ:
-Since Darwin’s Duel is an online multiplayer game, it requires a server to be running. I am hosting the server on my PC, and hence may not always be online. If you get stuck at the splash screen (image below), please try again later. 
-If the server is down, feel free to email us to get it back up again. 
-Emails:
-Sze Kang: E1121234@u.nus.edu
-Ethan: E1115316@u.nus.edu
+MUST READ
+Since Darwin’s Duel is an online multiplayer game, it requires us to run a local server for the game to run.
+(AKA the Darwin's Duel is currently unplayable.)
 Thank you for your understanding and patience!
 (server status: offline)
 
-
-Splash Screen
-
-If you do not own an android device:
-
-Install Android Studio
-Download zip file, extract and open in Android Studio
-Note: Open the folder called O1-master within the top level folder. So in Android Studio, open C:\Users\yourname\Downloads\O1-master\O1-master
-Gradle script found - build? > Yes. (Bottom right corner).
-If no popup shows, File > Sync project with gradle files
-This might be done automatically, if there is a blue popup above saying “syncing project with gradle”. If so, just wait until it is done.
-Set up virtual android device in Android Studio (recommended: Pixel 3A as this was what we tested on) https://www.youtube.com/watch?v=GhuiNcOEv1A. Pixel Fold might already be set up, but this is discouraged due to the strange aspect ratio. For android SDK, select API 35 and above (should already be selected)
-Set location in virtual device 
- 
-Click on the three dots here. New window will pop up. Click location. Find a location in Singapore and set location.
-Note: NPCs currently only spawn in Singapore, so it would be wise to set player location there.
-NOTE: If you do not see yourself (blue player icon) in Singapore, it means your location is not set properly!!! This also means other players will not be able to see you
-Press the “run” button (green triangle at the top)
-Note: might have to change configuration to “android” (button left to “run”) if the above does not work
-Sign up with new email account once login screen has been reached
-Note: if screen is stuck at loading screen (ie just says Darwins Duel and no input boxes), it means the server is not running, please contact us to fix this
-Click the small sign up button at the right to change to sign up mode
-Enter email and desired password. Note that “@” doesn’t seem to register using PC keyboard, might have to enter manually with the emulated phone’s keyboard
-Click the large sign up button in the middle
-Enjoy Darwin’s Duel
-
-If you own an android device:
+Download Instructions (only for android users):
 
 Download the APK file here: 
 Sign up with new email account once login screen has been reached
