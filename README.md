@@ -6,7 +6,6 @@ Members: Wang Kang En Ethan, Goh Sze Kang
 Proposed Level of Achievement: Apollo
 
 
-
 Instructions to Run Darwin’s Duel
 
 MUST READ
@@ -15,29 +14,13 @@ Since Darwin’s Duel is an online multiplayer game, it requires us to run a loc
 Thank you for your understanding and patience!
 (server status: offline)
 
-Download Instructions (only for android users):
+APK download: 
+	https://drive.google.com/file/d/1IHzeqC28vdASCS83Ajp9lerSAbFvFcW-/view?usp=sharing
 
-Download the APK file here: 
-Sign up with new email account once login screen has been reached
-Note: if screen is stuck at loading screen (ie just says Darwin’s Duel and no input boxes), it means the server is not running, please contact us to fix this
-Click the small sign up button at the right to change to sign up mode
-Enter email and desired password.
-Click the large sign up button in the middle
-Allow Location Permissions! This is necessary to run the multiplayer component!!
-Enjoy Darwin’s Duel
-Proof-of-Concept: 
-Link to Github: <clickHere>
-Github zip download : <clickHere> 
-APK download: <clickHere> 
+Video: 
+	<Explanatory video>
+https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*
 
-Video:
-
-<Explanatory video>
-
-<Demo video (no audio)> (MS2)
-Project Log
-
-<clickHere>
 
 Aim:
 
