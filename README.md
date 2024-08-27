@@ -19,8 +19,8 @@ APK download:
 
 Video: 
 	<Explanatory video>
-https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*
 
+![Picture1](https://github.com/user-attachments/assets/48766cf5-2a9d-4645-9815-e493db12b343)
 
 Aim:
 
