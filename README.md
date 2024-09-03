@@ -1,5 +1,8 @@
 https://docs.google.com/document/d/1DwfnI6AzMFVhtee-DWFDQCVM1g0Ek8ns7yIK4_hRM4g/edit?usp=sharing
 
+Demo video:
+https://drive.google.com/file/d/1PLEtG6E4CKsfKUjriL72LuvprP2Dt_45/view?usp=sharing
+
 Orbital MileStone 3 README
 CodeClown Creations 
 Members: Wang Kang En Ethan, Goh Sze Kang
